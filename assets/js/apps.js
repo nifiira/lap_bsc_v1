@@ -26,13 +26,21 @@ let tipeKoleksi = ""; // Menyimpan jenis database (rsud / pkm)
 // ========================================================
 // 2. SISTEM LOGIN & LOGOUT (Multi-Dashboard: RSUD & PKM)
 // ========================================================
+// ========================================================
+// 2. SISTEM LOGIN & LOGOUT (Multi-Dashboard: RSUD & PKM)
+// ========================================================
 auth.onAuthStateChanged((user) => {
   const currentPath = window.location.pathname;
-  const isLoginPage = currentPath.includes("index.html") || currentPath.endsWith("/");
+  console.log("📍 Path saat ini:", currentPath);
+  console.log("👤 Status User:", user);
+
+  // Deteksi halaman
   const isDashboardPage = currentPath.includes("dashboard.html");
+  const isLoginPage = currentPath.includes("index.html") || currentPath.endsWith("/");
   const namaUser = document.getElementById("namaUser");
 
   if (user) {
+    // === JIKA USER SUDAH LOGIN ===
     currentUser = user;
     const usernameAsli = user.email.replace("@gmail.com", "");
     if (namaUser) namaUser.innerText = usernameAsli;
@@ -40,30 +48,25 @@ auth.onAuthStateChanged((user) => {
     const selectTribulan = document.getElementById("pilihTribulan");
     if (selectTribulan) tribulanAktif = selectTribulan.value;
 
-    // Jika pengguna sudah login tapi berada di index.html, arahkan ke dashboard
     if (isLoginPage) {
       window.location.href = "dashboard.html";
       return;
     }
 
-    // Tentukan role & tipe koleksi Firestore
     if (usernameAsli.startsWith("admin")) {
-      aturTampilanBerdasarkanRole("admin");
-      tarikSemuaDataAdmin(); // Memuat rekapitulasi data RSUD & Puskesmas
+      if (typeof tarikSemuaDataAdmin === 'function') {
+        tarikSemuaDataAdmin();
+      }
     } 
     else if (usernameAsli.startsWith("rsud_")) {
       tipeKoleksi = "evaluasi_kinerja_rsud";
       formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`); 
-      
-      aturTampilanBerdasarkanRole("rsud");
-      muatDataDariFirebase(); // Memuat khusus data RSUD
+      if (typeof muatDataDariFirebase === 'function') muatDataDariFirebase();
     } 
     else if (usernameAsli.startsWith("pkm_")) {
       tipeKoleksi = "evaluasi_kinerja_pkm";
       formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
-      
-      aturTampilanBerdasarkanRole("pkm");
-      muatDataDariFirebase(); // Memuat khusus data PKM
+      if (typeof muatDataDariFirebase === 'function') muatDataDariFirebase();
     } 
     else {
       alert("Akses Ditolak: Kategori pengguna tidak dikenali.");
@@ -71,11 +74,16 @@ auth.onAuthStateChanged((user) => {
     }
 
   } else {
+    // === JIKA USER BELUM LOGIN ===
     currentUser = null;
     formRef = null;
-    // Jika belum login dan mencoba masuk ke dashboard, redirect ke index.html
+
+    console.log("⚠️ User belum login. Apakah sedang di dashboard?", isDashboardPage);
+
+    // Jika berada di halaman dashboard tanpa login, lempar paksa ke index.html
     if (isDashboardPage) {
-      window.location.href = "index.html";
+      console.log("🔄 Melakukan redirect ke index.html...");
+      window.location.href = "./index.html"; // Menggunakan ./ agar merujuk ke folder yang sama di root
     }
   }
 });
