@@ -28,9 +28,9 @@ let tipeKoleksi = ""; // Menyimpan jenis database (rsud / pkm)
 // ========================================================
 auth.onAuthStateChanged((user) => {
   const currentPath = window.location.pathname;
-  const isRsudPage = currentPath.includes("dashboard-rsud.html");
-  const isPkmPage = currentPath.includes("dashboard-pkm.html");
-  const isAdminPage = currentPath.includes("dashboard-admin.html");
+  const isRsudPage = currentPath.includes("dashboard.html");
+  const isPkmPage = currentPath.includes("dashboard.html");
+  const isAdminPage = currentPath.includes("dashboard.html");
   const namaUser = document.getElementById("namaUser");
 
   if (user) {
@@ -45,7 +45,7 @@ auth.onAuthStateChanged((user) => {
       if (isAdminPage) {
         tarikSemuaDataAdmin();
       } else {
-        window.location.href = "dashboard-admin.html";
+        window.location.href = "dashboard.html";
       }
     } 
     else if (usernameAsli.startsWith("rsud_")) {
@@ -55,7 +55,7 @@ auth.onAuthStateChanged((user) => {
       if (isRsudPage) {
         muatDataDariFirebase();
       } else {
-        window.location.href = "dashboard-rsud.html";
+        window.location.href = "dashboard.html";
       }
     } 
     else if (usernameAsli.startsWith("pkm_")) {
@@ -65,7 +65,7 @@ auth.onAuthStateChanged((user) => {
       if (isPkmPage) {
         muatDataDariFirebase();
       } else {
-        window.location.href = "dashboard-pkm.html";
+        window.location.href = "dashboard.html";
       }
     } 
     else {
