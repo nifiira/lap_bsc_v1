@@ -843,3 +843,32 @@ function pindahHalaman(numPage) {
   // Gulir layar kembali ke atas saat pindah halaman
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// ========================================================
+// 10. FITUR AUTO LOGOUT KARENA TIDAK AKTIF (IDLE TIMEOUT)
+// ========================================================
+let idleTimer;
+const waktuBatasIdle = 15 * 60 * 1000; // 15 menit (dalam milidetik). Ubah sesuai kebutuhan.
+
+function resetIdleTimer() {
+  // Hanya jalankan jika pengguna sedang login
+  if (!currentUser) return;
+
+  clearTimeout(idleTimer);
+  
+  // Set ulang timer mundur
+  idleTimer = setTimeout(() => {
+    alert("Sesi Anda telah berakhir karena tidak ada aktivitas selama 15 menit. Anda akan otomatis keluar.");
+    auth.signOut().then(() => {
+      window.location.href = "index.html";
+    });
+  }, waktuBatasIdle);
+}
+
+// Pantau berbagai aktivitas pengguna di browser
+window.onload = resetIdleTimer;
+window.onmousemove = resetIdleTimer;
+window.onkeypress = resetIdleTimer;
+window.onclick = resetIdleTimer;
+window.onscroll = resetIdleTimer;
+window.ontouchstart = resetIdleTimer;
