@@ -34,31 +34,30 @@ auth.onAuthStateChanged((user) => {
 
   if (user) {
     currentUser = user;
-    const usernameAsli = user.email.replace("@gmail.com", "");
-    if (namaUser) namaUser.innerText = usernameAsli;
+    const emailUser = user.email.toLowerCase(); // Menggunakan email lengkap
+    if (namaUser) namaUser.innerText = user.email;
 
     const selectTribulan = document.getElementById("pilihTribulan");
     if (selectTribulan) tribulanAktif = selectTribulan.value;
 
-    // Jika pengguna sudah login tapi berada di index.html, arahkan ke dashboard
     if (isLoginPage) {
       window.location.href = "dashboard.html";
       return;
     }
 
-    // Tentukan role & tipe koleksi Firestore
-    if (usernameAsli.startsWith("admin")) {
+    // Tentukan role berdasarkan awalan email lengkap (misal: admin..., rsud_..., atau pkm_...)
+    if (emailUser.startsWith("admin")) {
       aturTampilanBerdasarkanRole("admin");
       tarikSemuaDataAdmin(); // Memuat rekapitulasi data RSUD & Puskesmas
     } 
-    else if (usernameAsli.startsWith("rsud_")) {
+    else if (emailUser.startsWith("rsud_")) {
       tipeKoleksi = "evaluasi_kinerja_rsud";
       formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`); 
       
       aturTampilanBerdasarkanRole("rsud");
       muatDataDariFirebase(); // Memuat khusus data RSUD
     } 
-    else if (usernameAsli.startsWith("pkm_")) {
+    else if (emailUser.startsWith("pkm_")) {
       tipeKoleksi = "evaluasi_kinerja_pkm";
       formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
       
@@ -73,7 +72,6 @@ auth.onAuthStateChanged((user) => {
   } else {
     currentUser = null;
     formRef = null;
-    // Jika belum login dan mencoba masuk ke dashboard, redirect ke index.html
     if (isDashboardPage) {
       window.location.href = "index.html";
     }
@@ -96,19 +94,18 @@ function gantiTribulan() {
 }
 
 function aksiLogin() {
-  const username = document.getElementById("inputEmail").value;
+  const emailLengkap = document.getElementById("inputEmail").value.trim(); // Input form kini berupa email lengkap
   const password = document.getElementById("inputPassword").value;
 
-  if (!username || !password) {
-    alert("Harap isi Username dan Password!");
+  if (!emailLengkap || !password) {
+    alert("Harap isi Email dan Password dengan lengkap!");
     return;
   }
   
-  const dummyEmail = username + "@gmail.com"; 
-  
-  auth.signInWithEmailAndPassword(dummyEmail, password)
+  // Langsung autentikasi dengan email lengkap tanpa tambahan @gmail.com manual
+  auth.signInWithEmailAndPassword(emailLengkap, password)
     .then((userCredential) => {
-      alert("Berhasil masuk sebagai " + username);
+      alert("Berhasil masuk sebagai " + emailLengkap);
     })
     .catch((error) => {
       alert("Login Gagal: " + error.message);
