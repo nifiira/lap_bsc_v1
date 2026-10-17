@@ -40,7 +40,7 @@ auth.onAuthStateChanged((user) => {
 
     // Tampilkan nama user (sebelum tanda @) di antarmuka
     const usernameSaja = user.email.split('@')[0]; 
-    if (namaUser) namaUser.innerText = usernameSaja;
+    if (namaUser) namaUser.innerText = formatNamaInstansi(usernameSaja);
 
     const selectTribulan = document.getElementById("pilihTribulan");
     if (selectTribulan) tribulanAktif = selectTribulan.value;
