@@ -30,48 +30,56 @@ auth.onAuthStateChanged((user) => {
   const currentPath = window.location.pathname;
   const isLoginPage = currentPath.includes("index.html") || currentPath.endsWith("/");
   const isDashboardPage = currentPath.includes("dashboard.html");
+  const isPenilaianPage = currentPath.includes("penilaian-rsud.html") || currentPath.includes("penilaian-pkm.html");
+  
   const namaUser = document.getElementById("namaUser");
 
   if (user) {
     currentUser = user;
-    const emailUser = user.email.toLowerCase(); // Menggunakan email lengkap
-    // === AMBIL HANYA BAGIAN SEBELUM TANDA @ ===
+    const emailUser = user.email.toLowerCase(); 
+
+    // Tampilkan nama user (sebelum tanda @) di antarmuka
     const usernameSaja = user.email.split('@')[0]; 
-
-    if (namaUser) {
-      // Opsi 1: Tampilkan mentah (contoh: "rsud_pasuruan" atau "admin")
-      // namaUser.innerText = usernameSaja;
-
-      // Opsi 2 (Opsional): Jika ingin langsung diformat rapi jadi "RSUD Pasuruan" 
-      namaUser.innerText = formatNamaInstansi(usernameSaja);
-    }
+    if (namaUser) namaUser.innerText = usernameSaja;
 
     const selectTribulan = document.getElementById("pilihTribulan");
     if (selectTribulan) tribulanAktif = selectTribulan.value;
 
+    // Jika user berada di halaman login, arahkan ke dashboard utama
     if (isLoginPage) {
       window.location.href = "dashboard.html";
       return;
     }
 
-    // Tentukan role berdasarkan awalan email lengkap (misal: admin..., rsud_..., atau pkm_...)
+    // Tentukan hak akses dan tipe koleksi database berdasarkan awalan email
     if (emailUser.startsWith("admin")) {
       aturTampilanBerdasarkanRole("admin");
-      tarikSemuaDataAdmin(); // Memuat rekapitulasi data RSUD & Puskesmas
+      if (typeof tarikSemuaDataAdmin === 'function') tarikSemuaDataAdmin(); 
     } 
     else if (emailUser.startsWith("rsud_")) {
       tipeKoleksi = "evaluasi_kinerja_rsud";
       formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`); 
-      
       aturTampilanBerdasarkanRole("rsud");
-      muatDataDariFirebase(); // Memuat khusus data RSUD
+
+      // Jika user RSUD sedang berada di dashboard, biarkan. 
+      // Tapi jika mereka klik menu penilaian dan masih di penilaian-pkm, arahkan ke penilaian-rsud.html
+      if (currentPath.includes("penilaian-pkm.html")) {
+        window.location.href = "penilaian-rsud.html";
+      } else if (typeof muatDataDariFirebase === 'function') {
+        muatDataDariFirebase();
+      }
     } 
     else if (emailUser.startsWith("pkm_")) {
       tipeKoleksi = "evaluasi_kinerja_pkm";
       formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
-      
       aturTampilanBerdasarkanRole("pkm");
-      muatDataDariFirebase(); // Memuat khusus data PKM
+
+      // Jika user PKM sedang membuka penilaian-rsud, paksa pindah ke penilaian-pkm.html
+      if (currentPath.includes("penilaian-rsud.html")) {
+        window.location.href = "penilaian-pkm.html";
+      } else if (typeof muatDataDariFirebase === 'function') {
+        muatDataDariFirebase();
+      }
     } 
     else {
       alert("Akses Ditolak: Kategori pengguna tidak dikenali.");
@@ -81,7 +89,8 @@ auth.onAuthStateChanged((user) => {
   } else {
     currentUser = null;
     formRef = null;
-    if (isDashboardPage) {
+    // Jika belum login dan mencoba mengakses halaman protected, lempar kembali ke index.html
+    if (isDashboardPage || isPenilaianPage) {
       window.location.href = "index.html";
     }
   }
