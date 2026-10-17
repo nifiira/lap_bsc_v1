@@ -35,7 +35,16 @@ auth.onAuthStateChanged((user) => {
   if (user) {
     currentUser = user;
     const emailUser = user.email.toLowerCase(); // Menggunakan email lengkap
-    if (namaUser) namaUser.innerText = user.email;
+    // === AMBIL HANYA BAGIAN SEBELUM TANDA @ ===
+    const usernameSaja = user.email.split('@')[0]; 
+
+    if (namaUser) {
+      // Opsi 1: Tampilkan mentah (contoh: "rsud_pasuruan" atau "admin")
+      // namaUser.innerText = usernameSaja;
+
+      // Opsi 2 (Opsional): Jika ingin langsung diformat rapi jadi "RSUD Pasuruan" 
+      namaUser.innerText = formatNamaInstansi(usernameSaja);
+    }
 
     const selectTribulan = document.getElementById("pilihTribulan");
     if (selectTribulan) tribulanAktif = selectTribulan.value;
