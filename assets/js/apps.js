@@ -28,72 +28,76 @@ let tipeKoleksi = ""; // Menyimpan jenis database (rsud / pkm)
 // ========================================================
 auth.onAuthStateChanged((user) => {
   const currentPath = window.location.pathname;
-  const isLoginPage =
-    currentPath.includes("index.html") || currentPath.endsWith("/");
+  const isLoginPage = currentPath.includes("index.html") || currentPath.endsWith("/");
   const isDashboardPage = currentPath.includes("dashboard.html");
-  const isPenilaianPage =
-    currentPath.includes("penilaian-rsud.html") ||
-    currentPath.includes("penilaian-pkm.html");
-
-  const namaUser = document.getElementById("namaUser");
+  const isPenilaianPage = currentPath.includes("penilaian-rsud.html") || currentPath.includes("penilaian-pkm.html");
 
   if (user) {
     currentUser = user;
-    const emailUser = user.email.toLowerCase();
 
-    // Tampilkan nama user (sebelum tanda @) di antarmuka
-    const usernameSaja = user.email.split("@")[0];
-    const namaFormatted = formatNamaInstansi(usernameSaja);
+    // AMBIL PROFIL DARI KOLEKSI 'users' DI FIRESTORE BERDASARKAN UID
+    db.collection("users").doc(user.uid).get().then((doc) => {
+      if (doc.exists) {
+        const userData = doc.data();
+        const opdUser = userData.opd; // Misal: "rsud_pasuruan", "pkm_purworejo", atau "admin"
+        const namaInstansiResmi = userData.namaInstansi || "Administrator"; // Teks formal untuk UI
 
-    // Menerapkan ke SEMUA elemen yang memiliki kelas 'namaUser'
-    document.querySelectorAll(".namaUser").forEach((el) => {
-      el.innerText = namaFormatted;
+        // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
+        document.querySelectorAll('.namaUser').forEach(el => {
+            el.innerText = namaInstansiResmi;
+        });
+
+        const selectTribulan = document.getElementById("pilihTribulan");
+        if (selectTribulan) tribulanAktif = selectTribulan.value;
+
+        if (isLoginPage) {
+          window.location.href = "dashboard.html";
+          return;
+        }
+
+        // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
+        if (opdUser === "admin") {
+          aturTampilanBerdasarkanRole("admin");
+          if (typeof tarikSemuaDataAdmin === 'function') tarikSemuaDataAdmin();
+        } 
+        else if (opdUser.startsWith("rsud_")) {
+          tipeKoleksi = "evaluasi_kinerja_rsud";
+          formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
+          aturTampilanBerdasarkanRole("rsud");
+
+          if (currentPath.includes("penilaian-pkm.html")) {
+            window.location.href = "penilaian-rsud.html";
+          } else if (typeof muatDataDariFirebase === 'function') {
+            muatDataDariFirebase();
+          }
+        } 
+        else if (opdUser.startsWith("pkm_")) {
+          tipeKoleksi = "evaluasi_kinerja_pkm";
+          formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
+          aturTampilanBerdasarkanRole("pkm");
+
+          if (currentPath.includes("penilaian-rsud.html")) {
+            window.location.href = "penilaian-pkm.html";
+          } else if (typeof muatDataDariFirebase === 'function') {
+            muatDataDariFirebase();
+          }
+        } 
+        else {
+          alert("Akses Ditolak: Profil instansi tidak valid.");
+          auth.signOut();
+        }
+
+      } else {
+        alert("Akses Ditolak: Data profil user tidak ditemukan di database sistem.");
+        auth.signOut();
+      }
+    }).catch((err) => {
+      console.error("Gagal memuat profil:", err);
     });
 
-    const selectTribulan = document.getElementById("pilihTribulan");
-    if (selectTribulan) tribulanAktif = selectTribulan.value;
-
-    // Jika user berada di halaman login, arahkan ke dashboard utama
-    if (isLoginPage) {
-      window.location.href = "dashboard.html";
-      return;
-    }
-
-    // Tentukan hak akses dan tipe koleksi database berdasarkan awalan email
-    if (emailUser.startsWith("admin")) {
-      aturTampilanBerdasarkanRole("admin");
-      if (typeof tarikSemuaDataAdmin === "function") tarikSemuaDataAdmin();
-    } else if (emailUser.startsWith("rsud_")) {
-      tipeKoleksi = "evaluasi_kinerja_rsud";
-      formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
-      aturTampilanBerdasarkanRole("rsud");
-
-      // Jika user RSUD sedang berada di dashboard, biarkan.
-      // Tapi jika mereka klik menu penilaian dan masih di penilaian-pkm, arahkan ke penilaian-rsud.html
-      if (currentPath.includes("penilaian-pkm.html")) {
-        window.location.href = "penilaian-rsud.html";
-      } else if (typeof muatDataDariFirebase === "function") {
-        muatDataDariFirebase();
-      }
-    } else if (emailUser.startsWith("pkm_")) {
-      tipeKoleksi = "evaluasi_kinerja_pkm";
-      formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
-      aturTampilanBerdasarkanRole("pkm");
-
-      // Jika user PKM sedang membuka penilaian-rsud, paksa pindah ke penilaian-pkm.html
-      if (currentPath.includes("penilaian-rsud.html")) {
-        window.location.href = "penilaian-pkm.html";
-      } else if (typeof muatDataDariFirebase === "function") {
-        muatDataDariFirebase();
-      }
-    } else {
-      alert("Akses Ditolak: Kategori pengguna tidak dikenali.");
-      auth.signOut();
-    }
   } else {
     currentUser = null;
     formRef = null;
-    // Jika belum login dan mencoba mengakses halaman protected, lempar kembali ke index.html
     if (isDashboardPage || isPenilaianPage) {
       window.location.href = "index.html";
     }
