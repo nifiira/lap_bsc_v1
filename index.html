@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
   <head>
     <meta charset="utf-8" />
-    <title>DASHMIN - Bootstrap Admin Template</title>
+    <title>Bagian Perekonomian, SDA dan Administrasi Pembangunan - Login</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="" name="keywords" />
     <meta content="" name="description" />
@@ -63,13 +63,23 @@
       <!-- Spinner End -->
 
       <!-- Sign In Start -->
-      <div class="container-fluid bg-primary">
-        <div
-          class="row h-100 align-items-center justify-content-center"
-          style="min-height: 100vh"
-        >
-          <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-            <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
+      <div class="container-fluid px-0">
+        <div class="row g-0 vh-100 align-items-center">
+          <!-- Kolom Kiri: Background Gambar -->
+          <div
+            class="col-lg-7 d-none d-lg-block h-100"
+            style="
+              background-image: url(&quot;assets/img/background.jpg&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          ></div>
+
+          <!-- Kolom Kanan: Form Login -->
+          <div
+            class="col-12 col-lg-5 d-flex align-items-center justify-content-center h-100 bg-white"
+          >
+            <div class="p-4 p-sm-5 w-100" style="max-width: 450px">
               <form
                 onsubmit="
                   event.preventDefault();
@@ -86,12 +96,12 @@
                   />
                 </div>
                 <p
-                  class="h5 d-flex align-items-center justify-content-center text-center mb-5"
+                  class="h6 d-flex align-items-center justify-content-center text-center mb-4 text-dark"
                 >
                   Bagian Perekonomian, SDA dan Administrasi Pembangunan
                 </p>
                 <p
-                  class="h5 d-flex align-items-center justify-content-center text-center mb-3"
+                  class="h5 d-flex align-items-center justify-content-center text-center mb-4 fw-bold text-primary"
                 >
                   Masuk Aplikasi
                 </p>
@@ -147,7 +157,7 @@
     <script src="assets/lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="assets/lib/tempusdominus/js/moment.min.js"></script>
     <script src="assets/lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="assets/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- SDK Firebase -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
@@ -161,3 +171,11 @@
     <script src="assets/js/rumus_rsud.js"></script>
   </body>
 </html>
+```[cite: 5]
+
+<FollowUp>
+  <Suggestion
+    >Apakah gambar background pada bagian kiri sudah tampil dengan baik di
+    browser Anda?</Suggestion
+  >
+</FollowUp>
