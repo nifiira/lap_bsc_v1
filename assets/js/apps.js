@@ -28,73 +28,83 @@ let tipeKoleksi = ""; // Menyimpan jenis database (rsud / pkm)
 // ========================================================
 auth.onAuthStateChanged((user) => {
   const currentPath = window.location.pathname;
-  const isLoginPage = currentPath.includes("index.html") || currentPath.endsWith("/");
+  const isLoginPage =
+    currentPath.includes("index.html") || currentPath.endsWith("/");
   const isDashboardPage = currentPath.includes("dashboard.html");
-  const isPenilaianPage = currentPath.includes("penilaian-rsud.html") || currentPath.includes("penilaian-pkm.html");
+  const isPenilaianPage =
+    currentPath.includes("penilaian-rsud.html") ||
+    currentPath.includes("penilaian-pkm.html");
 
   if (user) {
     currentUser = user;
 
     // AMBIL PROFIL DARI KOLEKSI 'users' DI FIRESTORE BERDASARKAN UID
-    db.collection("users").doc(user.uid).get().then((doc) => {
-      if (doc.exists) {
-        const userData = doc.data();
-        const opdUser = userData.opd; // Misal: "rsud_pasuruan", "pkm_purworejo", atau "admin"
-        const namaInstansiResmi = userData.namaInstansi || "Administrator"; // Teks formal untuk UI
+    db.collection("users")
+      .doc(user.uid)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          const userData = doc.data();
+          const opdUser = userData.opd; // Misal: "rsud_pasuruan", "pkm_purworejo", atau "admin"
+          const namaInstansiResmi = userData.namaInstansi || "Administrator"; // Teks formal untuk UI
 
-        // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
-        document.querySelectorAll('.namaUser').forEach(el => {
+          // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
+          document.querySelectorAll(".namaUser").forEach((el) => {
             el.innerText = namaInstansiResmi;
-        });
+          });
 
-        const selectTribulan = document.getElementById("pilihTribulan");
-        if (selectTribulan) tribulanAktif = selectTribulan.value;
+          const selectTribulan = document.getElementById("pilihTribulan");
+          if (selectTribulan) tribulanAktif = selectTribulan.value;
 
-        if (isLoginPage) {
-          window.location.href = "dashboard.html";
-          return;
-        }
-
-        // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
-        if (opdUser === "admin") {
-          aturTampilanBerdasarkanRole("admin");
-          if (typeof tarikSemuaDataAdmin === 'function') tarikSemuaDataAdmin();
-        } 
-        else if (opdUser.startsWith("rsud_")) {
-          tipeKoleksi = "evaluasi_kinerja_rsud";
-          formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
-          aturTampilanBerdasarkanRole("rsud");
-
-          if (currentPath.includes("penilaian-pkm.html")) {
-            window.location.href = "penilaian-rsud.html";
-          } else if (typeof muatDataDariFirebase === 'function') {
-            muatDataDariFirebase();
+          if (isLoginPage) {
+            window.location.href = "dashboard.html";
+            return;
           }
-        } 
-        else if (opdUser.startsWith("pkm_")) {
-          tipeKoleksi = "evaluasi_kinerja_pkm";
-          formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
-          aturTampilanBerdasarkanRole("pkm");
 
-          if (currentPath.includes("penilaian-rsud.html")) {
-            window.location.href = "penilaian-pkm.html";
-          } else if (typeof muatDataDariFirebase === 'function') {
-            muatDataDariFirebase();
+          // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
+          if (opdUser === "admin") {
+            aturTampilanBerdasarkanRole("admin");
+            if (currentPath.includes("user-login.html")) {
+              tarikDaftarUserAdmin();
+            }
+          } else if (opdUser.startsWith("rsud_")) {
+            tipeKoleksi = "evaluasi_kinerja_rsud";
+            formRef = db
+              .collection(tipeKoleksi)
+              .doc(`${user.uid}_${tribulanAktif}`);
+            aturTampilanBerdasarkanRole("rsud");
+
+            if (currentPath.includes("penilaian-pkm.html")) {
+              window.location.href = "penilaian-rsud.html";
+            } else if (typeof muatDataDariFirebase === "function") {
+              muatDataDariFirebase();
+            }
+          } else if (opdUser.startsWith("pkm_")) {
+            tipeKoleksi = "evaluasi_kinerja_pkm";
+            formRef = db
+              .collection(tipeKoleksi)
+              .doc(`${user.uid}_${tribulanAktif}`);
+            aturTampilanBerdasarkanRole("pkm");
+
+            if (currentPath.includes("penilaian-rsud.html")) {
+              window.location.href = "penilaian-pkm.html";
+            } else if (typeof muatDataDariFirebase === "function") {
+              muatDataDariFirebase();
+            }
+          } else {
+            alert("Akses Ditolak: Profil instansi tidak valid.");
+            auth.signOut();
           }
-        } 
-        else {
-          alert("Akses Ditolak: Profil instansi tidak valid.");
+        } else {
+          alert(
+            "Akses Ditolak: Data profil user tidak ditemukan di database sistem.",
+          );
           auth.signOut();
         }
-
-      } else {
-        alert("Akses Ditolak: Data profil user tidak ditemukan di database sistem.");
-        auth.signOut();
-      }
-    }).catch((err) => {
-      console.error("Gagal memuat profil:", err);
-    });
-
+      })
+      .catch((err) => {
+        console.error("Gagal memuat profil:", err);
+      });
   } else {
     currentUser = null;
     formRef = null;
@@ -1055,7 +1065,6 @@ window.onclick = resetIdleTimer;
 window.onscroll = resetIdleTimer;
 window.ontouchstart = resetIdleTimer;
 
-
 // ========================================================
 // 1. MENAMPILKAN SEMUA DATA USER DARI FIRESTORE
 // ========================================================
@@ -1065,7 +1074,8 @@ function tarikDaftarUserAdmin() {
 
   tabelRef.innerHTML = `<tr><td colspan="5" class="text-center">Sedang mengambil data user...</td></tr>`;
 
-  db.collection("users").get()
+  db.collection("users")
+    .get()
     .then((snapshot) => {
       let htmlTabel = "";
       let nomor = 1;
@@ -1073,7 +1083,8 @@ function tarikDaftarUserAdmin() {
       snapshot.forEach((doc) => {
         const user = doc.data();
         const email = user.email || "-";
-        const namaInstansi = user.namaInstansi || formatNamaInstansi(user.opd || "");
+        const namaInstansi =
+          user.namaInstansi || formatNamaInstansi(user.opd || "");
         const role = user.opd || "User";
 
         htmlTabel += `
@@ -1113,7 +1124,9 @@ function prosesRegistrasiOPD() {
   const emailInput = document.getElementById("regEmail").value.trim();
   const passwordInput = document.getElementById("regPassword").value;
   const selectOpd = document.getElementById("regOPD");
-  const namaInstansiInput = document.getElementById("regNamaInstansi").value.trim();
+  const namaInstansiInput = document
+    .getElementById("regNamaInstansi")
+    .value.trim();
 
   const opdTerpilih = selectOpd.value;
 
@@ -1125,15 +1138,17 @@ function prosesRegistrasiOPD() {
   // Gunakan Instance Sekunder Firebase Auth agar sesi login Admin aktif tidak terputus
   let secondaryApp;
   try {
-    secondaryApp = firebase.apps.find(app => app.name === "SecondaryAdminApp") 
-                   || firebase.initializeApp(firebaseConfig, "SecondaryAdminApp");
+    secondaryApp =
+      firebase.apps.find((app) => app.name === "SecondaryAdminApp") ||
+      firebase.initializeApp(firebaseConfig, "SecondaryAdminApp");
   } catch (e) {
     secondaryApp = firebase.app("SecondaryAdminApp");
   }
 
   const secondaryAuth = secondaryApp.auth();
 
-  secondaryAuth.createUserWithEmailAndPassword(emailInput, passwordInput)
+  secondaryAuth
+    .createUserWithEmailAndPassword(emailInput, passwordInput)
     .then((userCredential) => {
       const newUser = userCredential.user;
 
@@ -1143,12 +1158,14 @@ function prosesRegistrasiOPD() {
         email: emailInput,
         opd: opdTerpilih,
         namaInstansi: namaInstansiInput,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
     })
     .then(() => {
-      alert(`Berhasil! Akun ${emailInput} telah didaftarkan untuk ${namaInstansiInput}`);
-      
+      alert(
+        `Berhasil! Akun ${emailInput} telah didaftarkan untuk ${namaInstansiInput}`,
+      );
+
       // Reset Form & Tutup Modal
       document.getElementById("formRegistrasiUser").reset();
       const modalEl = document.getElementById("modalTambahUser");
@@ -1172,10 +1189,17 @@ function adminKirimResetPassword(emailUser) {
     return;
   }
 
-  if (confirm(`Apakah Anda yakin ingin mengirim tautan reset password ke email:\n${emailUser}?`)) {
-    auth.sendPasswordResetEmail(emailUser)
+  if (
+    confirm(
+      `Apakah Anda yakin ingin mengirim tautan reset password ke email:\n${emailUser}?`,
+    )
+  ) {
+    auth
+      .sendPasswordResetEmail(emailUser)
       .then(() => {
-        alert(`Tautan reset password berhasil dikirim ke ${emailUser}.\nSilakan periksa kotak masuk/spam email tersebut.`);
+        alert(
+          `Tautan reset password berhasil dikirim ke ${emailUser}.\nSilakan periksa kotak masuk/spam email tersebut.`,
+        );
       })
       .catch((error) => {
         alert("Gagal mengirim email reset password: " + error.message);
@@ -1184,8 +1208,14 @@ function adminKirimResetPassword(emailUser) {
 }
 
 function hapusUserFirestore(uidUser, emailUser) {
-  if (confirm(`Apakah Anda yakin ingin menghapus profil user ${emailUser} dari database?`)) {
-    db.collection("users").doc(uidUser).delete()
+  if (
+    confirm(
+      `Apakah Anda yakin ingin menghapus profil user ${emailUser} dari database?`,
+    )
+  ) {
+    db.collection("users")
+      .doc(uidUser)
+      .delete()
       .then(() => {
         alert("Profil user berhasil dihapus.");
         tarikDaftarUserAdmin();
