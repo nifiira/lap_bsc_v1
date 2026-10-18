@@ -43,6 +43,51 @@
 
     <!-- Template Stylesheet -->
     <link href="assets/css/style.css" rel="stylesheet" />
+    <style>
+      /* Kolom Kiri Utama: Memuat gambar blur paling belakang */
+      .bg-login-kiri {
+        position: relative;
+        background-image: url("assets/img/icon.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+      }
+
+      /* Lapisan Blur Paling Belakang */
+      .bg-login-kiri::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("assets/img/login-banner2.png");
+        background-size: cover;
+        background-position: center;
+        filter: blur(5px) brightness(0.85); /* Efek blur dan sedikit penggelapan */
+        transform: scale(1.1); /* Mencegah pinggiran blur terpotong */
+      }
+
+      /* Lapisan Gambar Kedua (Gambar Utama yang Jernih di Depan Latar Blur) */
+      .gambar-depan-wrapper {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 2rem;
+      }
+
+      .gambar-depan-wrapper img {
+        max-width: 85%;
+        max-height: 85%;
+        object-fit: contain;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Bayangan halus di sekeliling gambar */
+      }
+    </style>
   </head>
 
   <body>
@@ -66,15 +111,11 @@
       <div class="container-fluid px-0">
         <div class="row g-0 vh-100 align-items-center">
           <!-- Kolom Kiri: Background Gambar dari assets/img/icon.jpg -->
-          <div
-            class="col-lg-7 d-none d-lg-block h-100 bg-blue"
-            style="
-              background-image: url(&quot;assets/img/login-banner2.png&quot;);
-              background-size: contain;
-              background-position: center;
-              background-repeat: no-repeat;
-            "
-          ></div>
+          <div class="col-lg-7 d-none d-lg-block h-100 bg-login-kiri">
+            <div class="gambar-depan-wrapper">
+              <img src="assets/img/icon.png" alt="Latar Belakang SIAPSATYA" />
+            </div>
+          </div>
 
           <!-- Kolom Kanan: Form Login -->
           <div
