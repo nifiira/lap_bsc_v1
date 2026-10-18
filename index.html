@@ -44,7 +44,7 @@
     <!-- Template Stylesheet -->
     <link href="assets/css/style.css" rel="stylesheet" />
     <style>
-      /* Kolom Kiri Utama: Memuat gambar blur paling belakang */
+      /* Kolom Kiri Utama */
       .bg-login-kiri {
         position: relative;
         background-image: url("assets/img/icon.jpg");
@@ -54,7 +54,7 @@
         overflow: hidden;
       }
 
-      /* Lapisan Blur Paling Belakang */
+      /* Lapisan Blur Paling Belakang (Dikurangi menjadi 3px agar tidak terlalu kabur) */
       .bg-login-kiri::before {
         content: "";
         position: absolute;
@@ -62,14 +62,14 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-image: url("assets/img/login-banner2.png");
+        background-image: url("assets/img/icon.jpg");
         background-size: cover;
         background-position: center;
-        filter: blur(3px) brightness(0.9); /* Efek blur dan sedikit penggelapan */
-        transform: scale(1.1); /* Mencegah pinggiran blur terpotong */
+        filter: blur(3px) brightness(0.9); /* Nilai blur diturunkan dari 10px ke 3px */
+        transform: scale(1.05);
       }
 
-      /* Lapisan Gambar Kedua (Gambar Utama yang Jernih di Depan Latar Blur) */
+      /* Lapisan Gambar Utama di Depan */
       .gambar-depan-wrapper {
         position: relative;
         z-index: 1;
@@ -85,7 +85,7 @@
         max-height: 85%;
         object-fit: contain;
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Bayangan halus di sekeliling gambar */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
       }
     </style>
   </head>
