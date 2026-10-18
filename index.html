@@ -130,6 +130,22 @@
         text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
         margin-top: 1rem;
       }
+      /* Menambahkan efek pencampuran gradasi ke putih di sisi kanan foto */
+      .bg-login-kiri::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0.4) 0%,
+          rgba(0, 0, 0, 0.2) 60%,
+          rgba(255, 255, 255, 0.95) 100%
+        );
+        z-index: 1;
+      }
     </style>
   </head>
 
