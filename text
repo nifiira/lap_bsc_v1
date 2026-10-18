@@ -1,19 +1,145 @@
-<div class="navbar-nav w-100">
-  <a href="dashboard.html" class="nav-item nav-link"
-    ><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
-  >
+function prosesRegistrasiOPD() {
+  const emailInput = document.getElementById("regEmail").value.trim();
+  const passwordInput = document.getElementById("regPassword").value;
+  const selectOpd = document.getElementById("regOPD");
+  
+  const opdTerpilih = selectOpd.value; // Contoh: "rsud_pasuruan" atau "pkm_purworejo"
+  const namaInstansiTerpilih = selectOpd.options[selectOpd.selectedIndex].text; // Contoh: "RSUD Pasuruan"
 
-  <!-- Menu khusus RSUD -->
-  <a href="penilaian-rsud.html" class="nav-item nav-link" id="menuPenilaianRsud"
-    ><i class="fa fa-clipboard-check me-2"></i>Penilaian RSUD</a
-  >
+  if (!emailInput || !passwordInput || !opdTerpilih) {
+    alert("Harap lengkapi Email, Password, dan Pilihan Instansi!");
+    return;
+  }
 
-  <!-- Menu khusus Puskesmas -->
-  <a href="penilaian-pkm.html" class="nav-item nav-link" id="menuPenilaianPkm"
-    ><i class="fa fa-clipboard-check me-2"></i>Penilaian Puskesmas</a
-  >
+  // Gunakan Instance Sekunder agar sesi login Admin utama tidak terganggu
+  let secondaryApp;
+  try {
+    secondaryApp = firebase.apps.find(app => app.name === "SecondaryAdminApp") 
+                   || firebase.initializeApp(firebaseConfig, "SecondaryAdminApp");
+  } catch (e) {
+    secondaryApp = firebase.app("SecondaryAdminApp");
+  }
 
-  <a href="laporan.html" class="nav-item nav-link"
-    ><i class="fa fa-print me-2"></i>Laporan</a
-  >
-</div>
+  const secondaryAuth = secondaryApp.auth();
+
+  secondaryAuth.createUserWithEmailAndPassword(emailInput, passwordInput)
+    .then((userCredential) => {
+      const newUser = userCredential.user;
+
+      // Simpan pemetaan role dan nama formal instansi ke Firestore
+      return db.collection("users").doc(newUser.uid).set({
+        uid: newUser.uid,
+        email: emailInput,
+        opd: opdTerpilih,              // Digunakan untuk logika sistem & database
+        namaInstansi: namaInstansiTerpilih, // Ditampilkan di antarmuka dashboard
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    })
+    .then(() => {
+      alert(`Berhasil! Akun ${emailInput} terdaftar untuk instansi: ${namaInstansiTerpilih}`);
+      document.getElementById("regEmail").value = "";
+      document.getElementById("regPassword").value = "";
+      document.getElementById("regOPD").value = "";
+    })
+    .catch((error) => {
+      alert("Pendaftaran Gagal: " + error.message);
+    });
+}
+
+
+
+auth.onAuthStateChanged((user) => {
+  const currentPath = window.location.pathname;
+  const isLoginPage = currentPath.includes("index.html") || currentPath.endsWith("/");
+  const isDashboardPage = currentPath.includes("dashboard.html");
+  const isPenilaianPage = currentPath.includes("penilaian-rsud.html") || currentPath.includes("penilaian-pkm.html");
+
+  if (user) {
+    currentUser = user;
+
+    // AMBIL PROFIL DARI KOLEKSI 'users' DI FIRESTORE BERDASARKAN UID
+    db.collection("users").doc(user.uid).get().then((doc) => {
+      if (doc.exists) {
+        const userData = doc.data();
+        const opdUser = userData.opd; // Misal: "rsud_pasuruan", "pkm_purworejo", atau "admin"
+        const namaInstansiResmi = userData.namaInstansi || "Administrator"; // Teks formal untuk UI
+
+        // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
+        document.querySelectorAll('.namaUser').forEach(el => {
+            el.innerText = namaInstansiResmi;
+        });
+
+        const selectTribulan = document.getElementById("pilihTribulan");
+        if (selectTribulan) tribulanAktif = selectTribulan.value;
+
+        if (isLoginPage) {
+          window.location.href = "dashboard.html";
+          return;
+        }
+
+        // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
+        if (opdUser === "admin") {
+          aturTampilanBerdasarkanRole("admin");
+          if (typeof tarikSemuaDataAdmin === 'function') tarikSemuaDataAdmin();
+        } 
+        else if (opdUser.startsWith("rsud_")) {
+          tipeKoleksi = "evaluasi_kinerja_rsud";
+          formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
+          aturTampilanBerdasarkanRole("rsud");
+
+          if (currentPath.includes("penilaian-pkm.html")) {
+            window.location.href = "penilaian-rsud.html";
+          } else if (typeof muatDataDariFirebase === 'function') {
+            muatDataDariFirebase();
+          }
+        } 
+        else if (opdUser.startsWith("pkm_")) {
+          tipeKoleksi = "evaluasi_kinerja_pkm";
+          formRef = db.collection(tipeKoleksi).doc(`${user.uid}_${tribulanAktif}`);
+          aturTampilanBerdasarkanRole("pkm");
+
+          if (currentPath.includes("penilaian-rsud.html")) {
+            window.location.href = "penilaian-pkm.html";
+          } else if (typeof muatDataDariFirebase === 'function') {
+            muatDataDariFirebase();
+          }
+        } 
+        else {
+          alert("Akses Ditolak: Profil instansi tidak valid.");
+          auth.signOut();
+        }
+
+      } else {
+        alert("Akses Ditolak: Data profil user tidak ditemukan di database sistem.");
+        auth.signOut();
+      }
+    }).catch((err) => {
+      console.error("Gagal memuat profil:", err);
+    });
+
+  } else {
+    currentUser = null;
+    formRef = null;
+    if (isDashboardPage || isPenilaianPage) {
+      window.location.href = "index.html";
+    }
+  }
+});
+
+
+function adminKirimResetPassword(emailUser) {
+  if (!emailUser) {
+    alert("Email user tidak valid.");
+    return;
+  }
+
+  if (confirm(`Apakah Anda yakin ingin mengirimkan tautan reset password ke email: ${emailUser}?`)) {
+    auth.sendPasswordResetEmail(emailUser)
+      .then(() => {
+        alert(`Tautan reset password berhasil dikirim ke ${emailUser}.\nSilakan cek kotak masuk/spam email tersebut.`);
+      })
+      .catch((error) => {
+        alert("Gagal mengirim email reset password: " + error.message);
+      });
+  }
+}
