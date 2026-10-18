@@ -1050,3 +1050,144 @@ window.onkeypress = resetIdleTimer;
 window.onclick = resetIdleTimer;
 window.onscroll = resetIdleTimer;
 window.ontouchstart = resetIdleTimer;
+
+
+// ========================================================
+// 1. MENAMPILKAN SEMUA DATA USER DARI FIRESTORE
+// ========================================================
+function tarikDaftarUserAdmin() {
+  const tabelRef = document.getElementById("tabelDaftarUser");
+  if (!tabelRef) return;
+
+  tabelRef.innerHTML = `<tr><td colspan="5" class="text-center">Sedang mengambil data user...</td></tr>`;
+
+  db.collection("users").get()
+    .then((snapshot) => {
+      let htmlTabel = "";
+      let nomor = 1;
+
+      snapshot.forEach((doc) => {
+        const user = doc.data();
+        const email = user.email || "-";
+        const namaInstansi = user.namaInstansi || formatNamaInstansi(user.opd || "");
+        const role = user.opd || "User";
+
+        htmlTabel += `
+          <tr>
+            <td>${nomor++}</td>
+            <td><strong>${email}</strong></td>
+            <td>${namaInstansi}</td>
+            <td><span class="badge bg-info text-dark">${role}</span></td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-warning me-1" onclick="adminKirimResetPassword('${email}')" title="Kirim Email Reset Password">
+                <i class="fa fa-key me-1"></i> Reset Password
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="hapusUserFirestore('${doc.id}', '${email}')" title="Hapus Profil User">
+                <i class="fa fa-trash me-1"></i> Hapus
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      if (htmlTabel === "") {
+        tabelRef.innerHTML = `<tr><td colspan="5" class="text-center">Belum ada user terdaftar.</td></tr>`;
+      } else {
+        tabelRef.innerHTML = htmlTabel;
+      }
+    })
+    .catch((error) => {
+      console.error("Gagal mengambil data user:", error);
+      tabelRef.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Gagal memuat data user.</td></tr>`;
+    });
+}
+
+// ========================================================
+// 2. REGISTRASI USER BARU OLEH ADMIN
+// ========================================================
+function prosesRegistrasiOPD() {
+  const emailInput = document.getElementById("regEmail").value.trim();
+  const passwordInput = document.getElementById("regPassword").value;
+  const selectOpd = document.getElementById("regOPD");
+  const namaInstansiInput = document.getElementById("regNamaInstansi").value.trim();
+
+  const opdTerpilih = selectOpd.value;
+
+  if (!emailInput || !passwordInput || !opdTerpilih || !namaInstansiInput) {
+    alert("Harap lengkapi Email, Password, Kategori OPD, dan Nama Instansi!");
+    return;
+  }
+
+  // Gunakan Instance Sekunder Firebase Auth agar sesi login Admin aktif tidak terputus
+  let secondaryApp;
+  try {
+    secondaryApp = firebase.apps.find(app => app.name === "SecondaryAdminApp") 
+                   || firebase.initializeApp(firebaseConfig, "SecondaryAdminApp");
+  } catch (e) {
+    secondaryApp = firebase.app("SecondaryAdminApp");
+  }
+
+  const secondaryAuth = secondaryApp.auth();
+
+  secondaryAuth.createUserWithEmailAndPassword(emailInput, passwordInput)
+    .then((userCredential) => {
+      const newUser = userCredential.user;
+
+      // Simpan pemetaan profil ke koleksi 'users' di Firestore
+      return db.collection("users").doc(newUser.uid).set({
+        uid: newUser.uid,
+        email: emailInput,
+        opd: opdTerpilih,
+        namaInstansi: namaInstansiInput,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    })
+    .then(() => {
+      alert(`Berhasil! Akun ${emailInput} telah didaftarkan untuk ${namaInstansiInput}`);
+      
+      // Reset Form & Tutup Modal
+      document.getElementById("formRegistrasiUser").reset();
+      const modalEl = document.getElementById("modalTambahUser");
+      const modalInstance = bootstrap.Modal.getInstance(modalEl);
+      if (modalInstance) modalInstance.hide();
+
+      // Refresh Tabel User
+      tarikDaftarUserAdmin();
+    })
+    .catch((error) => {
+      alert("Pendaftaran Gagal: " + error.message);
+    });
+}
+
+// ========================================================
+// 3. RESET PASSWORD & HAPUS PROFIL USER
+// ========================================================
+function adminKirimResetPassword(emailUser) {
+  if (!emailUser || emailUser === "-") {
+    alert("Email pengguna tidak valid.");
+    return;
+  }
+
+  if (confirm(`Apakah Anda yakin ingin mengirim tautan reset password ke email:\n${emailUser}?`)) {
+    auth.sendPasswordResetEmail(emailUser)
+      .then(() => {
+        alert(`Tautan reset password berhasil dikirim ke ${emailUser}.\nSilakan periksa kotak masuk/spam email tersebut.`);
+      })
+      .catch((error) => {
+        alert("Gagal mengirim email reset password: " + error.message);
+      });
+  }
+}
+
+function hapusUserFirestore(uidUser, emailUser) {
+  if (confirm(`Apakah Anda yakin ingin menghapus profil user ${emailUser} dari database?`)) {
+    db.collection("users").doc(uidUser).delete()
+      .then(() => {
+        alert("Profil user berhasil dihapus.");
+        tarikDaftarUserAdmin();
+      })
+      .catch((error) => {
+        alert("Gagal menghapus user: " + error.message);
+      });
+  }
+}
