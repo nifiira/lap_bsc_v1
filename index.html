@@ -54,7 +54,7 @@
         overflow: hidden;
       }
 
-      /* Lapisan Blur Paling Belakang (Dikurangi menjadi 3px agar tidak terlalu kabur) */
+      /* Lapisan Blur Paling Belakang */
       .bg-login-kiri::before {
         content: "";
         position: absolute;
@@ -65,27 +65,70 @@
         background-image: url("assets/img/bg.jpg");
         background-size: cover;
         background-position: center;
-        filter: blur(3px) brightness(0.9); /* Nilai blur diturunkan dari 10px ke 3px */
+        filter: blur(3px) brightness(0.9);
         transform: scale(1.05);
       }
 
-      /* Lapisan Gambar Utama di Depan */
+      /* Lapisan Konten Utama di Depan */
       .gambar-depan-wrapper {
         position: relative;
         z-index: 1;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         height: 100%;
-        padding: 2rem;
+        padding: 3rem 2rem;
+        text-align: center;
       }
 
-      .gambar-depan-wrapper img {
-        max-width: 50%;
-        max-height: 50%;
+      /* Styling Logo Utama */
+      .gambar-depan-wrapper img.logo-tengah {
+        max-width: 120px;
+        max-height: 120px;
         object-fit: contain;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+        margin: 1.2rem 0;
+      }
+
+      /* Variasi Teks Estetik di Sisi Kiri */
+      .banner-title-upper {
+        color: #ffd700;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+        margin-bottom: 0.4rem;
+      }
+
+      .banner-title-main {
+        color: #ffffff;
+        font-size: 1.4rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+        line-height: 1.4;
+        max-width: 550px;
+        margin-bottom: 0.5rem;
+      }
+
+      .banner-divider {
+        height: 3px;
+        width: 70px;
+        background: #ffd700;
+        margin: 0.8rem auto;
+        border-radius: 2px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      }
+
+      .banner-footer-vision {
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 0.95rem;
+        font-style: italic;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+        margin-top: 1rem;
       }
     </style>
   </head>
@@ -110,10 +153,26 @@
       <!-- Sign In Start -->
       <div class="container-fluid px-0">
         <div class="row g-0 vh-100 align-items-center">
-          <!-- Kolom Kiri: Background Gambar dari assets/img/icon.jpg -->
+          <!-- Kolom Kiri: Dual Background (Blur + Variasi Teks & Logo) -->
           <div class="col-lg-7 d-none d-lg-block h-100 bg-login-kiri">
             <div class="gambar-depan-wrapper">
-              <img src="assets/img/icon.png" alt="Latar Belakang SIAPSATYA" />
+              <span class="banner-title-upper"
+                >Pemerintah Kabupaten Pasuruan</span
+              >
+              <h2 class="banner-title-main">
+                Bagian Perekonomian, SDA dan Administrasi Pembangunan
+              </h2>
+              <div class="banner-divider"></div>
+
+              <img
+                src="assets/img/icon.png"
+                alt="Logo Instansi"
+                class="logo-tengah"
+              />
+
+              <p class="banner-footer-vision">
+                "Pasuruan Maju, Sejahtera, dan Berkeadilan"
+              </p>
             </div>
           </div>
 
