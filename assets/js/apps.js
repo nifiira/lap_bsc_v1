@@ -64,8 +64,9 @@ auth.onAuthStateChanged((user) => {
           // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
           if (opdUser === "admin") {
             aturTampilanBerdasarkanRole("admin");
-            if (typeof tarikSemuaDataAdmin === "function")
-              tarikSemuaDataAdmin();
+            if (currentPath.includes("user-login.html")) {
+              tarikDaftarUserAdmin();
+            }
           } else if (opdUser.startsWith("rsud_")) {
             tipeKoleksi = "evaluasi_kinerja_rsud";
             formRef = db
