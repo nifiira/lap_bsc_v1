@@ -1110,14 +1110,15 @@ function prosesRegistrasiOPD() {
   const emailInput = document.getElementById("regEmail").value.trim();
   const passwordInput = document.getElementById("regPassword").value;
   const selectOpd = document.getElementById("regOPD");
-  const namaInstansiInput = document
-    .getElementById("regNamaInstansi")
-    .value.trim();
 
-  const opdTerpilih = selectOpd.value;
+  const opdTerpilih = selectOpd.value; // Contoh: "rsud_bangil"
+  // Mengambil teks dari option yang dipilih (Contoh: "RSUD Bangil")
+  const namaInstansiTerpilih = selectOpd.options[selectOpd.selectedIndex]
+    ? selectOpd.options[selectOpd.selectedIndex].text
+    : "";
 
-  if (!emailInput || !passwordInput || !opdTerpilih || !namaInstansiInput) {
-    alert("Harap lengkapi Email, Password, Kategori OPD, dan Nama Instansi!");
+  if (!emailInput || !passwordInput || !opdTerpilih) {
+    alert("Harap lengkapi Email, Password, dan Pilihan Instansi!");
     return;
   }
 
@@ -1143,13 +1144,13 @@ function prosesRegistrasiOPD() {
         uid: newUser.uid,
         email: emailInput,
         opd: opdTerpilih,
-        namaInstansi: namaInstansiInput,
+        namaInstansi: namaInstansiTerpilih, // Otomatis menyimpan nama dari option
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
     })
     .then(() => {
       alert(
-        `Berhasil! Akun ${emailInput} telah didaftarkan untuk ${namaInstansiInput}`,
+        `Berhasil! Akun ${emailInput} telah didaftarkan untuk ${namaInstansiTerpilih}`,
       );
 
       // Reset Form & Tutup Modal
@@ -1159,7 +1160,9 @@ function prosesRegistrasiOPD() {
       if (modalInstance) modalInstance.hide();
 
       // Refresh Tabel User
-      tarikDaftarUserAdmin();
+      if (typeof tarikDaftarUserAdmin === "function") {
+        tarikDaftarUserAdmin();
+      }
     })
     .catch((error) => {
       alert("Pendaftaran Gagal: " + error.message);
