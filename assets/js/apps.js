@@ -848,6 +848,7 @@ async function tarikSemuaDataAdmin() {
 
       htmlTabel += `
         <tr class="pkm-row">
+            <td>${nomor++}</td>
             <td><strong>${nama}</strong></td>
             <td>${triwulan}</td>
             <td><strong>${total}</strong></td>
