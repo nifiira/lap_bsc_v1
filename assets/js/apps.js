@@ -47,8 +47,7 @@ auth.onAuthStateChanged((user) => {
           const userData = doc.data();
           const opdUser = userData.opd; // Misal: "rsud_pasuruan", "pkm_purworejo", atau "admin"
           const namaInstansiResmi = userData.namaInstansi || "Administrator"; // Teks formal untuk UI
-          localStorage.setItem("auth_uid", user.uid);
-          localStorage.setItem("auth_role", opdUser);
+
           // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
           document.querySelectorAll(".namaUser").forEach((el) => {
             el.innerText = namaInstansiResmi;
@@ -94,21 +93,6 @@ auth.onAuthStateChanged((user) => {
           } else {
             alert("Akses Ditolak: Profil instansi tidak valid.");
             auth.signOut();
-          }
-          const antiBlinkStyle = document.getElementById("anti-blink-style");
-          if (antiBlinkStyle) antiBlinkStyle.remove();
-
-          // Munculkan sidebar secara mulus
-          const sidebarEl = document.querySelector(".sidebar");
-          if (sidebarEl) {
-            sidebarEl.classList.add("siap");
-          }
-          // 2. MUNCULKAN KONTEN UTAMA SECARA GLOBAL (UNTUK ADMIN & USER)
-          const formContainer = document.querySelector(
-            ".bg-light.rounded.h-100",
-          );
-          if (formContainer) {
-            formContainer.classList.add("siap");
           }
         } else {
           alert(
@@ -216,10 +200,6 @@ function togglePassword() {
 function logoutUser() {
   const konfirmasi = confirm("Apakah Anda yakin ingin keluar?");
   if (konfirmasi) {
-    // BERSIHKAN CACHE LOKAL AGAR TIDAK TERSANGKUT DI SESI BERIKUTNYA
-    localStorage.removeItem("auth_uid");
-    localStorage.removeItem("auth_role");
-
     auth.signOut();
   }
 }
