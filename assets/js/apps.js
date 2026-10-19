@@ -117,29 +117,19 @@ auth.onAuthStateChanged((user) => {
 // Mengatur tampilan menu berdasarkan role pengguna
 // ========================================================
 function aturTampilanBerdasarkanRole(role) {
-  const menuRsud = document.getElementById("menuPenilaianRsud");
-  const menuPkm = document.getElementById("menuPenilaianPkm");
-  const menuUser = document.getElementById("menuUserLogin");
-  const sectionAdminRecap = document.getElementById("sectionAdminRecap");
-
-  // Sembunyikan semua secara default terlebih dahulu
-  if (menuRsud) menuRsud.style.display = "none";
-  if (menuPkm) menuPkm.style.display = "none";
-  if (menuUser) menuUser.style.display = "none";
-  if (sectionAdminRecap) sectionAdminRecap.style.display = "none";
-
+  // Cukup tambahkan class ke body berdasarkan role user
   if (role === "admin") {
-    // Jika Admin: Tampilkan kedua menu penilaian dan tabel rekap admin
-    if (menuRsud) menuRsud.style.display = "block";
-    if (menuPkm) menuPkm.style.display = "block";
-    if (menuUser) menuUser.style.display = "block";
-    if (sectionAdminRecap) sectionAdminRecap.style.display = "block";
+    document.body.classList.add("role-admin");
   } else if (role === "rsud") {
-    // Jika RSUD: Hanya tampilkan menu penilaian RSUD
-    if (menuRsud) menuRsud.style.display = "block";
+    document.body.classList.add("role-rsud");
   } else if (role === "pkm") {
-    // Jika Puskesmas: Hanya tampilkan menu penilaian Puskesmas
-    if (menuPkm) menuPkm.style.display = "block";
+    document.body.classList.add("role-pkm");
+  }
+
+  // Sembunyikan elemen admin rekap jika ada
+  const sectionAdminRecap = document.getElementById("sectionAdminRecap");
+  if (sectionAdminRecap) {
+    sectionAdminRecap.style.display = role === "admin" ? "block" : "none";
   }
 }
 
