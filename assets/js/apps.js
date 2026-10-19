@@ -655,11 +655,8 @@ function hitungGrandTotal() {
 
   // === FITUR SAPU JAGAT: REKAM SELURUH NILAI DI LAYAR KE FIREBASE ===
   if (currentUser && formRef) {
-    const usernameAsli = currentUser.email.replace("@gmail.com", "");
-    const namaLengkapInstansi = formatNamaInstansi(usernameAsli);
-
     let dataLengkap = {
-      nama_instansi: namaLengkapInstansi,
+      nama_instansi: currentNamaInstansi || "Instansi Resmi",
       grand_total: grandTotal.toFixed(2),
       predikat: predikatHasil,
     };
