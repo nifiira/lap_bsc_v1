@@ -64,9 +64,8 @@ auth.onAuthStateChanged((user) => {
           // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
           if (opdUser === "admin") {
             aturTampilanBerdasarkanRole("admin");
-            if (currentPath.includes("user-login.html")) {
-              tarikDaftarUserAdmin();
-            }
+            if (typeof tarikSemuaDataAdmin === "function")
+              tarikSemuaDataAdmin();
           } else if (opdUser.startsWith("rsud_")) {
             tipeKoleksi = "evaluasi_kinerja_rsud";
             formRef = db
@@ -94,12 +93,6 @@ auth.onAuthStateChanged((user) => {
           } else {
             alert("Akses Ditolak: Profil instansi tidak valid.");
             auth.signOut();
-          }
-
-          // MUNCULKAN KEMBALI SIDEBAR SECARA MULUS SETELAH ROLE SIAP
-          const sidebarEl = document.querySelector(".sidebar");
-          if (sidebarEl) {
-            sidebarEl.classList.add("siap");
           }
         } else {
           alert(
