@@ -814,6 +814,7 @@ async function tarikSemuaDataAdmin() {
 
   try {
     let htmlTabel = "";
+    let nomor = 1;
 
     const snapshotRsud = await db.collection("evaluasi_kinerja_rsud").get();
     snapshotRsud.forEach((doc) => {
@@ -826,6 +827,7 @@ async function tarikSemuaDataAdmin() {
 
       htmlTabel += `
         <tr class="rsud-row">
+            <td>${nomor++}</td>
             <td><strong>${nama}</strong></td>
             <td>${triwulan}</td>
             <td><strong>${total}</strong></td>
