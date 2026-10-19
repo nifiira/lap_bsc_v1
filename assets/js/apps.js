@@ -1,4 +1,34 @@
 // ========================================================
+// Mengatur tampilan menu berdasarkan role pengguna
+// ========================================================
+function aturTampilanBerdasarkanRole(role) {
+  const menuRsud = document.getElementById("menuPenilaianRsud");
+  const menuPkm = document.getElementById("menuPenilaianPkm");
+  const menuUser = document.getElementById("menuUserLogin");
+  const sectionAdminRecap = document.getElementById("sectionAdminRecap");
+
+  // Sembunyikan semua secara default terlebih dahulu
+  if (menuRsud) menuRsud.style.display = "none";
+  if (menuPkm) menuPkm.style.display = "none";
+  if (menuUser) menuUser.style.display = "none";
+  if (sectionAdminRecap) sectionAdminRecap.style.display = "none";
+
+  if (role === "admin") {
+    // Jika Admin: Tampilkan kedua menu penilaian dan tabel rekap admin
+    if (menuRsud) menuRsud.style.display = "block";
+    if (menuPkm) menuPkm.style.display = "block";
+    if (menuUser) menuUser.style.display = "block";
+    if (sectionAdminRecap) sectionAdminRecap.style.display = "block";
+  } else if (role === "rsud") {
+    // Jika RSUD: Hanya tampilkan menu penilaian RSUD
+    if (menuRsud) menuRsud.style.display = "block";
+  } else if (role === "pkm") {
+    // Jika Puskesmas: Hanya tampilkan menu penilaian Puskesmas
+    if (menuPkm) menuPkm.style.display = "block";
+  }
+}
+
+// ========================================================
 // 1. CONFIG & INITIALIZATION FIREBASE (CLOUD FIRESTORE)
 // ========================================================
 const firebaseConfig = {
@@ -112,36 +142,6 @@ auth.onAuthStateChanged((user) => {
     }
   }
 });
-
-// ========================================================
-// Mengatur tampilan menu berdasarkan role pengguna
-// ========================================================
-function aturTampilanBerdasarkanRole(role) {
-  const menuRsud = document.getElementById("menuPenilaianRsud");
-  const menuPkm = document.getElementById("menuPenilaianPkm");
-  const menuUser = document.getElementById("menuUserLogin");
-  const sectionAdminRecap = document.getElementById("sectionAdminRecap");
-
-  // Sembunyikan semua secara default terlebih dahulu
-  if (menuRsud) menuRsud.style.display = "none";
-  if (menuPkm) menuPkm.style.display = "none";
-  if (menuUser) menuUser.style.display = "none";
-  if (sectionAdminRecap) sectionAdminRecap.style.display = "none";
-
-  if (role === "admin") {
-    // Jika Admin: Tampilkan kedua menu penilaian dan tabel rekap admin
-    if (menuRsud) menuRsud.style.display = "block";
-    if (menuPkm) menuPkm.style.display = "block";
-    if (menuUser) menuUser.style.display = "block";
-    if (sectionAdminRecap) sectionAdminRecap.style.display = "block";
-  } else if (role === "rsud") {
-    // Jika RSUD: Hanya tampilkan menu penilaian RSUD
-    if (menuRsud) menuRsud.style.display = "block";
-  } else if (role === "pkm") {
-    // Jika Puskesmas: Hanya tampilkan menu penilaian Puskesmas
-    if (menuPkm) menuPkm.style.display = "block";
-  }
-}
 
 function gantiTribulan() {
   const selectTribulan = document.getElementById("pilihTribulan");
