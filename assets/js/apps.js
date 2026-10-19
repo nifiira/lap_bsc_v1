@@ -103,6 +103,13 @@ auth.onAuthStateChanged((user) => {
           if (sidebarEl) {
             sidebarEl.classList.add("siap");
           }
+          // 2. MUNCULKAN KONTEN UTAMA SECARA GLOBAL (UNTUK ADMIN & USER)
+          const formContainer = document.querySelector(
+            ".bg-light.rounded.h-100",
+          );
+          if (formContainer) {
+            formContainer.classList.add("siap");
+          }
         } else {
           alert(
             "Akses Ditolak: Data profil user tidak ditemukan di database sistem.",
@@ -284,23 +291,12 @@ function muatDataDariFirebase() {
         if (typeof hitungTotalPoin41 === "function") hitungTotalPoin41();
         if (typeof hitungGrandTotal === "function") hitungGrandTotal();
       }
-
-      // === MUNCULKAN KONTEN PENILAIAN SECARA MULUS SETELAH SIAP ===
-      const formContainer = document.querySelector(".bg-light.rounded.h-100");
-      if (formContainer) {
-        formContainer.classList.add("siap");
-      }
     })
     .catch((error) => {
       console.error("Gagal memuat data dari Firebase: ", error);
-
-      // Tetap munculkan form jika terjadi error agar tidak tertahan
-      const formContainer = document.querySelector(".bg-light.rounded.h-100");
-      if (formContainer) {
-        formContainer.classList.add("siap");
-      }
     });
 }
+
 // ========================================================
 // 4. FUNGSI KALKULASI & PENJUMLAHAN
 // ========================================================
