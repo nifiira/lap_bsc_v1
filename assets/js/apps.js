@@ -808,6 +808,7 @@ function formatNamaInstansi(username) {
 // ========================================================
 async function tarikSemuaDataAdmin() {
   const tabelRef = document.getElementById("tabelRekapAdmin");
+  // const tabelRef = document.getElementById("tabelDaftarUser");
   if (!tabelRef) return;
 
   tabelRef.innerHTML = "";
@@ -821,16 +822,15 @@ async function tarikSemuaDataAdmin() {
       const data = doc.data();
       const idParts = doc.id.split("_");
       const triwulan = idParts[1] || "Tidak Diketahui";
-      // const nama = data.nama_instansi || "RSUD (Belum Input)";
-      const namaInstansi =
-        user.namaInstansi || formatNamaInstansi(user.opd || "");
+      const nama = data.nama_instansi || "RSUD (Belum Input)";
+
       const total = data.grand_total || "0.00";
       const predikat = data.predikat || "-";
 
       htmlTabel += `
         <tr class="rsud-row">
             <td>${nomor++}</td>
-            <td><strong>${namaInstansi}</strong></td>
+            <td><strong>${nama}</strong></td>
             <td>${triwulan}</td>
             <td><strong>${total}</strong></td>
             <td>${predikat}</td>
