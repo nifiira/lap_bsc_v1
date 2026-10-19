@@ -43,19 +43,16 @@
 
     <!-- Template Stylesheet -->
     <link href="assets/css/style.css" rel="stylesheet" />
-    <script>
+    <script id="anti-blink-script">
       (function () {
-        const cachedRole = localStorage.getItem("auth_role");
-        // Jika role tersimpan bukan admin, sembunyikan menu khusus sejak milidetik pertama
-        if (cachedRole && cachedRole !== "admin") {
-          const style = document.createElement("style");
-          style.innerHTML = `
-          #menuPenilaianRsud, #menuPenilaianPkm, #menuUserLogin {
-            display: none !important;
-          }
-        `;
-          document.head.appendChild(style);
+        const style = document.createElement("style");
+        style.id = "anti-blink-style";
+        style.innerHTML = `
+        #menuPenilaianRsud, #menuPenilaianPkm, #menuUserLogin {
+          display: none;
         }
+      `;
+        document.head.appendChild(style);
       })();
     </script>
   </head>
