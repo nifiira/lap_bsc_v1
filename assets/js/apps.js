@@ -117,22 +117,39 @@ auth.onAuthStateChanged((user) => {
 // Mengatur tampilan menu berdasarkan role pengguna
 // ========================================================
 function aturTampilanBerdasarkanRole(role) {
-  // Cukup tambahkan class ke body berdasarkan role user
+  const containerMenu = document.getElementById("containerMenuNavbar");
+  if (!containerMenu) return;
+
+  // Template menu dasar yang selalu ada
+  let htmlMenu = `
+    <a href="dashboard.html" class="nav-item nav-link active">
+      <i class="fa fa-tachometer-alt me-2"></i>Dashboard
+    </a>
+  `;
+
+  // Tambahkan menu berdasarkan role
   if (role === "admin") {
-    document.body.classList.add("role-admin");
+    htmlMenu += `
+      <a href="penilaian-rsud.html" class="nav-item nav-link" id="menuPenilaianRsud"><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD RSUD</a>
+      <a href="penilaian-pkm.html" class="nav-item nav-link" id="menuPenilaianPkm"><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD PKM</a>
+      <a href="laporan.html" class="nav-item nav-link"><i class="fa fa-print me-2"></i>Laporan</a>
+      <a href="user-login.html" class="nav-item nav-link" id="menuUserLogin"><i class="fa fa-user-plus me-2"></i>User Login</a>
+    `;
   } else if (role === "rsud") {
-    document.body.classList.add("role-rsud");
+    htmlMenu += `
+      <a href="penilaian-rsud.html" class="nav-item nav-link" id="menuPenilaianRsud"><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD RSUD</a>
+      <a href="laporan.html" class="nav-item nav-link"><i class="fa fa-print me-2"></i>Laporan</a>
+    `;
   } else if (role === "pkm") {
-    document.body.classList.add("role-pkm");
+    htmlMenu += `
+      <a href="penilaian-pkm.html" class="nav-item nav-link" id="menuPenilaianPkm"><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD PKM</a>
+      <a href="laporan.html" class="nav-item nav-link"><i class="fa fa-print me-2"></i>Laporan</a>
+    `;
   }
 
-  // Sembunyikan elemen admin rekap jika ada
-  const sectionAdminRecap = document.getElementById("sectionAdminRecap");
-  if (sectionAdminRecap) {
-    sectionAdminRecap.style.display = role === "admin" ? "block" : "none";
-  }
+  // Masukkan menu yang sudah difilter ke dalam sidebar
+  containerMenu.innerHTML = htmlMenu;
 }
-
 function gantiTribulan() {
   const selectTribulan = document.getElementById("pilihTribulan");
   if (!selectTribulan || !currentUser || !tipeKoleksi) return;
