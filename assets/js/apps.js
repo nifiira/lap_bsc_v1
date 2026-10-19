@@ -95,6 +95,14 @@ auth.onAuthStateChanged((user) => {
             alert("Akses Ditolak: Profil instansi tidak valid.");
             auth.signOut();
           }
+          const antiBlinkStyle = document.getElementById("anti-blink-style");
+          if (antiBlinkStyle) antiBlinkStyle.remove();
+
+          // Munculkan sidebar secara mulus
+          const sidebarEl = document.querySelector(".sidebar");
+          if (sidebarEl) {
+            sidebarEl.classList.add("siap");
+          }
         } else {
           alert(
             "Akses Ditolak: Data profil user tidak ditemukan di database sistem.",
