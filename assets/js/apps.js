@@ -45,10 +45,9 @@ auth.onAuthStateChanged((user) => {
       .then((doc) => {
         if (doc.exists) {
           const userData = doc.data();
-          const opdUser = userData.opd; // Misal: "rsud_pasuruan", "pkm_purworejo", atau "admin"
-          const namaInstansiResmi = userData.namaInstansi || "Administrator"; // Teks formal untuk UI
+          const opdUser = userData.opd;
+          const namaInstansiResmi = userData.namaInstansi || "Administrator";
 
-          // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
           document.querySelectorAll(".namaUser").forEach((el) => {
             el.innerText = namaInstansiResmi;
           });
@@ -61,7 +60,7 @@ auth.onAuthStateChanged((user) => {
             return;
           }
 
-          // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
+          // Tentukan Hak Akses Berdasarkan Atribut 'opd' di Database
           if (opdUser === "admin") {
             aturTampilanBerdasarkanRole("admin");
             if (currentPath.includes("user-login.html")) {
@@ -94,6 +93,12 @@ auth.onAuthStateChanged((user) => {
           } else {
             alert("Akses Ditolak: Profil instansi tidak valid.");
             auth.signOut();
+          }
+
+          // Tampilkan kembali menu secara mulus setelah role siap (Mencegah Blink)
+          const navMenu = document.querySelector(".navbar-nav");
+          if (navMenu) {
+            navMenu.classList.add("menu-ready");
           }
         } else {
           alert(
