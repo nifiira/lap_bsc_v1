@@ -1,9 +1,12 @@
 /* Sembunyikan menu saat pertama load untuk mencegah blink */
-.navbar-nav {
+/* Sidebar disembunyikan secara transparan pada milidetik pertama load */
+.sidebar {
   opacity: 0;
-  transition: opacity 0.25s ease-in;
+  transition: opacity 0.2s ease-in-out;
 }
-.navbar-nav.menu-ready {
+
+/* Kelas untuk memunculkan sidebar setelah role selesai divalidasi */
+.sidebar.siap {
   opacity: 1;
 }
 
