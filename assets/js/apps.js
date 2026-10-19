@@ -66,6 +66,7 @@ auth.onAuthStateChanged((user) => {
             aturTampilanBerdasarkanRole("admin");
             if (typeof tarikSemuaDataAdmin === "function")
               tarikSemuaDataAdmin();
+            tarikDaftarUserAdmin();
           } else if (opdUser.startsWith("rsud_")) {
             tipeKoleksi = "evaluasi_kinerja_rsud";
             formRef = db
