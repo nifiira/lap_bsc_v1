@@ -200,6 +200,10 @@ function togglePassword() {
 function logoutUser() {
   const konfirmasi = confirm("Apakah Anda yakin ingin keluar?");
   if (konfirmasi) {
+    // BERSIHKAN CACHE LOKAL AGAR TIDAK TERSANGKUT DI SESI BERIKUTNYA
+    localStorage.removeItem("auth_uid");
+    localStorage.removeItem("auth_role");
+
     auth.signOut();
   }
 }
