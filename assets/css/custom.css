@@ -1,11 +1,11 @@
 /* Sembunyikan menu saat pertama load untuk mencegah blink */
-/* .navbar-nav {
+.navbar-nav {
   opacity: 0;
   transition: opacity 0.25s ease-in;
 }
 .navbar-nav.menu-ready {
   opacity: 1;
-} */
+}
 
 .tb-style {
   margin: 15px auto 0;
