@@ -1,3 +1,15 @@
+/* Sembunyikan menu/sidebar secara default saat pertama load */
+#sidebar-menu,
+.sidebar {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Kelas untuk memunculkan kembali setelah role siap */
+.sidebar.loaded {
+  opacity: 1;
+}
+
 .tb-style {
   margin: 15px auto 0;
   width: 300px;
