@@ -18,6 +18,8 @@ const auth = firebase.auth();
 
 let currentUser = null;
 let formRef = null;
+let currentRole = ""; // Menyimpan role aktif (admin / rsud / pkm)
+let currentNamaInstansi = ""; // Menyimpan nama resmi instansi aktif
 
 // Variabel Global Baru
 let tribulanAktif = "TW1-2026";
@@ -45,12 +47,12 @@ auth.onAuthStateChanged((user) => {
       .then((doc) => {
         if (doc.exists) {
           const userData = doc.data();
-          const opdUser = userData.opd; // Misal: "rsud_pasuruan", "pkm_purworejo", atau "admin"
-          const namaInstansiResmi = userData.namaInstansi || "Administrator"; // Teks formal untuk UI
+          currentRole = userData.opd; // Misal: "rsud_bangil", "pkm_purworejo", atau "admin"
+          currentNamaInstansi = userData.namaInstansi || "Administrator";
 
           // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
           document.querySelectorAll(".namaUser").forEach((el) => {
-            el.innerText = namaInstansiResmi;
+            el.innerText = currentNamaInstansi;
           });
 
           const selectTribulan = document.getElementById("pilihTribulan");
@@ -61,13 +63,22 @@ auth.onAuthStateChanged((user) => {
             return;
           }
 
-          // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
-          if (opdUser === "admin") {
-            aturTampilanBerdasarkanRole("admin");
-            if (typeof tarikSemuaDataAdmin === "function")
+          // JIKA BERADA DI HALAMAN LAPORAN, LANGSUNG TARIK DATA SESUAI USER
+          if (currentPath.includes("laporan.html")) {
+            if (typeof tarikSemuaDataAdmin === "function") {
               tarikSemuaDataAdmin();
-            tarikDaftarUserAdmin();
-          } else if (opdUser.startsWith("rsud_")) {
+            }
+          }
+
+          // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
+          if (currentRole === "admin") {
+            aturTampilanBerdasarkanRole("admin");
+            if (currentPath.includes("user-login.html")) {
+              tarikDaftarUserAdmin();
+            } else if (typeof tarikSemuaDataAdmin === "function") {
+              tarikSemuaDataAdmin();
+            }
+          } else if (currentRole.startsWith("rsud_")) {
             tipeKoleksi = "evaluasi_kinerja_rsud";
             formRef = db
               .collection(tipeKoleksi)
@@ -76,10 +87,13 @@ auth.onAuthStateChanged((user) => {
 
             if (currentPath.includes("penilaian-pkm.html")) {
               window.location.href = "penilaian-rsud.html";
-            } else if (typeof muatDataDariFirebase === "function") {
+            } else if (
+              !currentPath.includes("laporan.html") &&
+              typeof muatDataDariFirebase === "function"
+            ) {
               muatDataDariFirebase();
             }
-          } else if (opdUser.startsWith("pkm_")) {
+          } else if (currentRole.startsWith("pkm_")) {
             tipeKoleksi = "evaluasi_kinerja_pkm";
             formRef = db
               .collection(tipeKoleksi)
@@ -88,7 +102,10 @@ auth.onAuthStateChanged((user) => {
 
             if (currentPath.includes("penilaian-rsud.html")) {
               window.location.href = "penilaian-pkm.html";
-            } else if (typeof muatDataDariFirebase === "function") {
+            } else if (
+              !currentPath.includes("laporan.html") &&
+              typeof muatDataDariFirebase === "function"
+            ) {
               muatDataDariFirebase();
             }
           } else {
@@ -108,7 +125,13 @@ auth.onAuthStateChanged((user) => {
   } else {
     currentUser = null;
     formRef = null;
-    if (isDashboardPage || isPenilaianPage) {
+    currentRole = "";
+    currentNamaInstansi = "";
+    if (
+      isDashboardPage ||
+      isPenilaianPage ||
+      currentPath.includes("laporan.html")
+    ) {
       window.location.href = "index.html";
     }
   }
@@ -808,66 +831,70 @@ function formatNamaInstansi(username) {
 // ========================================================
 async function tarikSemuaDataAdmin() {
   const tabelRef = document.getElementById("tabelRekapAdmin");
-  // const tabelRef = document.getElementById("tabelDaftarUser");
   if (!tabelRef) return;
 
-  tabelRef.innerHTML = "";
+  tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center;">Memuat laporan...</td></tr>`;
 
   try {
     let htmlTabel = "";
     let nomor = 1;
 
-    const snapshotRsud = await db.collection("evaluasi_kinerja_rsud").get();
-    snapshotRsud.forEach((doc) => {
-      const data = doc.data();
-      const idParts = doc.id.split("_");
-      const triwulan = idParts[1] || "Tidak Diketahui";
-      const nama = data.nama_instansi || "RSUD (Belum Input)";
+    // Tentukan koleksi apa saja yang ditarik berdasarkan role aktif di memori
+    let targetKoleksi = [];
+    if (currentRole === "admin") {
+      targetKoleksi = [
+        { name: "evaluasi_kinerja_rsud", type: "rsud-row" },
+        { name: "evaluasi_kinerja_pkm", type: "pkm-row" },
+      ];
+    } else if (currentRole.startsWith("rsud_")) {
+      targetKoleksi = [{ name: "evaluasi_kinerja_rsud", type: "rsud-row" }];
+    } else if (currentRole.startsWith("pkm_")) {
+      targetKoleksi = [{ name: "evaluasi_kinerja_pkm", type: "pkm-row" }];
+    }
 
-      const total = data.grand_total || "0.00";
-      const predikat = data.predikat || "-";
+    for (let col of targetKoleksi) {
+      const snapshot = await db.collection(col.name).get();
+      snapshot.forEach((doc) => {
+        const data = doc.data();
 
-      htmlTabel += `
-        <tr class="rsud-row">
-            <td>${nomor++}</td>
-            <td><strong>${nama}</strong></td>
-            <td>${triwulan}</td>
-            <td><strong>${total}</strong></td>
-            <td>${predikat}</td>
-            <td><button class="btn-aksi" onclick="lihatDetailAdmin('evaluasi_kinerja_rsud', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa-solid fa-eye"></i> Detail</button></td>
-        </tr>
-      `;
-    });
+        // Jika bukan admin, saring laporan agar hanya milik instansi yang sedang login
+        if (currentRole !== "admin") {
+          const milikUid =
+            currentUser && doc.id.startsWith(currentUser.uid + "_");
+          const milikNama =
+            currentNamaInstansi && data.nama_instansi === currentNamaInstansi;
+          if (!milikUid && !milikNama) {
+            return; // Lewati jika bukan milik instansi ini
+          }
+        }
 
-    const snapshotPkm = await db.collection("evaluasi_kinerja_pkm").get();
-    snapshotPkm.forEach((doc) => {
-      const data = doc.data();
-      const idParts = doc.id.split("_");
-      const triwulan = idParts[1] || "Tidak Diketahui";
-      const nama = data.nama_instansi || "PKM (Belum Input)";
-      const total = data.grand_total || "0.00";
-      const predikat = data.predikat || "-";
+        const idParts = doc.id.split("_");
+        const triwulan = idParts[1] || "Tidak Diketahui";
+        const nama = data.nama_instansi || "Instansi (Belum Input)";
+        const total = data.grand_total || "0.00";
+        const predikat = data.predikat || "-";
 
-      htmlTabel += `
-        <tr class="pkm-row">
-            <td>${nomor++}</td>
-            <td><strong>${nama}</strong></td>
-            <td>${triwulan}</td>
-            <td><strong>${total}</strong></td>
-            <td>${predikat}</td>
-            <td><button class="btn-aksi" onclick="lihatDetailAdmin('evaluasi_kinerja_pkm', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa-solid fa-eye"></i> Detail</button></td>
-        </tr>
-      `;
-    });
+        htmlTabel += `
+          <tr class="${col.type}">
+              <td>${nomor++}</td>
+              <td><strong>${nama}</strong></td>
+              <td>${triwulan}</td>
+              <td><strong>${total}</strong></td>
+              <td>${predikat}</td>
+              <td><button class="btn-aksi" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa-solid fa-eye"></i> Detail</button></td>
+          </tr>
+        `;
+      });
+    }
 
     if (htmlTabel === "") {
-      tabelRef.innerHTML = `<tr><td colspan="5" style="text-align:center;">Belum ada laporan.</td></tr>`;
+      tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada laporan untuk instansi Anda.</td></tr>`;
     } else {
       tabelRef.innerHTML = htmlTabel;
     }
   } catch (error) {
-    console.error("Gagal:", error);
-    tabelRef.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data.</td></tr>`;
+    console.error("Gagal memuat laporan:", error);
+    tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Gagal memuat data laporan.</td></tr>`;
   }
 }
 

@@ -18,6 +18,8 @@ const auth = firebase.auth();
 
 let currentUser = null;
 let formRef = null;
+let currentRole = ""; // Menyimpan role aktif (admin / rsud / pkm)
+let currentNamaInstansi = ""; // Menyimpan nama resmi instansi aktif
 
 // Variabel Global Baru
 let tribulanAktif = "TW1-2026";
@@ -66,6 +68,7 @@ auth.onAuthStateChanged((user) => {
             aturTampilanBerdasarkanRole("admin");
             if (typeof tarikSemuaDataAdmin === "function")
               tarikSemuaDataAdmin();
+            tarikDaftarUserAdmin();
           } else if (opdUser.startsWith("rsud_")) {
             tipeKoleksi = "evaluasi_kinerja_rsud";
             formRef = db
@@ -807,12 +810,14 @@ function formatNamaInstansi(username) {
 // ========================================================
 async function tarikSemuaDataAdmin() {
   const tabelRef = document.getElementById("tabelRekapAdmin");
+  // const tabelRef = document.getElementById("tabelDaftarUser");
   if (!tabelRef) return;
 
   tabelRef.innerHTML = "";
 
   try {
     let htmlTabel = "";
+    let nomor = 1;
 
     const snapshotRsud = await db.collection("evaluasi_kinerja_rsud").get();
     snapshotRsud.forEach((doc) => {
@@ -820,11 +825,13 @@ async function tarikSemuaDataAdmin() {
       const idParts = doc.id.split("_");
       const triwulan = idParts[1] || "Tidak Diketahui";
       const nama = data.nama_instansi || "RSUD (Belum Input)";
+
       const total = data.grand_total || "0.00";
       const predikat = data.predikat || "-";
 
       htmlTabel += `
         <tr class="rsud-row">
+            <td>${nomor++}</td>
             <td><strong>${nama}</strong></td>
             <td>${triwulan}</td>
             <td><strong>${total}</strong></td>
@@ -845,6 +852,7 @@ async function tarikSemuaDataAdmin() {
 
       htmlTabel += `
         <tr class="pkm-row">
+            <td>${nomor++}</td>
             <td><strong>${nama}</strong></td>
             <td>${triwulan}</td>
             <td><strong>${total}</strong></td>
