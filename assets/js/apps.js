@@ -47,7 +47,8 @@ auth.onAuthStateChanged((user) => {
           const userData = doc.data();
           const opdUser = userData.opd; // Misal: "rsud_pasuruan", "pkm_purworejo", atau "admin"
           const namaInstansiResmi = userData.namaInstansi || "Administrator"; // Teks formal untuk UI
-
+          localStorage.setItem("auth_uid", user.uid);
+          localStorage.setItem("auth_role", opdUser);
           // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
           document.querySelectorAll(".namaUser").forEach((el) => {
             el.innerText = namaInstansiResmi;
