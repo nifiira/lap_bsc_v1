@@ -125,20 +125,20 @@ auth.onAuthStateChanged((user) => {
 function aturTampilanBerdasarkanRole(role) {
   const menuRsud = document.getElementById("menuPenilaianRsud");
   const menuPkm = document.getElementById("menuPenilaianPkm");
-  const menuUserLogin = document.getElementById("menuUserLogin");
+  const menuUser = document.getElementById("menuUserLogin");
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
 
   // Sembunyikan semua secara default terlebih dahulu
   if (menuRsud) menuRsud.style.display = "none";
   if (menuPkm) menuPkm.style.display = "none";
-  if (menuUserLogin) menuUserLogin.style.display = "none";
+  if (menuUser) menuUser.style.display = "none";
   if (sectionAdminRecap) sectionAdminRecap.style.display = "none";
 
   if (role === "admin") {
     // Jika Admin: Tampilkan kedua menu penilaian dan tabel rekap admin
     if (menuRsud) menuRsud.style.display = "block";
     if (menuPkm) menuPkm.style.display = "block";
-    if (menuUserLogin) menuUserLogin.style.display = "block";
+    if (menuUser) menuUser.style.display = "block";
     if (sectionAdminRecap) sectionAdminRecap.style.display = "block";
   } else if (role === "rsud") {
     // Jika RSUD: Hanya tampilkan menu penilaian RSUD
