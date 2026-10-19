@@ -96,7 +96,7 @@ auth.onAuthStateChanged((user) => {
             auth.signOut();
           }
 
-          // MUNCULKAN KEMBALI SIDEBAR SECARA MULUS (Mencegah Efek Blink)
+          // MUNCULKAN KEMBALI SIDEBAR SECARA MULUS SETELAH ROLE SIAP
           const sidebarEl = document.querySelector(".sidebar");
           if (sidebarEl) {
             sidebarEl.classList.add("siap");
