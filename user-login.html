@@ -29,6 +29,22 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/css/style.css" rel="stylesheet" />
+    <style>
+      .sidebar {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      .sidebar.siap {
+        opacity: 1;
+      }
+      .bg-light.rounded.h-100 {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      .bg-light.rounded.h-100.siap {
+        opacity: 1;
+      }
+    </style>
     <script id="anti-blink-script">
       (function () {
         const style = document.createElement("style");
