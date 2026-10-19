@@ -117,39 +117,32 @@ auth.onAuthStateChanged((user) => {
 // Mengatur tampilan menu berdasarkan role pengguna
 // ========================================================
 function aturTampilanBerdasarkanRole(role) {
-  const containerMenu = document.getElementById("containerMenuNavbar");
-  if (!containerMenu) return;
+  const menuRsud = document.getElementById("menuPenilaianRsud");
+  const menuPkm = document.getElementById("menuPenilaianPkm");
+  const menuUser = document.getElementById("menuUserLogin");
+  const sectionAdminRecap = document.getElementById("sectionAdminRecap");
 
-  // Template menu dasar yang selalu ada
-  let htmlMenu = `
-    <a href="dashboard.html" class="nav-item nav-link active">
-      <i class="fa fa-tachometer-alt me-2"></i>Dashboard
-    </a>
-  `;
+  // Sembunyikan semua secara default terlebih dahulu
+  if (menuRsud) menuRsud.style.display = "none";
+  if (menuPkm) menuPkm.style.display = "none";
+  if (menuUser) menuUser.style.display = "none";
+  if (sectionAdminRecap) sectionAdminRecap.style.display = "none";
 
-  // Tambahkan menu berdasarkan role
   if (role === "admin") {
-    htmlMenu += `
-      <a href="penilaian-rsud.html" class="nav-item nav-link" id="menuPenilaianRsud"><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD RSUD</a>
-      <a href="penilaian-pkm.html" class="nav-item nav-link" id="menuPenilaianPkm"><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD PKM</a>
-      <a href="laporan.html" class="nav-item nav-link"><i class="fa fa-print me-2"></i>Laporan</a>
-      <a href="user-login.html" class="nav-item nav-link" id="menuUserLogin"><i class="fa fa-user-plus me-2"></i>User Login</a>
-    `;
+    // Jika Admin: Tampilkan kedua menu penilaian dan tabel rekap admin
+    if (menuRsud) menuRsud.style.display = "block";
+    if (menuPkm) menuPkm.style.display = "block";
+    if (menuUser) menuUser.style.display = "block";
+    if (sectionAdminRecap) sectionAdminRecap.style.display = "block";
   } else if (role === "rsud") {
-    htmlMenu += `
-      <a href="penilaian-rsud.html" class="nav-item nav-link" id="menuPenilaianRsud"><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD RSUD</a>
-      <a href="laporan.html" class="nav-item nav-link"><i class="fa fa-print me-2"></i>Laporan</a>
-    `;
+    // Jika RSUD: Hanya tampilkan menu penilaian RSUD
+    if (menuRsud) menuRsud.style.display = "block";
   } else if (role === "pkm") {
-    htmlMenu += `
-      <a href="penilaian-pkm.html" class="nav-item nav-link" id="menuPenilaianPkm"><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD PKM</a>
-      <a href="laporan.html" class="nav-item nav-link"><i class="fa fa-print me-2"></i>Laporan</a>
-    `;
+    // Jika Puskesmas: Hanya tampilkan menu penilaian Puskesmas
+    if (menuPkm) menuPkm.style.display = "block";
   }
-
-  // Masukkan menu yang sudah difilter ke dalam sidebar
-  containerMenu.innerHTML = htmlMenu;
 }
+
 function gantiTribulan() {
   const selectTribulan = document.getElementById("pilihTribulan");
   if (!selectTribulan || !currentUser || !tipeKoleksi) return;
