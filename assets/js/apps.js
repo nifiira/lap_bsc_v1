@@ -1070,7 +1070,7 @@ function pindahHalaman(numPage) {
 // 10. FITUR AUTO LOGOUT KARENA TIDAK AKTIF (IDLE TIMEOUT)
 // ========================================================
 let idleTimer;
-const waktuBatasIdle = 15 * 60 * 1000; // 15 menit (dalam milidetik). Ubah sesuai kebutuhan.
+const waktuBatasIdle = 1 * 60 * 1000; // 15 menit (dalam milidetik). Ubah sesuai kebutuhan.
 
 function resetIdleTimer() {
   // Hanya jalankan jika pengguna sedang login
