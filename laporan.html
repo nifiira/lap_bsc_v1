@@ -201,28 +201,13 @@
         <!-- Main Content End -->
 
         <!-- Detail Modal Start -->
-        <div
-          class="modal fade"
-          id="modalDetailAdmin"
-          tabindex="-1"
-          aria-labelledby="modalDetailAdminLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title text-white" id="judulModal">
-                  <i class="fa fa-user-plus me-2"></i>Detail Laporan
-                </h5>
-                <button
-                  type="button"
-                  class="btn-close btn-close-white"
-                  onclick="tutupModalAdmin()"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body text-dark" id="isiModalDetail"></div>
-            </div>
+        <div id="modalDetailAdmin" class="modal-overlay">
+          <div class="modal-content">
+            <button class="close-btn" onclick="tutupModalAdmin()">
+              Tutup X
+            </button>
+            <h3 id="judulModal" style="margin-top: 0">Detail Penilaian</h3>
+            <div id="isiModalDetail" style="margin-top: 15px"></div>
           </div>
         </div>
         <!-- Detail Modal End -->
