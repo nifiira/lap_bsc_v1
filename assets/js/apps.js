@@ -878,7 +878,7 @@ async function tarikSemuaDataAdmin() {
               <td>${triwulan}</td>
               <td><strong>${total}</strong></td>
               <td>${predikat}</td>
-              <td><button class="btn-aksi" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa-solid fa-eye"></i> Detail</button></td>
+              <td><button class="btn btn-sm btn-warning me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa-solid fa-eye"></i> Detail</button></td>
           </tr>
         `;
       });
@@ -1070,7 +1070,7 @@ function pindahHalaman(numPage) {
 // 10. FITUR AUTO LOGOUT KARENA TIDAK AKTIF (IDLE TIMEOUT)
 // ========================================================
 let idleTimer;
-const waktuBatasIdle = 1 * 60 * 1000; // 15 menit (dalam milidetik). Ubah sesuai kebutuhan.
+const waktuBatasIdle = 15 * 60 * 1000; // 15 menit (dalam milidetik). Ubah sesuai kebutuhan.
 
 function resetIdleTimer() {
   // Hanya jalankan jika pengguna sedang login
