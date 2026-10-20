@@ -201,18 +201,46 @@
         <!-- Main Content End -->
 
         <!-- Detail Modal Start -->
-        <div class="container-fluid pt-4 px4">
-          <div id="modalDetailAdmin" class="modal-overlay">
+        <div
+          class="modal fade"
+          id="modalDetailAdmin"
+          tabindex="-1"
+          aria-labelledby="modalDetailAdminLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-              <button class="close-btn" onclick="tutupModalAdmin()">
-                Tutup X
-              </button>
-              <h3 id="judulModal" style="margin-top: 0">Detail Penilaian</h3>
-              <div id="isiModalDetail" style="margin-top: 15px"></div>
+              <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title text-white" id="modalDetailAdminLabel">
+                  <i class="fa fa-user-plus me-2"></i>Detail Laporan
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close btn-close-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body text-dark"></div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Batal
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  onclick="prosesRegistrasiOPD()"
+                >
+                  Simpan Akun
+                </button>
+              </div>
             </div>
           </div>
         </div>
-
         <!-- Detail Modal End -->
 
         <!-- Footer Start -->
