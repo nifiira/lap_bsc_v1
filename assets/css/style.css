@@ -286,8 +286,8 @@
   opacity: 0;
   visibility: hidden;
   transition:
-    opacity 1ms ease,
-    visibility 0.5ms ease;
+    opacity 1s ease,
+    visibility 1ms ease;
 }
 /* .tampil-menu {
   opacity: 1 !important;
