@@ -1,20 +1,10 @@
-/* Sembunyikan menu saat pertama load untuk mencegah blink */
-/* Sidebar disembunyikan secara transparan pada milidetik pertama load */
-/* .sidebar {
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
+/* Secara default, sembunyikan menu-menu sensitif agar teksnya tidak berkedip saat loading */
+#menuPenilaianRsud,
+#menuPenilaianPkm,
+#menuUserLogin,
+#sectionAdminRecap {
+  display: none !important;
 }
-
-.sidebar.siap {
-  opacity: 1;
-} */
-/* .navbar-nav {
-  opacity: 0;
-  transition: opacity 0.25s ease-in;
-}
-.navbar-nav.menu-ready {
-  opacity: 1;
-} */
 
 .tb-style {
   margin: 15px auto 0;
