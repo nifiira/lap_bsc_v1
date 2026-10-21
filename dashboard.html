@@ -44,10 +44,16 @@
     <!-- Template Stylesheet -->
     <link href="assets/css/style.css" rel="stylesheet" />
     <style>
-      /* Menyamarkan area sidebar ketika proses render ulang halaman */
-      #containerMenuNavbar:empty {
-        min-height: 250px;
-        background-color: #f8f9fa; /* Warna abu-abu terang bawaan navbar bg-light */
+      /* 1. Sembunyikan teks/elemen menu di dalam sidebar saat halaman pertama kali dimuat */
+      .navbar-nav#containerMenuNavbar:not(.sudah-dimuat) a {
+        color: transparent !important;
+        background-color: transparent !important;
+        pointer-events: none; /* Supaya tidak bisa diklik saat proses loading */
+      }
+
+      /* 2. Berikan efek transisi halus saat teksnya muncul kembali */
+      .navbar-nav#containerMenuNavbar a {
+        transition: color 0.2s ease;
       }
     </style>
   </head>
