@@ -43,6 +43,13 @@
 
     <!-- Template Stylesheet -->
     <link href="assets/css/style.css" rel="stylesheet" />
+    <style>
+      /* Menyamarkan area sidebar sebelum menu dimuat oleh JavaScript */
+      #navbar:empty {
+        min-height: 250px; /* Berikan tinggi minimal agar area sidebar tidak menciut */
+        background-color: #f8f9fa; /* Sesuaikan dengan warna background sidebar Anda (bg-light) */
+      }
+    </style>
   </head>
 
   <body>
@@ -102,28 +109,21 @@
               href="penilaian-rsud.html"
               class="nav-item nav-link"
               id="menuPenilaianRsud"
-              style="display: none"
               ><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD RSUD</a
             >
             <a
               href="penilaian-pkm.html"
               class="nav-item nav-link"
               id="menuPenilaianPkm"
-              style="display: none"
               ><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD PKM</a
             >
-            <a
-              href="laporan.html"
-              class="nav-item nav-link"
-              style="display: block"
-              id="menuLaporan"
+            <a href="laporan.html" class="nav-item nav-link"
               ><i class="fa fa-print me-2"></i>Laporan</a
             >
             <a
               href="user-login.html"
               class="nav-item nav-link"
               id="menuUserLogin"
-              style="display: none"
               ><i class="fa fa-user-plus me-2"></i>User Login</a
             >
           </div>
