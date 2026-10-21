@@ -886,95 +886,93 @@ function formatNamaInstansi(username) {
 // ========================================================
 // 9. FUNGSI KHUSUS DASHBOARD ADMIN
 // ========================================================
-async function lihatDetailAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
+async function tarikSemuaDataAdmin() {
+  const tabelRef = document.getElementById("tabelRekapAdmin");
+  if (!tabelRef) return;
+
+  tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center;">Memuat laporan...</td></tr>`;
+
   try {
-    const doc = await db.collection(namaKoleksi).doc(docId).get();
-    if (!doc.exists) {
-      alert("Data rincian tidak ditemukan di database.");
-      return;
-    }
-    const data = doc.data();
+    let htmlTabel = "";
+    let nomor = 1;
 
-    // Hitung total dengan fallback aman
-    let totalVal = parseFloat(data.grand_total) || 0;
-    if (totalVal === 0) {
-      const t1 = parseFloat(data.skor_11_Total) || 0;
-      const t2 = parseFloat(data.skor_21_Total) || 0;
-      const t3 = parseFloat(data.skor_31_Total) || 0;
-      const t4 = parseFloat(data.skor_41_Total) || 0;
-      totalVal = t1 + t2 + t3 + t4;
-    }
-    const predikat =
-      data.predikat && data.predikat !== "-"
-        ? data.predikat
-        : tentukanPredikat(totalVal);
-
-    // Buat elemen modal secara dinamis jika belum ada di dalam HTML
-    let modalEl = document.getElementById("modalDetailAdmin");
-    if (!modalEl) {
-      const modalHtml = `
-        <div class="modal fade" id="modalDetailAdmin" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-              <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title"><i class="fa fa-file-alt me-2"></i>Rincian Laporan Kinerja</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body bg-light">
-                <div class="card p-3 mb-3 shadow-sm border-0">
-                  <h6 class="fw-bold text-primary mb-2" id="detailInstansiPeriode"></h6>
-                  <div class="row">
-                    <div class="col-6"><strong>Grand Total Skor:</strong> <span id="detailGrandTotal" class="text-success fw-bold"></span></div>
-                    <div class="col-6"><strong>Predikat:</strong> <span id="detailPredikat" class="badge bg-info text-dark"></span></div>
-                  </div>
-                </div>
-                <div class="card p-3 shadow-sm border-0">
-                  <h6 class="fw-bold mb-3">Daftar Komponen & Nilai Tersimpan</h6>
-                  <div class="table-responsive" style="max-height: 350px;">
-                    <table class="table table-bordered table-striped table-sm align-middle" id="tabelRincianIsi">
-                      <thead>
-                        <tr class="table-secondary">
-                          <th>Nama Variabel / Komponen</th>
-                          <th class="text-end">Nilai / Skor</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-      document.body.insertAdjacentHTML("beforeend", modalHtml);
-      modalEl = document.getElementById("modalDetailAdmin");
+    let targetKoleksi = [];
+    if (currentRole === "admin") {
+      targetKoleksi = [
+        { name: "evaluasi_kinerja_rsud", type: "rsud-row" },
+        { name: "evaluasi_kinerja_pkm", type: "pkm-row" },
+      ];
+    } else if (currentRole.startsWith("rsud_")) {
+      targetKoleksi = [{ name: "evaluasi_kinerja_rsud", type: "rsud-row" }];
+    } else if (currentRole.startsWith("pkm_")) {
+      targetKoleksi = [{ name: "evaluasi_kinerja_pkm", type: "pkm-row" }];
     }
 
-    // Masukkan data informasi utama ke dalam modal
-    document.getElementById("detailInstansiPeriode").innerText =
-      `${namaInstansi} — Periode: ${triwulan}`;
-    document.getElementById("detailGrandTotal").innerText = totalVal.toFixed(2);
-    document.getElementById("detailPredikat").innerText = predikat;
+    for (let col of targetKoleksi) {
+      const snapshot = await db.collection(col.name).get();
+      snapshot.forEach((doc) => {
+        const data = doc.data();
 
-    // Masukkan daftar key & value ke dalam baris tabel rincian
-    let tbodyHtml = "";
-    for (const [key, val] of Object.entries(data)) {
-      if (key !== "nama_instansi" && key !== "timestamp") {
-        tbodyHtml += `<tr><td><code>${key}</code></td><td class="fw-bold text-end">${val}</td></tr>`;
-      }
+        if (currentRole !== "admin") {
+          const milikUid =
+            currentUser && doc.id.startsWith(currentUser.uid + "_");
+          const milikNama =
+            currentNamaInstansi && data.nama_instansi === currentNamaInstansi;
+          if (!milikUid && !milikNama) {
+            return;
+          }
+        }
+
+        const idParts = doc.id.split("_");
+        const triwulan = idParts[1] || "Tidak Diketahui";
+        const nama = data.nama_instansi || "Instansi (Belum Input)";
+
+        let totalVal = parseFloat(data.grand_total) || 0;
+        if (totalVal === 0) {
+          const t1 = parseFloat(data.skor_11_Total) || 0;
+          const t2 = parseFloat(data.skor_21_Total) || 0;
+          const t3 = parseFloat(data.skor_31_Total) || 0;
+          const t4 = parseFloat(data.skor_41_Total) || 0;
+          totalVal = t1 + t2 + t3 + t4;
+        }
+
+        const total = totalVal.toFixed(2);
+        const predikat =
+          data.predikat && data.predikat !== "-"
+            ? data.predikat
+            : tentukanPredikat(totalVal);
+
+        htmlTabel += `
+          <tr class="${col.type}">
+              <td>${nomor++}</td>
+              <td><strong>${nama}</strong></td>
+              <td>${triwulan}</td>
+              <td><strong>${total}</strong></td>
+              <td>${predikat}</td>
+              <td>
+                <button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Lihat Rincian">
+                  <i class="fa fa-solid fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-success me-1" onclick="exportToExcel('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Cetak ke Excel Sesuai Template">
+                  <i class="fa fa-solid fa-print"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="hapusDataAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Hapus Laporan Ini">
+                  <i class="fa fa-solid fa-trash"></i>
+                </button>
+              </td>
+          </tr>
+        `;
+      });
     }
-    document.querySelector("#tabelRincianIsi tbody").innerHTML = tbodyHtml;
 
-    // Munculkan modal menggunakan Bootstrap 5 Modal API
-    const myModal = new bootstrap.Modal(modalEl);
-    myModal.show();
+    if (htmlTabel === "") {
+      tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada laporan untuk instansi Anda.</td></tr>`;
+    } else {
+      tabelRef.innerHTML = htmlTabel;
+    }
   } catch (error) {
-    console.error("Gagal memuat detail:", error);
-    alert("Terjadi kesalahan saat memuat rincian data.");
+    console.error("Gagal memuat laporan:", error);
+    tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Gagal memuat data laporan.</td></tr>`;
   }
 }
 
