@@ -929,17 +929,11 @@ async function tarikSemuaDataAdmin() {
 
         let totalVal = parseFloat(data.grand_total) || 0;
         if (totalVal === 0) {
-          let sumTotal = 0;
-          for (let [key, val] of Object.entries(data)) {
-            if (
-              key.includes("_Total") &&
-              !key.includes("grand") &&
-              !isNaN(val)
-            ) {
-              sumTotal += parseFloat(val) || 0;
-            }
-          }
-          if (sumTotal > 0) totalVal = sumTotal;
+          const t1 = parseFloat(data.skor_11_Total) || 0;
+          const t2 = parseFloat(data.skor_21_Total) || 0;
+          const t3 = parseFloat(data.skor_31_Total) || 0;
+          const t4 = parseFloat(data.skor_41_Total) || 0;
+          totalVal = t1 + t2 + t3 + t4;
         }
 
         const total = totalVal.toFixed(2);
