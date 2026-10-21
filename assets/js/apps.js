@@ -896,7 +896,6 @@ async function tarikSemuaDataAdmin() {
     let htmlTabel = "";
     let nomor = 1;
 
-    // Tentukan koleksi apa saja yang ditarik berdasarkan role aktif di memori
     let targetKoleksi = [];
     if (currentRole === "admin") {
       targetKoleksi = [
@@ -914,14 +913,13 @@ async function tarikSemuaDataAdmin() {
       snapshot.forEach((doc) => {
         const data = doc.data();
 
-        // Jika bukan admin, saring laporan agar hanya milik instansi yang sedang login
         if (currentRole !== "admin") {
           const milikUid =
             currentUser && doc.id.startsWith(currentUser.uid + "_");
           const milikNama =
             currentNamaInstansi && data.nama_instansi === currentNamaInstansi;
           if (!milikUid && !milikNama) {
-            return; // Lewati jika bukan milik instansi ini
+            return;
           }
         }
 
@@ -929,7 +927,6 @@ async function tarikSemuaDataAdmin() {
         const triwulan = idParts[1] || "Tidak Diketahui";
         const nama = data.nama_instansi || "Instansi (Belum Input)";
 
-        // Perlindungan data: Hitung otomatis jika grand_total di database kosong/0
         let totalVal = parseFloat(data.grand_total) || 0;
         if (totalVal === 0) {
           let sumTotal = 0;
@@ -964,6 +961,9 @@ async function tarikSemuaDataAdmin() {
                 </button>
                 <button class="btn btn-sm btn-success me-1" onclick="exportToExcel('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Cetak ke Excel Sesuai Template">
                   <i class="fa fa-solid fa-print"></i> Cetak
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="hapusDataAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Hapus Laporan Ini">
+                  <i class="fa fa-solid fa-trash"></i> Hapus
                 </button>
               </td>
           </tr>
@@ -1345,5 +1345,29 @@ function hapusUserFirestore(uidUser, emailUser) {
       .catch((error) => {
         alert("Gagal menghapus user: " + error.message);
       });
+  }
+}
+
+// ========================================================
+// HAPUS DATA PENILAIAN
+// ========================================================
+async function hapusDataAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
+  const konfirmasi = confirm(
+    `⚠️ PERHATIAN!\n\nApakah Anda yakin ingin MENGHAPUS permanen laporan kinerja untuk:\n- Instansi: ${namaInstansi}\n- Periode: ${triwulan}?`,
+  );
+
+  if (konfirmasi) {
+    try {
+      // Hapus dokumen spesifik dari koleksi Firestore
+      await db.collection(namaKoleksi).doc(docId).delete();
+
+      alert("Data laporan berhasil dihapus dari sistem.");
+
+      // Muat ulang tabel rekap agar baris yang terhapus langsung hilang dari layar
+      tarikSemuaDataAdmin();
+    } catch (error) {
+      console.error("Gagal menghapus data laporan:", error);
+      alert("Terjadi kesalahan saat menghapus data: " + error.message);
+    }
   }
 }
