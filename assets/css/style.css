@@ -280,6 +280,10 @@
 #menuDashboard,
 #menuLaporan,
 #sectionAdminRecap {
-  display: none !important;
-  text-color: transparent !important; /* Sembunyikan teks agar tidak berkedip */
+  /* display: none !important; */
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out; /* Efek muncul dengan mulus */
+}
+.tampil-menu {
+  opacity: 1 !important;
 }

@@ -148,42 +148,54 @@ function aturTampilanBerdasarkanRole(role) {
   const menuLaporan = document.getElementById("menuLaporan");
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
 
-  // Sembunyikan semua secara default
-  if (menuRsud) menuRsud.style.setProperty("display", "none", "important");
-  if (menuPkm) menuPkm.style.setProperty("display", "none", "important");
-  if (menuUser) menuUser.style.setProperty("display", "none", "important");
-  if (menuDashboard)
-    menuDashboard.style.setProperty("display", "none", "important");
-  if (menuLaporan)
-    menuLaporan.style.setProperty("display", "none", "important");
-  if (sectionAdminRecap)
-    sectionAdminRecap.style.setProperty("display", "none", "important");
+  // Sembunyikan semua secara default terlebih dahulu
+  if (menuRsud) {
+    menuRsud.style.display = "none";
+    menuRsud.classList.remove("tampil-menu");
+  }
+  if (menuPkm) {
+    menuPkm.style.display = "none";
+    menuPkm.classList.remove("tampil-menu");
+  }
+  if (menuUser) {
+    menuUser.style.display = "none";
+    menuUser.classList.remove("tampil-menu");
+  }
+  if (sectionAdminRecap) {
+    sectionAdminRecap.style.display = "none";
+    sectionAdminRecap.classList.remove("tampil-menu");
+  }
 
   if (role === "admin") {
-    // Jika Admin: Tampilkan semua menu terkait
-    if (menuRsud) menuRsud.style.setProperty("display", "block", "important");
-    if (menuPkm) menuPkm.style.setProperty("display", "block", "important");
-    if (menuUser) menuUser.style.setProperty("display", "block", "important");
-    if (menuDashboard)
-      menuDashboard.style.setProperty("display", "block", "important");
-    if (menuLaporan)
-      menuLaporan.style.setProperty("display", "block", "important");
-    if (sectionAdminRecap)
-      sectionAdminRecap.style.setProperty("display", "block", "important");
+    // Jika Admin: Tampilkan kedua menu penilaian dan tabel rekap admin
+    if (menuRsud) {
+      menuRsud.style.display = "block";
+      menuRsud.classList.add("tampil-menu");
+    }
+    if (menuPkm) {
+      menuPkm.style.display = "block";
+      menuPkm.classList.add("tampil-menu");
+    }
+    if (menuUser) {
+      menuUser.style.display = "block";
+      menuUser.classList.add("tampil-menu");
+    }
+    if (sectionAdminRecap) {
+      sectionAdminRecap.style.display = "block";
+      sectionAdminRecap.classList.add("tampil-menu");
+    }
   } else if (role === "rsud") {
     // Jika RSUD: Hanya tampilkan menu penilaian RSUD
-    if (menuRsud) menuRsud.style.setProperty("display", "block", "important");
-    if (menuDashboard)
-      menuDashboard.style.setProperty("display", "block", "important");
-    if (menuLaporan)
-      menuLaporan.style.setProperty("display", "block", "important");
+    if (menuRsud) {
+      menuRsud.style.display = "block";
+      menuRsud.classList.add("tampil-menu");
+    }
   } else if (role === "pkm") {
     // Jika Puskesmas: Hanya tampilkan menu penilaian Puskesmas
-    if (menuPkm) menuPkm.style.setProperty("display", "block", "important");
-    if (menuDashboard)
-      menuDashboard.style.setProperty("display", "block", "important");
-    if (menuLaporan)
-      menuLaporan.style.setProperty("display", "block", "important");
+    if (menuPkm) {
+      menuPkm.style.display = "block";
+      menuPkm.classList.add("tampil-menu");
+    }
   }
 }
 
