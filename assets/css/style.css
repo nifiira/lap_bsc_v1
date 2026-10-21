@@ -281,5 +281,5 @@
 #menuLaporan,
 #sectionAdminRecap {
   display: none !important;
-  text-color: transparent !important;
+  color: transparent !important; /* Sembunyikan teks agar tidak berkedip */
 }
