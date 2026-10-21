@@ -228,7 +228,7 @@ function aturTampilanBerdasarkanRole(role) {
 
 function gantiOpdAdmin() {
   const selectOpd = document.getElementById("pilihOpdAdmin");
-  // const selectTribulan = document.getElementById("pilihTribulan");
+  const selectTribulan = document.getElementById("pilihTribulan");
   if (!selectOpd || !selectTribulan) return;
 
   const opdTerpilih = selectOpd.value; // contoh: "rsud_bangil"
