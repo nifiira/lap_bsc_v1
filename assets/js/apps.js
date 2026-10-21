@@ -145,6 +145,7 @@ function aturTampilanBerdasarkanRole(role) {
   const menuPkm = document.getElementById("menuPenilaianPkm");
   const menuUser = document.getElementById("menuUserLogin");
   const menuDashboard = document.getElementById("menuDashboard");
+  const menuLaporan = document.getElementById("menuLaporan");
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
 
   // Sembunyikan semua secara default
@@ -153,6 +154,8 @@ function aturTampilanBerdasarkanRole(role) {
   if (menuUser) menuUser.style.setProperty("display", "none", "important");
   if (menuDashboard)
     menuDashboard.style.setProperty("display", "none", "important");
+  if (menuLaporan)
+    menuLaporan.style.setProperty("display", "none", "important");
   if (sectionAdminRecap)
     sectionAdminRecap.style.setProperty("display", "none", "important");
 
@@ -163,6 +166,8 @@ function aturTampilanBerdasarkanRole(role) {
     if (menuUser) menuUser.style.setProperty("display", "block", "important");
     if (menuDashboard)
       menuDashboard.style.setProperty("display", "block", "important");
+    if (menuLaporan)
+      menuLaporan.style.setProperty("display", "block", "important");
     if (sectionAdminRecap)
       sectionAdminRecap.style.setProperty("display", "block", "important");
   } else if (role === "rsud") {
@@ -170,11 +175,15 @@ function aturTampilanBerdasarkanRole(role) {
     if (menuRsud) menuRsud.style.setProperty("display", "block", "important");
     if (menuDashboard)
       menuDashboard.style.setProperty("display", "block", "important");
+    if (menuLaporan)
+      menuLaporan.style.setProperty("display", "block", "important");
   } else if (role === "pkm") {
     // Jika Puskesmas: Hanya tampilkan menu penilaian Puskesmas
     if (menuPkm) menuPkm.style.setProperty("display", "block", "important");
     if (menuDashboard)
       menuDashboard.style.setProperty("display", "block", "important");
+    if (menuLaporan)
+      menuLaporan.style.setProperty("display", "block", "important");
   }
 }
 
