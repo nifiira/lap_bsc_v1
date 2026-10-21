@@ -944,9 +944,7 @@ async function tarikSemuaDataAdmin() {
               <td><strong>${total}</strong></td>
               <td>${predikat}</td>
               <td>
-                <button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Lihat Rincian">
-                  <i class="fa fa-solid fa-eye"></i>
-                </button>
+              
                 <button class="btn btn-sm btn-success me-1" onclick="exportToExcel('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Cetak ke Excel Sesuai Template">
                   <i class="fa fa-solid fa-print"></i>
                 </button>
@@ -967,97 +965,6 @@ async function tarikSemuaDataAdmin() {
   } catch (error) {
     console.error("Gagal memuat laporan:", error);
     tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Gagal memuat data laporan: ${error.message}</td></tr>`;
-  }
-}
-
-async function lihatDetailAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
-  let modalEl = document.getElementById("modalDetailAdmin");
-
-  // Jika elemen modal belum ada di HTML, buat secara otomatis menggunakan komponen native Bootstrap 5
-  if (!modalEl) {
-    const modalHtml = `
-      <div class="modal fade" id="modalDetailAdmin" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-          <div class="modal-content shadow-lg border-0">
-            <div class="modal-header bg-primary text-white">
-              <h5 id="judulModal" class="modal-title fw-bold">Detail Nilai</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="tutupModalAdmin()"></button>
-            </div>
-            <div id="isiModalDetail" class="modal-body bg-light">
-              <p>Sedang memuat rincian nilai...</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="tutupModalAdmin()">Tutup</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-    document.body.insertAdjacentHTML("beforeend", modalHtml);
-    modalEl = document.getElementById("modalDetailAdmin");
-  }
-
-  document.getElementById("judulModal").innerText =
-    `Detail Nilai: ${namaInstansi} (${triwulan})`;
-  const isiRef = document.getElementById("isiModalDetail");
-  isiRef.innerHTML =
-    "<p class='text-center py-3'>Sedang memuat rincian nilai...</p>";
-
-  // Tampilkan modal menggunakan Bootstrap 5 Modal API agar interaktif dan bisa diklik/close dengan normal
-  const myModal = new bootstrap.Modal(modalEl);
-  myModal.show();
-
-  try {
-    const doc = await db.collection(namaKoleksi).doc(docId).get();
-    if (doc.exists) {
-      const data = doc.data();
-
-      let htmlKonten = `
-        <div style="margin-bottom: 15px;">
-            <button class="btn btn-success btn-sm" onclick="exportToExcel('${namaKoleksi}', '${docId}', '${namaInstansi}', '${triwulan}')">
-                <i class="fa-solid fa-file-excel me-1"></i> Cetak Laporan ${namaInstansi} Sesuai Template
-            </button>
-        </div>
-      `;
-      htmlKonten += `<table class="table table-bordered table-striped table-sm align-middle"><thead><tr class="table-secondary"><th>Nama Poin / Indikator</th><th class="text-end">Skor Didapat</th></tr></thead><tbody>`;
-
-      const keys = Object.keys(data)
-        .filter(
-          (k) =>
-            k.startsWith("skor_") ||
-            k.startsWith("subTotal_") ||
-            k.startsWith("real_") ||
-            k.startsWith("target_"),
-        )
-        .sort();
-
-      keys.forEach((k) => {
-        htmlKonten += `<tr><td><code>${k}</code></td><td class="text-end"><strong>${data[k]}</strong></td></tr>`;
-      });
-      htmlKonten += `</tbody></table>`;
-
-      isiRef.innerHTML = htmlKonten;
-    } else {
-      isiRef.innerHTML = `<p style="color:red;" class="text-center">Data tidak ditemukan di database.</p>`;
-    }
-  } catch (error) {
-    isiRef.innerHTML = `<p style="color:red;" class="text-center">Gagal menarik rincian data: ${error.message}</p>`;
-  }
-}
-
-function tutupModalAdmin() {
-  const modalEl = document.getElementById("modalDetailAdmin");
-  if (modalEl) {
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
-    if (modalInstance) {
-      modalInstance.hide();
-    } else {
-      modalEl.classList.remove("show");
-      modalEl.style.display = "none";
-      document.querySelectorAll(".modal-backdrop").forEach((el) => el.remove());
-      document.body.classList.remove("modal-open");
-      document.body.style.removeProperty("overflow");
-    }
   }
 }
 
