@@ -281,4 +281,5 @@
 #menuLaporan,
 #sectionAdminRecap {
   display: none !important;
+  text-color: transparent !important;
 }
