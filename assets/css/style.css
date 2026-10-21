@@ -282,7 +282,7 @@
 #sectionAdminRecap {
   /* display: none !important; */
   opacity: 0;
-  transition: opacity 0.2s ease-in-out; /* Efek muncul dengan mulus */
+  transition: opacity 0.01ms ease-in-out; /* Efek muncul dengan mulus */
 }
 .tampil-menu {
   opacity: 1 !important;
