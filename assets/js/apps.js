@@ -226,33 +226,73 @@ function aturTampilanBerdasarkanRole(role) {
   }
 }
 
-function gantiOpdAdmin() {
+async function gantiOpdAdmin() {
   const selectOpd = document.getElementById("pilihOpdAdmin");
   const selectTribulan = document.getElementById("pilihTribulan");
   if (!selectOpd || !selectTribulan) return;
 
-  const opdTerpilih = selectOpd.value; // contoh: "rsud_bangil"
-  const triwulanTerpilih = selectTribulan.value; // contoh: "TW1-2026"
+  const opdTerpilih = selectOpd.value; // Contoh: "rsud_bangil" atau "pkm_..."
+  const triwulanTerpilih = selectTribulan.value; // Contoh: "TW1-2026"
 
   if (!opdTerpilih) {
+    // Kosongkan form jika belum memilih instansi
+    document
+      .querySelectorAll('input[type="number"], select')
+      .forEach((input) => {
+        if (input.id !== "pilihTribulan" && input.id !== "pilihOpdAdmin")
+          input.value = "";
+      });
+    document
+      .querySelectorAll('[id^="skor_"], [id^="subTotal_"]')
+      .forEach((el) => (el.innerText = "0.00"));
+    formRef = null;
     return;
   }
 
-  // Tentukan koleksi database berdasarkan pilihan OPD
+  // Tentukan jenis koleksi database berdasarkan pilihan OPD
   if (opdTerpilih.startsWith("rsud_")) {
     tipeKoleksi = "evaluasi_kinerja_rsud";
   } else if (opdTerpilih.startsWith("pkm_")) {
     tipeKoleksi = "evaluasi_kinerja_pkm";
   }
 
-  // Arahkan formRef ke dokumen instansi dan triwulan yang dipilih admin
-  // (Catatan: Pastikan ID dokumen di database disesuaikan dengan pola penyimpanan, misal UID instansi atau prefix nama)
-  formRef = db
-    .collection(tipeKoleksi)
-    .doc(`${opdTerpilih}_${triwulanTerpilih}`);
+  try {
+    // 1. Cari data user di koleksi 'users' berdasarkan field 'opd' untuk mendapatkan UID-nya
+    const userSnapshot = await db
+      .collection("users")
+      .where("opd", "==", opdTerpilih)
+      .get();
 
-  // Muat data dari firebase untuk instansi tersebut
-  muatDataDariFirebase();
+    if (userSnapshot.empty) {
+      alert("Profil instansi tidak ditemukan di database pengguna sistem.");
+      return;
+    }
+
+    const userData = userSnapshot.docs[0].data();
+    const targetUid = userData.uid;
+
+    // 2. Arahkan formRef ke dokumen yang benar menggunakan pola UID + Triwulan
+    formRef = db
+      .collection(tipeKoleksi)
+      .doc(`${targetUid}_${triwulanTerpilih}`);
+
+    // 3. Reset tampilan form sebelum memuat data baru
+    document
+      .querySelectorAll('input[type="number"], select')
+      .forEach((input) => {
+        if (input.id !== "pilihTribulan" && input.id !== "pilihOpdAdmin")
+          input.value = "";
+      });
+    document
+      .querySelectorAll('[id^="skor_"], [id^="subTotal_"]')
+      .forEach((el) => (el.innerText = "0.00"));
+
+    // 4. Muat nilai dari Firebase ke form
+    muatDataDariFirebase();
+  } catch (error) {
+    console.error("Gagal memuat data instansi untuk admin:", error);
+    alert("Terjadi kesalahan saat mengambil data: " + error.message);
+  }
 }
 
 function gantiTribulan() {
