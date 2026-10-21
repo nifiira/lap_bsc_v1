@@ -930,7 +930,9 @@ async function tarikSemuaDataAdmin() {
               <td>${triwulan}</td>
               <td><strong>${total}</strong></td>
               <td>${predikat}</td>
-              <td><button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa fa-solid fa-eye"></i> Detail</button></td>
+              <td><button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa fa-solid fa-eye"></i> Detail</button>
+              <button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa fa-solid fa-print"></i> Detail</button></td>
+              
           </tr>
         `;
       });
