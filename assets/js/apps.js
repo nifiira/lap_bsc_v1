@@ -144,6 +144,7 @@ function aturTampilanBerdasarkanRole(role) {
   const menuRsud = document.getElementById("menuPenilaianRsud");
   const menuPkm = document.getElementById("menuPenilaianPkm");
   const menuUser = document.getElementById("menuUserLogin");
+  const menuDashboard = document.getElementById("menuDashboard");
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
 
   // Sembunyikan semua secara default terlebih dahulu
