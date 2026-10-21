@@ -286,8 +286,8 @@
   opacity: 0;
   visibility: hidden;
   transition:
-    opacity 0.15s ease,
-    visibility 0.15s ease;
+    opacity 0ms ease,
+    visibility 0ms ease;
 }
 /* .tampil-menu {
   opacity: 1 !important;
@@ -297,6 +297,8 @@
 #menuPenilaianRsud.tampil-menu,
 #menuPenilaianPkm.tampil-menu,
 #menuUserLogin.tampil-menu,
+#menuDashboard.tampil-menu,
+#menuLaporan.tampil-menu,
 #sectionAdminRecap.tampil-menu {
   opacity: 1;
   visibility: visible;
