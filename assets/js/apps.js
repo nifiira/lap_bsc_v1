@@ -226,6 +226,35 @@ function aturTampilanBerdasarkanRole(role) {
   }
 }
 
+function gantiOpdAdmin() {
+  const selectOpd = document.getElementById("pilihOpdAdmin");
+  const selectTribulan = document.getElementById("pilihTribulan");
+  if (!selectOpd || !selectTribulan) return;
+
+  const opdTerpilih = selectOpd.value; // contoh: "rsud_bangil"
+  const triwulanTerpilih = selectTribulan.value; // contoh: "TW1-2026"
+
+  if (!opdTerpilih) {
+    return;
+  }
+
+  // Tentukan koleksi database berdasarkan pilihan OPD
+  if (opdTerpilih.startsWith("rsud_")) {
+    tipeKoleksi = "evaluasi_kinerja_rsud";
+  } else if (opdTerpilih.startsWith("pkm_")) {
+    tipeKoleksi = "evaluasi_kinerja_pkm";
+  }
+
+  // Arahkan formRef ke dokumen instansi dan triwulan yang dipilih admin
+  // (Catatan: Pastikan ID dokumen di database disesuaikan dengan pola penyimpanan, misal UID instansi atau prefix nama)
+  formRef = db
+    .collection(tipeKoleksi)
+    .doc(`${opdTerpilih}_${triwulanTerpilih}`);
+
+  // Muat data dari firebase untuk instansi tersebut
+  muatDataDariFirebase();
+}
+
 function gantiTribulan() {
   const selectTribulan = document.getElementById("pilihTribulan");
   if (!selectTribulan || !currentUser || !tipeKoleksi) return;
