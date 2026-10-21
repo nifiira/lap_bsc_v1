@@ -44,16 +44,12 @@
     <!-- Template Stylesheet -->
     <link href="assets/css/style.css" rel="stylesheet" />
     <style>
-      /* 1. Sembunyikan teks/elemen menu di dalam sidebar saat halaman pertama kali dimuat */
-      .navbar-nav#containerMenuNavbar:not(.sudah-dimuat) a {
-        color: transparent !important;
-        background-color: transparent !important;
-        pointer-events: none; /* Supaya tidak bisa diklik saat proses loading */
-      }
-
-      /* 2. Berikan efek transisi halus saat teksnya muncul kembali */
-      .navbar-nav#containerMenuNavbar a {
-        transition: color 0.2s ease;
+      /* Secara default, sembunyikan menu-menu sensitif agar teksnya tidak berkedip saat loading */
+      #menuPenilaianRsud,
+      #menuPenilaianPkm,
+      #menuUserLogin,
+      #sectionAdminRecap {
+        display: none !important;
       }
     </style>
   </head>
