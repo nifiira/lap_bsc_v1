@@ -177,16 +177,18 @@
                 <div
                   class="tb-style text-dark p-3 bg-white rounded shadow-sm mb-4"
                 >
-                  <div class="row align-items-center g-3">
+                  <div
+                    class="d-flex flex-wrap align-items-center justify-content-between gap-3"
+                  >
                     <!-- Kolom Pilih Periode Laporan -->
-                    <div class="col-md-6">
+                    <div style="flex: 1; min-width: 280px">
                       <label
                         for="pilihTribulan"
                         class="form-label fw-bold text-dark mb-1"
                         style="font-size: 0.9rem"
                       >
                         <i class="fa fa-calendar-alt text-primary me-2"></i
-                        >Pilih Periode Laporan:
+                        >Periode Laporan Kinerja:
                       </label>
                       <div class="input-group">
                         <span
@@ -208,11 +210,10 @@
                       </div>
                     </div>
 
-                    <!-- Kolom Pilih Instansi/OPD khusus Admin (Default display: none sesuai permintaan) -->
+                    <!-- Kolom Pilih Instansi/OPD khusus Admin (Sementara disembunyikan/display: none) -->
                     <div
-                      class="col-md-6"
+                      style="flex: 1; min-width: 280px; display: none"
                       id="wrapperPilihOpdAdmin"
-                      style="display: none"
                     >
                       <label
                         for="pilihOpdAdmin"
