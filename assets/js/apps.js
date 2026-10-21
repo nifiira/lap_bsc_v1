@@ -896,24 +896,18 @@ async function tarikSemuaDataAdmin() {
     let htmlTabel = "";
     let nomor = 1;
 
-    let targetKoleksi = [];
-    if (currentRole === "admin") {
-      targetKoleksi = [
-        { name: "evaluasi_kinerja_rsud", type: "rsud-row" },
-        { name: "evaluasi_kinerja_pkm", type: "pkm-row" },
-      ];
-    } else if (currentRole.startsWith("rsud_")) {
-      targetKoleksi = [{ name: "evaluasi_kinerja_rsud", type: "rsud-row" }];
-    } else if (currentRole.startsWith("pkm_")) {
-      targetKoleksi = [{ name: "evaluasi_kinerja_pkm", type: "pkm-row" }];
-    }
+    let targetKoleksi = [
+      { name: "evaluasi_kinerja_rsud", type: "rsud-row" },
+      { name: "evaluasi_kinerja_pkm", type: "pkm-row" },
+    ];
 
     for (let col of targetKoleksi) {
       const snapshot = await db.collection(col.name).get();
       snapshot.forEach((doc) => {
         const data = doc.data();
 
-        if (currentRole !== "admin") {
+        // Jika bukan admin, lakukan penyaringan kepemilikan data
+        if (currentRole && currentRole !== "admin") {
           const milikUid =
             currentUser && doc.id.startsWith(currentUser.uid + "_");
           const milikNama =
@@ -966,17 +960,40 @@ async function tarikSemuaDataAdmin() {
     }
 
     if (htmlTabel === "") {
-      tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada laporan untuk instansi Anda.</td></tr>`;
+      tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada laporan data ditemukan.</td></tr>`;
     } else {
       tabelRef.innerHTML = htmlTabel;
     }
   } catch (error) {
     console.error("Gagal memuat laporan:", error);
-    tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Gagal memuat data laporan.</td></tr>`;
+    tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Gagal memuat data laporan: ${error.message}</td></tr>`;
   }
 }
 
 async function lihatDetailAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
+  const modalElemen = document.getElementById("modalDetailAdmin");
+
+  // Jika elemen modal belum ada di HTML, buat secara otomatis agar tidak error
+  if (!modalElemen) {
+    const modalHtml = `
+      <div id="modalDetailAdmin" class="modal" tabindex="-1" style="display:none; position:fixed; z-index:1050; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-lg" style="margin: 50px auto; background:#fff; padding:20px; border-radius:8px; max-width:700px;">
+          <div class="modal-header d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+            <h5 id="judulModal" class="fw-bold m-0">Detail Nilai</h5>
+            <button type="button" class="btn-close" onclick="tutupModalAdmin()"></button>
+          </div>
+          <div id="isiModalDetail" class="modal-body" style="max-height: 400px; overflow-y: auto;">
+            <p>Sedang memuat rincian nilai...</p>
+          </div>
+          <div class="modal-footer border-top pt-2 mt-3 text-end">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="tutupModalAdmin()">Tutup</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", modalHtml);
+  }
+
   document.getElementById("modalDetailAdmin").style.display = "block";
   document.getElementById("judulModal").innerText =
     `Detail Nilai: ${namaInstansi} (${triwulan})`;
@@ -989,14 +1006,13 @@ async function lihatDetailAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
       const data = doc.data();
 
       let htmlKonten = `
-    <div style="margin-bottom: 15px;">
-        <button class="btn-excel" style="background-color: #059669; padding: 8px 12px; font-size: 14px;" 
-                onclick="exportToExcel('${namaKoleksi}', '${docId}', '${namaInstansi}', '${triwulan}')">
-            <i class="fa-solid fa-file-excel"></i> Cetak Laporan ${namaInstansi} Sesuai Template
-        </button>
-    </div>
-`;
-      htmlKonten += `<table class="admin-table"><tr><th>Nama Poin / Indikator</th><th>Skor Didapat</th></tr>`;
+        <div style="margin-bottom: 15px;">
+            <button class="btn btn-success btn-sm" onclick="exportToExcel('${namaKoleksi}', '${docId}', '${namaInstansi}', '${triwulan}')">
+                <i class="fa-solid fa-file-excel me-1"></i> Cetak Laporan ${namaInstansi} Sesuai Template
+            </button>
+        </div>
+      `;
+      htmlKonten += `<table class="table table-bordered table-striped table-sm"><thead><tr><th>Nama Poin / Indikator</th><th>Skor Didapat</th></tr></thead><tbody>`;
 
       const keys = Object.keys(data)
         .filter(
@@ -1011,9 +1027,11 @@ async function lihatDetailAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
       keys.forEach((k) => {
         htmlKonten += `<tr><td>${k}</td><td><strong>${data[k]}</strong></td></tr>`;
       });
-      htmlKonten += `</table>`;
+      htmlKonten += `</tbody></table>`;
 
       isiRef.innerHTML = htmlKonten;
+    } else {
+      isiRef.innerHTML = `<p style="color:red;">Data tidak ditemukan di database.</p>`;
     }
   } catch (error) {
     isiRef.innerHTML = `<p style="color:red;">Gagal menarik rincian data: ${error.message}</p>`;
@@ -1021,7 +1039,8 @@ async function lihatDetailAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
 }
 
 function tutupModalAdmin() {
-  document.getElementById("modalDetailAdmin").style.display = "none";
+  const modal = document.getElementById("modalDetailAdmin");
+  if (modal) modal.style.display = "none";
 }
 
 async function exportExcelAdmin() {
