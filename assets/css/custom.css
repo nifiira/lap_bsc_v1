@@ -1,11 +1,3 @@
-/* Secara default, sembunyikan menu-menu sensitif agar teksnya tidak berkedip saat loading */
-#menuPenilaianRsud,
-#menuPenilaianPkm,
-#menuUserLogin,
-#sectionAdminRecap {
-  display: none !important;
-}
-
 .tb-style {
   margin: 15px auto 0;
   width: 300px;

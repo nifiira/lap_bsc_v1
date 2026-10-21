@@ -272,3 +272,12 @@
   background: var(--dark);
   border-color: var(--primary);
 }
+
+/* Secara default, sembunyikan menu-menu sensitif agar teksnya tidak berkedip saat loading */
+#menuPenilaianRsud,
+#menuPenilaianPkm,
+#menuUserLogin,
+#menuDashboard,
+#sectionAdminRecap {
+  display: none !important;
+}
