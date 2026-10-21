@@ -3265,39 +3265,97 @@
               </div>
             </div>
             <!-- Navigasi Halaman Poin 1-4 -->
-            <div class="pagination-container my-4 text-end">
-              <button
-                class="btn btn-primary active"
-                onclick="pindahHalaman(1)"
-                id="btn-page-1"
+            <div
+              class="btn-toolbar d-flex justify-content-end"
+              role="toolbar"
+              style="text-align: right"
+            >
+              <div
+                class="btn-group me-2"
+                role="group"
+                aria-label="First group"
+                style="text-align: right"
               >
-                Poin 1
-              </button>
-              <button
-                class="btn btn-secondary"
-                onclick="pindahHalaman(2)"
-                id="btn-page-2"
-              >
-                Poin 2
-              </button>
-              <button
-                class="btn btn-secondary"
-                onclick="pindahHalaman(3)"
-                id="btn-page-3"
-              >
-                Poin 3
-              </button>
-              <button
-                class="btn btn-secondary"
-                onclick="pindahHalaman(4)"
-                id="btn-page-4"
-              >
-                Poin 4
-              </button>
+                <button
+                  type="button"
+                  class="btn btn-primary active"
+                  onclick="pindahHalaman(1)"
+                  id="btn-page-1"
+                >
+                  Point 1
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="pindahHalaman(2)"
+                  id="btn-page-2"
+                >
+                  Point 2
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="pindahHalaman(3)"
+                  id="btn-page-3"
+                >
+                  Point 3
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="pindahHalaman(4)"
+                  id="btn-page-4"
+                >
+                  Point 4
+                </button>
+              </div>
             </div>
           </div>
         </div>
         <!-- Main Content End -->
+
+        <!-- Sub Main Content Start -->
+        <div class="container-fluid pt-4 px-4">
+          <div class="row g-4 justify-content-center">
+            <div class="col-sm-12 col-xl-12">
+              <div class="bg-light rounded h-100 p-4">
+                <div
+                  class="d-flex align-items-center justify-content-between flex-wrap"
+                >
+                  <div>
+                    <h5 class="mb-1 text-dark fw-bold">
+                      <i class="fa fa-chart-line me-2 text-primary"></i
+                      >Rekapitulasi Penilaian Kinerja
+                    </h5>
+                    <span class="text-muted" style="font-size: 0.9rem"
+                      >Akumulasi keseluruhan skor dan predikat instansi</span
+                    >
+                  </div>
+                  <div class="text-end mt-3 mt-sm-0">
+                    <div
+                      class="d-inline-block bg-white border px-3 py-2 rounded shadow-sm"
+                    >
+                      <span class="text-dark fw-semibold me-2"
+                        >Grand Total:</span
+                      >
+                      <span id="grandTotal" class="fs-5 fw-bold text-primary"
+                        >0.00</span
+                      >
+                      <span class="text-muted mx-2">|</span>
+                      <span class="text-dark fw-semibold me-2">Predikat:</span>
+                      <span
+                        id="predikatGrandTotal"
+                        class="badge bg-success fs-6 px-3 py-2"
+                        >-</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sub Main Content End -->
 
         <!-- Footer Start -->
         <div class="container-fluid pt-4 px-4">
