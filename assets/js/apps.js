@@ -148,7 +148,7 @@ function aturTampilanBerdasarkanRole(role) {
   const menuDashboard = document.getElementById("menuDashboard");
   const menuLaporan = document.getElementById("menuLaporan");
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
-
+  const wrapperOpdAdmin = document.getElementById("wrapperPilihOpdAdmin");
   // Sembunyikan semua secara default terlebih dahulu
   if (menuRsud) {
     menuRsud.style.display = "none";
@@ -166,6 +166,9 @@ function aturTampilanBerdasarkanRole(role) {
     sectionAdminRecap.style.display = "none";
     sectionAdminRecap.classList.remove("tampil-menu");
   }
+  if (wrapperOpdAdmin) {
+    wrapperOpdAdmin.style.display = "none"; // Default tersembunyi
+  }
 
   if (role === "admin") {
     // Jika Admin: Tampilkan kedua menu penilaian dan tabel rekap admin
@@ -176,6 +179,9 @@ function aturTampilanBerdasarkanRole(role) {
       menuLaporan.classList.add("tampil-menu");
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
+    }
+    if (wrapperOpdAdmin) {
+      wrapperOpdAdmin.style.display = "block";
     }
     if (menuPkm) {
       menuPkm.style.display = "block";
