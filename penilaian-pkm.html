@@ -160,26 +160,97 @@
           <div class="row g-4 justify-content-center">
             <div class="col-sm-12 col-xl-12">
               <div class="bg-light rounded h-100">
-                <div class="tb-style text-dark">
-                  <label for="pilihTribulan">Pilih Periode Laporan: </label>
-
-                  <select
-                    id="pilihTribulan"
-                    onchange="gantiTribulan()"
-                    style="padding: 5px; font-weight: bold"
+                <div class="px-1 my-1 py-1 mx-1">
+                  <div
+                    class="bg-white p-4 rounded-4 shadow border my-3 mx-3"
+                    style="
+                      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+                      width: auto;
+                    "
                   >
-                    <option value="TW1-2026">Triwulan 1 (2026)</option>
-                    <option value="TW2-2026">Triwulan 2 (2026)</option>
-                    <option value="TW3-2026">Triwulan 3 (2026)</option>
-                    <option value="TW4-2026">Triwulan 4 (2026)</option>
-                  </select>
+                    <div
+                      class="d-flex flex-wrap align-items-center justify-content-between gap-3"
+                    >
+                      <!-- Kolom Pilih Periode Laporan -->
+                      <div style="flex: 1; min-width: 280px">
+                        <label
+                          for="pilihTribulan"
+                          class="form-label fw-bold text-dark mb-2"
+                          style="font-size: 0.9rem"
+                        >
+                          <i class="fa fa-calendar-alt text-primary me-2"></i
+                          >Periode Laporan Kinerja:
+                        </label>
+                        <div class="input-group">
+                          <span
+                            class="input-group-text bg-light border-end-0 text-primary ps-3"
+                            style="
+                              border-top-left-radius: 8px;
+                              border-bottom-left-radius: 8px;
+                            "
+                          >
+                            <i class="fa fa-clock"></i>
+                          </span>
+                          <select
+                            id="pilihTribulan"
+                            onchange="gantiTribulan()"
+                            class="form-select border-start-0 bg-light fw-bold text-dark shadow-none"
+                            style="
+                              cursor: pointer;
+                              border-top-right-radius: 8px;
+                              border-bottom-right-radius: 8px;
+                            "
+                          >
+                            <option value="TW1-2026">Triwulan 1 (2026)</option>
+                            <option value="TW2-2026">Triwulan 2 (2026)</option>
+                            <option value="TW3-2026">Triwulan 3 (2026)</option>
+                            <option value="TW4-2026">Triwulan 4 (2026)</option>
+                          </select>
+                        </div>
+                      </div>
 
-                  <!-- <div class="fs-5 fw-bold text-primary">
-                    Grand Total: <span id="grandTotal">0.00</span> (<span
-                      id="predikatGrandTotal"
-                      >-</span
-                    >)
-                  </div> -->
+                      <!-- Kolom Pilih Instansi/OPD khusus Admin (Sementara disembunyikan/display: none) -->
+                      <div
+                        style="flex: 1; min-width: 280px; display: none"
+                        id="wrapperPilihOpdAdmin"
+                      >
+                        <label
+                          for="pilihOpdAdmin"
+                          class="form-label fw-bold text-dark mb-2"
+                          style="font-size: 0.9rem"
+                        >
+                          <i class="fa fa-hospital text-danger me-2"></i>Pilih
+                          Instansi / RSUD (Mode Admin):
+                        </label>
+                        <div class="input-group">
+                          <span
+                            class="input-group-text bg-light border-end-0 text-danger ps-3"
+                            style="
+                              border-top-left-radius: 8px;
+                              border-bottom-left-radius: 8px;
+                            "
+                          >
+                            <i class="fa fa-building"></i>
+                          </span>
+                          <select
+                            id="pilihOpdAdmin"
+                            class="form-select border-start-0 bg-light fw-bold text-dark shadow-none"
+                            style="
+                              cursor: pointer;
+                              border-top-right-radius: 8px;
+                              border-bottom-right-radius: 8px;
+                            "
+                          >
+                            <option value="">
+                              -- Pilih Instansi Puskesmas --
+                            </option>
+                            <option value="rsud_bangil">RSUD Bangil</option>
+                            <option value="rsud_grati">RSUD Grati</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- ======================================================== -->
