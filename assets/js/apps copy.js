@@ -47,12 +47,12 @@ auth.onAuthStateChanged((user) => {
       .then((doc) => {
         if (doc.exists) {
           const userData = doc.data();
-          const opdUser = userData.opd; // Misal: "rsud_pasuruan", "pkm_purworejo", atau "admin"
-          const namaInstansiResmi = userData.namaInstansi || "Administrator"; // Teks formal untuk UI
+          currentRole = userData.opd; // Misal: "rsud_bangil", "pkm_purworejo", atau "admin"
+          currentNamaInstansi = userData.namaInstansi || "Administrator";
 
           // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
           document.querySelectorAll(".namaUser").forEach((el) => {
-            el.innerText = namaInstansiResmi;
+            el.innerText = currentNamaInstansi;
           });
 
           const selectTribulan = document.getElementById("pilihTribulan");
@@ -63,13 +63,22 @@ auth.onAuthStateChanged((user) => {
             return;
           }
 
-          // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
-          if (opdUser === "admin") {
-            aturTampilanBerdasarkanRole("admin");
-            if (typeof tarikSemuaDataAdmin === "function")
+          // JIKA BERADA DI HALAMAN LAPORAN, LANGSUNG TARIK DATA SESUAI USER
+          if (currentPath.includes("laporan.html")) {
+            if (typeof tarikSemuaDataAdmin === "function") {
               tarikSemuaDataAdmin();
-            tarikDaftarUserAdmin();
-          } else if (opdUser.startsWith("rsud_")) {
+            }
+          }
+
+          // Tentukan Hak Akses & Koleksi Database Berdasarkan Atribut 'opd' di Database
+          if (currentRole === "admin") {
+            aturTampilanBerdasarkanRole("admin");
+            if (currentPath.includes("user-login.html")) {
+              tarikDaftarUserAdmin();
+            } else if (typeof tarikSemuaDataAdmin === "function") {
+              tarikSemuaDataAdmin();
+            }
+          } else if (currentRole.startsWith("rsud_")) {
             tipeKoleksi = "evaluasi_kinerja_rsud";
             formRef = db
               .collection(tipeKoleksi)
@@ -78,10 +87,13 @@ auth.onAuthStateChanged((user) => {
 
             if (currentPath.includes("penilaian-pkm.html")) {
               window.location.href = "penilaian-rsud.html";
-            } else if (typeof muatDataDariFirebase === "function") {
+            } else if (
+              !currentPath.includes("laporan.html") &&
+              typeof muatDataDariFirebase === "function"
+            ) {
               muatDataDariFirebase();
             }
-          } else if (opdUser.startsWith("pkm_")) {
+          } else if (currentRole.startsWith("pkm_")) {
             tipeKoleksi = "evaluasi_kinerja_pkm";
             formRef = db
               .collection(tipeKoleksi)
@@ -90,7 +102,10 @@ auth.onAuthStateChanged((user) => {
 
             if (currentPath.includes("penilaian-rsud.html")) {
               window.location.href = "penilaian-pkm.html";
-            } else if (typeof muatDataDariFirebase === "function") {
+            } else if (
+              !currentPath.includes("laporan.html") &&
+              typeof muatDataDariFirebase === "function"
+            ) {
               muatDataDariFirebase();
             }
           } else {
@@ -110,7 +125,13 @@ auth.onAuthStateChanged((user) => {
   } else {
     currentUser = null;
     formRef = null;
-    if (isDashboardPage || isPenilaianPage) {
+    currentRole = "";
+    currentNamaInstansi = "";
+    if (
+      isDashboardPage ||
+      isPenilaianPage ||
+      currentPath.includes("laporan.html")
+    ) {
       window.location.href = "index.html";
     }
   }
@@ -127,42 +148,74 @@ function aturTampilanBerdasarkanRole(role) {
   const menuLaporan = document.getElementById("menuLaporan");
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
 
-  // Sembunyikan semua secara default
-  if (menuRsud) menuRsud.style.setProperty("display", "none", "important");
-  if (menuPkm) menuPkm.style.setProperty("display", "none", "important");
-  if (menuUser) menuUser.style.setProperty("display", "none", "important");
-  if (menuDashboard)
-    menuDashboard.style.setProperty("display", "none", "important");
-  if (menuLaporan)
-    menuLaporan.style.setProperty("display", "none", "important");
-  if (sectionAdminRecap)
-    sectionAdminRecap.style.setProperty("display", "none", "important");
+  // Sembunyikan semua secara default terlebih dahulu
+  if (menuRsud) {
+    menuRsud.style.display = "none";
+    menuRsud.classList.remove("tampil-menu");
+  }
+  if (menuPkm) {
+    menuPkm.style.display = "none";
+    menuPkm.classList.remove("tampil-menu");
+  }
+  if (menuUser) {
+    menuUser.style.display = "none";
+    menuUser.classList.remove("tampil-menu");
+  }
+  if (sectionAdminRecap) {
+    sectionAdminRecap.style.display = "none";
+    sectionAdminRecap.classList.remove("tampil-menu");
+  }
 
   if (role === "admin") {
-    // Jika Admin: Tampilkan semua menu terkait
-    if (menuRsud) menuRsud.style.setProperty("display", "block", "important");
-    if (menuPkm) menuPkm.style.setProperty("display", "block", "important");
-    if (menuUser) menuUser.style.setProperty("display", "block", "important");
-    if (menuDashboard)
-      menuDashboard.style.setProperty("display", "block", "important");
-    if (menuLaporan)
-      menuLaporan.style.setProperty("display", "block", "important");
-    if (sectionAdminRecap)
-      sectionAdminRecap.style.setProperty("display", "block", "important");
+    // Jika Admin: Tampilkan kedua menu penilaian dan tabel rekap admin
+    if (menuRsud) {
+      menuRsud.style.display = "block";
+      menuRsud.classList.add("tampil-menu");
+      menuLaporan.style.display = "block";
+      menuLaporan.classList.add("tampil-menu");
+      menuDashboard.style.display = "block";
+      menuDashboard.classList.add("tampil-menu");
+    }
+    if (menuPkm) {
+      menuPkm.style.display = "block";
+      menuPkm.classList.add("tampil-menu");
+      menuLaporan.style.display = "block";
+      menuLaporan.classList.add("tampil-menu");
+      menuDashboard.style.display = "block";
+      menuDashboard.classList.add("tampil-menu");
+    }
+    if (menuUser) {
+      menuUser.style.display = "block";
+      menuUser.classList.add("tampil-menu");
+      menuLaporan.style.display = "block";
+      menuLaporan.classList.add("tampil-menu");
+      menuDashboard.style.display = "block";
+      menuDashboard.classList.add("tampil-menu");
+    }
+    if (sectionAdminRecap) {
+      sectionAdminRecap.style.display = "block";
+      sectionAdminRecap.classList.add("tampil-menu");
+    }
   } else if (role === "rsud") {
     // Jika RSUD: Hanya tampilkan menu penilaian RSUD
-    if (menuRsud) menuRsud.style.setProperty("display", "block", "important");
-    if (menuDashboard)
-      menuDashboard.style.setProperty("display", "block", "important");
-    if (menuLaporan)
-      menuLaporan.style.setProperty("display", "block", "important");
+    if (menuRsud) {
+      menuRsud.style.display = "block";
+      menuRsud.classList.add("tampil-menu");
+      menuLaporan.style.display = "block";
+      menuLaporan.classList.add("tampil-menu");
+      menuDashboard.style.display = "block";
+      menuDashboard.classList.add("tampil-menu");
+    }
   } else if (role === "pkm") {
     // Jika Puskesmas: Hanya tampilkan menu penilaian Puskesmas
-    if (menuPkm) menuPkm.style.setProperty("display", "block", "important");
-    if (menuDashboard)
-      menuDashboard.style.setProperty("display", "block", "important");
-    if (menuLaporan)
-      menuLaporan.style.setProperty("display", "block", "important");
+    if (menuPkm) {
+      menuPkm.style.display = "block";
+      menuPkm.classList.add("tampil-menu");
+      menuLaporan.style.display = "block";
+      menuLaporan.classList.add("tampil-menu");
+      menuDashboard.style.display = "block";
+      menuDashboard.classList.add("tampil-menu");
+    }
   }
 }
 
@@ -654,11 +707,8 @@ function hitungGrandTotal() {
 
   // === FITUR SAPU JAGAT: REKAM SELURUH NILAI DI LAYAR KE FIREBASE ===
   if (currentUser && formRef) {
-    const usernameAsli = currentUser.email.replace("@gmail.com", "");
-    const namaLengkapInstansi = formatNamaInstansi(usernameAsli);
-
     let dataLengkap = {
-      nama_instansi: namaLengkapInstansi,
+      nama_instansi: currentNamaInstansi || "Instansi Resmi",
       grand_total: grandTotal.toFixed(2),
       predikat: predikatHasil,
     };
@@ -870,8 +920,28 @@ async function tarikSemuaDataAdmin() {
         const idParts = doc.id.split("_");
         const triwulan = idParts[1] || "Tidak Diketahui";
         const nama = data.nama_instansi || "Instansi (Belum Input)";
-        const total = data.grand_total || "0.00";
-        const predikat = data.predikat || "-";
+
+        // Perlindungan data: Hitung otomatis jika grand_total di database kosong/0
+        let totalVal = parseFloat(data.grand_total) || 0;
+        if (totalVal === 0) {
+          let sumTotal = 0;
+          for (let [key, val] of Object.entries(data)) {
+            if (
+              key.includes("_Total") &&
+              !key.includes("grand") &&
+              !isNaN(val)
+            ) {
+              sumTotal += parseFloat(val) || 0;
+            }
+          }
+          if (sumTotal > 0) totalVal = sumTotal;
+        }
+
+        const total = totalVal.toFixed(2);
+        const predikat =
+          data.predikat && data.predikat !== "-"
+            ? data.predikat
+            : tentukanPredikat(totalVal);
 
         htmlTabel += `
           <tr class="${col.type}">
@@ -880,9 +950,14 @@ async function tarikSemuaDataAdmin() {
               <td>${triwulan}</td>
               <td><strong>${total}</strong></td>
               <td>${predikat}</td>
-              <td><button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa fa-solid fa-eye"></i> Detail</button>
-              <button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa fa-solid fa-print"></i> Detail</button></td>
-              
+              <td>
+                <button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Lihat Rincian">
+                  <i class="fa fa-solid fa-eye"></i> Detail
+                </button>
+                <button class="btn btn-sm btn-success me-1" onclick="exportToExcel('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Cetak ke Excel Sesuai Template">
+                  <i class="fa fa-solid fa-print"></i> Cetak
+                </button>
+              </td>
           </tr>
         `;
       });
