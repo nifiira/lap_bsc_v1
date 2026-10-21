@@ -174,8 +174,9 @@
           <div class="row g-4 justify-content-center">
             <div class="col-sm-12 col-xl-12">
               <div class="bg-light rounded h-100">
-                <!-- Bagian Header Filter: Periode Laporan & Pilihan OPD Admin -->
-                <div class="bg-white p-4 mb-4 rounded shadow-sm border-0">
+                <div
+                  class="tb-style text-dark p-3 bg-white rounded shadow-sm mb-4"
+                >
                   <div class="row align-items-center g-3">
                     <!-- Kolom Pilih Periode Laporan -->
                     <div class="col-md-6">
@@ -185,7 +186,7 @@
                         style="font-size: 0.9rem"
                       >
                         <i class="fa fa-calendar-alt text-primary me-2"></i
-                        >Periode Laporan Kinerja
+                        >Pilih Periode Laporan:
                       </label>
                       <div class="input-group">
                         <span
@@ -207,7 +208,7 @@
                       </div>
                     </div>
 
-                    <!-- Kolom Pilih Instansi/OPD khusus Admin (Sementara disembunyikan/display: none) -->
+                    <!-- Kolom Pilih Instansi/OPD khusus Admin (Default display: none sesuai permintaan) -->
                     <div
                       class="col-md-6"
                       id="wrapperPilihOpdAdmin"
@@ -219,7 +220,7 @@
                         style="font-size: 0.9rem"
                       >
                         <i class="fa fa-hospital text-danger me-2"></i>Pilih
-                        Instansi / RSUD (Mode Admin)
+                        Instansi / RSUD (Mode Admin):
                       </label>
                       <div class="input-group">
                         <span
@@ -235,7 +236,6 @@
                           <option value="">-- Pilih Instansi RSUD --</option>
                           <option value="rsud_bangil">RSUD Bangil</option>
                           <option value="rsud_grati">RSUD Grati</option>
-                          <!-- Tambahkan opsi instansi lainnya di sini jika diperlukan nanti -->
                         </select>
                       </div>
                     </div>
