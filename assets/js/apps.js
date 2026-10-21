@@ -971,34 +971,41 @@ async function tarikSemuaDataAdmin() {
 }
 
 async function lihatDetailAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
-  const modalElemen = document.getElementById("modalDetailAdmin");
+  let modalEl = document.getElementById("modalDetailAdmin");
 
-  // Jika elemen modal belum ada di HTML, buat secara otomatis agar tidak error
-  if (!modalElemen) {
+  // Jika elemen modal belum ada di HTML, buat secara otomatis menggunakan komponen native Bootstrap 5
+  if (!modalEl) {
     const modalHtml = `
-      <div id="modalDetailAdmin" class="modal" tabindex="-1" style="display:none; position:fixed; z-index:1050; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-        <div class="modal-dialog modal-lg" style="margin: 50px auto; background:#fff; padding:20px; border-radius:8px; max-width:700px;">
-          <div class="modal-header d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-            <h5 id="judulModal" class="fw-bold m-0">Detail Nilai</h5>
-            <button type="button" class="btn-close" onclick="tutupModalAdmin()"></button>
-          </div>
-          <div id="isiModalDetail" class="modal-body" style="max-height: 400px; overflow-y: auto;">
-            <p>Sedang memuat rincian nilai...</p>
-          </div>
-          <div class="modal-footer border-top pt-2 mt-3 text-end">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="tutupModalAdmin()">Tutup</button>
+      <div class="modal fade" id="modalDetailAdmin" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+          <div class="modal-content shadow-lg border-0">
+            <div class="modal-header bg-primary text-white">
+              <h5 id="judulModal" class="modal-title fw-bold">Detail Nilai</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="tutupModalAdmin()"></button>
+            </div>
+            <div id="isiModalDetail" class="modal-body bg-light">
+              <p>Sedang memuat rincian nilai...</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="tutupModalAdmin()">Tutup</button>
+            </div>
           </div>
         </div>
       </div>
     `;
     document.body.insertAdjacentHTML("beforeend", modalHtml);
+    modalEl = document.getElementById("modalDetailAdmin");
   }
 
-  document.getElementById("modalDetailAdmin").style.display = "block";
   document.getElementById("judulModal").innerText =
     `Detail Nilai: ${namaInstansi} (${triwulan})`;
   const isiRef = document.getElementById("isiModalDetail");
-  isiRef.innerHTML = "<p>Sedang memuat rincian nilai...</p>";
+  isiRef.innerHTML =
+    "<p class='text-center py-3'>Sedang memuat rincian nilai...</p>";
+
+  // Tampilkan modal menggunakan Bootstrap 5 Modal API agar interaktif dan bisa diklik/close dengan normal
+  const myModal = new bootstrap.Modal(modalEl);
+  myModal.show();
 
   try {
     const doc = await db.collection(namaKoleksi).doc(docId).get();
@@ -1012,7 +1019,7 @@ async function lihatDetailAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
             </button>
         </div>
       `;
-      htmlKonten += `<table class="table table-bordered table-striped table-sm"><thead><tr><th>Nama Poin / Indikator</th><th>Skor Didapat</th></tr></thead><tbody>`;
+      htmlKonten += `<table class="table table-bordered table-striped table-sm align-middle"><thead><tr class="table-secondary"><th>Nama Poin / Indikator</th><th class="text-end">Skor Didapat</th></tr></thead><tbody>`;
 
       const keys = Object.keys(data)
         .filter(
@@ -1025,22 +1032,33 @@ async function lihatDetailAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
         .sort();
 
       keys.forEach((k) => {
-        htmlKonten += `<tr><td>${k}</td><td><strong>${data[k]}</strong></td></tr>`;
+        htmlKonten += `<tr><td><code>${k}</code></td><td class="text-end"><strong>${data[k]}</strong></td></tr>`;
       });
       htmlKonten += `</tbody></table>`;
 
       isiRef.innerHTML = htmlKonten;
     } else {
-      isiRef.innerHTML = `<p style="color:red;">Data tidak ditemukan di database.</p>`;
+      isiRef.innerHTML = `<p style="color:red;" class="text-center">Data tidak ditemukan di database.</p>`;
     }
   } catch (error) {
-    isiRef.innerHTML = `<p style="color:red;">Gagal menarik rincian data: ${error.message}</p>`;
+    isiRef.innerHTML = `<p style="color:red;" class="text-center">Gagal menarik rincian data: ${error.message}</p>`;
   }
 }
 
 function tutupModalAdmin() {
-  const modal = document.getElementById("modalDetailAdmin");
-  if (modal) modal.style.display = "none";
+  const modalEl = document.getElementById("modalDetailAdmin");
+  if (modalEl) {
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalInstance.hide();
+    } else {
+      modalEl.classList.remove("show");
+      modalEl.style.display = "none";
+      document.querySelectorAll(".modal-backdrop").forEach((el) => el.remove());
+      document.body.classList.remove("modal-open");
+      document.body.style.removeProperty("overflow");
+    }
+  }
 }
 
 async function exportExcelAdmin() {
