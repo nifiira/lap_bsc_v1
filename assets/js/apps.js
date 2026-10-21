@@ -920,8 +920,28 @@ async function tarikSemuaDataAdmin() {
         const idParts = doc.id.split("_");
         const triwulan = idParts[1] || "Tidak Diketahui";
         const nama = data.nama_instansi || "Instansi (Belum Input)";
-        const total = data.grand_total || "0.00";
-        const predikat = data.predikat || "-";
+
+        // Perlindungan data: Hitung otomatis jika grand_total di database kosong/0
+        let totalVal = parseFloat(data.grand_total) || 0;
+        if (totalVal === 0) {
+          let sumTotal = 0;
+          for (let [key, val] of Object.entries(data)) {
+            if (
+              key.includes("_Total") &&
+              !key.includes("grand") &&
+              !isNaN(val)
+            ) {
+              sumTotal += parseFloat(val) || 0;
+            }
+          }
+          if (sumTotal > 0) totalVal = sumTotal;
+        }
+
+        const total = totalVal.toFixed(2);
+        const predikat =
+          data.predikat && data.predikat !== "-"
+            ? data.predikat
+            : tentukanPredikat(totalVal);
 
         htmlTabel += `
           <tr class="${col.type}">
@@ -930,9 +950,14 @@ async function tarikSemuaDataAdmin() {
               <td>${triwulan}</td>
               <td><strong>${total}</strong></td>
               <td>${predikat}</td>
-              <td><button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa fa-solid fa-eye"></i> Detail</button>
-              <button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa fa-solid fa-print"></i> Detail</button></td>
-              
+              <td>
+                <button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Lihat Rincian">
+                  <i class="fa fa-solid fa-eye"></i> Detail
+                </button>
+                <button class="btn btn-sm btn-success me-1" onclick="exportToExcel('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Cetak ke Excel Sesuai Template">
+                  <i class="fa fa-solid fa-print"></i> Cetak
+                </button>
+              </td>
           </tr>
         `;
       });

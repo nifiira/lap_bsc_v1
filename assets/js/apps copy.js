@@ -830,66 +830,72 @@ function formatNamaInstansi(username) {
 // ========================================================
 async function tarikSemuaDataAdmin() {
   const tabelRef = document.getElementById("tabelRekapAdmin");
-  // const tabelRef = document.getElementById("tabelDaftarUser");
   if (!tabelRef) return;
 
-  tabelRef.innerHTML = "";
+  tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center;">Memuat laporan...</td></tr>`;
 
   try {
     let htmlTabel = "";
     let nomor = 1;
 
-    const snapshotRsud = await db.collection("evaluasi_kinerja_rsud").get();
-    snapshotRsud.forEach((doc) => {
-      const data = doc.data();
-      const idParts = doc.id.split("_");
-      const triwulan = idParts[1] || "Tidak Diketahui";
-      const nama = data.nama_instansi || "RSUD (Belum Input)";
+    // Tentukan koleksi apa saja yang ditarik berdasarkan role aktif di memori
+    let targetKoleksi = [];
+    if (currentRole === "admin") {
+      targetKoleksi = [
+        { name: "evaluasi_kinerja_rsud", type: "rsud-row" },
+        { name: "evaluasi_kinerja_pkm", type: "pkm-row" },
+      ];
+    } else if (currentRole.startsWith("rsud_")) {
+      targetKoleksi = [{ name: "evaluasi_kinerja_rsud", type: "rsud-row" }];
+    } else if (currentRole.startsWith("pkm_")) {
+      targetKoleksi = [{ name: "evaluasi_kinerja_pkm", type: "pkm-row" }];
+    }
 
-      const total = data.grand_total || "0.00";
-      const predikat = data.predikat || "-";
+    for (let col of targetKoleksi) {
+      const snapshot = await db.collection(col.name).get();
+      snapshot.forEach((doc) => {
+        const data = doc.data();
 
-      htmlTabel += `
-        <tr class="rsud-row">
-            <td>${nomor++}</td>
-            <td><strong>${nama}</strong></td>
-            <td>${triwulan}</td>
-            <td><strong>${total}</strong></td>
-            <td>${predikat}</td>
-            <td><button class="btn-aksi" onclick="lihatDetailAdmin('evaluasi_kinerja_rsud', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa-solid fa-eye"></i> Detail</button></td>
-        </tr>
-      `;
-    });
+        // Jika bukan admin, saring laporan agar hanya milik instansi yang sedang login
+        if (currentRole !== "admin") {
+          const milikUid =
+            currentUser && doc.id.startsWith(currentUser.uid + "_");
+          const milikNama =
+            currentNamaInstansi && data.nama_instansi === currentNamaInstansi;
+          if (!milikUid && !milikNama) {
+            return; // Lewati jika bukan milik instansi ini
+          }
+        }
 
-    const snapshotPkm = await db.collection("evaluasi_kinerja_pkm").get();
-    snapshotPkm.forEach((doc) => {
-      const data = doc.data();
-      const idParts = doc.id.split("_");
-      const triwulan = idParts[1] || "Tidak Diketahui";
-      const nama = data.nama_instansi || "PKM (Belum Input)";
-      const total = data.grand_total || "0.00";
-      const predikat = data.predikat || "-";
+        const idParts = doc.id.split("_");
+        const triwulan = idParts[1] || "Tidak Diketahui";
+        const nama = data.nama_instansi || "Instansi (Belum Input)";
+        const total = data.grand_total || "0.00";
+        const predikat = data.predikat || "-";
 
-      htmlTabel += `
-        <tr class="pkm-row">
-            <td>${nomor++}</td>
-            <td><strong>${nama}</strong></td>
-            <td>${triwulan}</td>
-            <td><strong>${total}</strong></td>
-            <td>${predikat}</td>
-            <td><button class="btn-aksi" onclick="lihatDetailAdmin('evaluasi_kinerja_pkm', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa-solid fa-eye"></i> Detail</button></td>
-        </tr>
-      `;
-    });
+        htmlTabel += `
+          <tr class="${col.type}">
+              <td>${nomor++}</td>
+              <td><strong>${nama}</strong></td>
+              <td>${triwulan}</td>
+              <td><strong>${total}</strong></td>
+              <td>${predikat}</td>
+              <td><button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa fa-solid fa-eye"></i> Detail</button>
+              <button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')"><i class="fa fa-solid fa-print"></i> Detail</button></td>
+              
+          </tr>
+        `;
+      });
+    }
 
     if (htmlTabel === "") {
-      tabelRef.innerHTML = `<tr><td colspan="5" style="text-align:center;">Belum ada laporan.</td></tr>`;
+      tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada laporan untuk instansi Anda.</td></tr>`;
     } else {
       tabelRef.innerHTML = htmlTabel;
     }
   } catch (error) {
-    console.error("Gagal:", error);
-    tabelRef.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data.</td></tr>`;
+    console.error("Gagal memuat laporan:", error);
+    tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Gagal memuat data laporan.</td></tr>`;
   }
 }
 
