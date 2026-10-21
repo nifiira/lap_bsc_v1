@@ -301,6 +301,7 @@ function simpanKeFirebase(namaPoin, nilaiRealisasi, nilaiTarget, skorAkhir) {
 
 function muatDataDariFirebase() {
   if (!formRef) return;
+  isSedangMemuat = true; // Kunci aktif
 
   formRef
     .get()
@@ -348,9 +349,15 @@ function muatDataDariFirebase() {
         if (typeof hitungTotalPoin41 === "function") hitungTotalPoin41();
         if (typeof hitungGrandTotal === "function") hitungGrandTotal();
       }
+
+      // Lepas kunci setelah selesai memuat
+      setTimeout(() => {
+        isSedangMemuat = false;
+      }, 500);
     })
     .catch((error) => {
       console.error("Gagal memuat data dari Firebase: ", error);
+      isSedangMemuat = false;
     });
 }
 
