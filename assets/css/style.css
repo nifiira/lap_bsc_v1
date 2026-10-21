@@ -281,9 +281,23 @@
 #menuLaporan,
 #sectionAdminRecap {
   /* display: none !important; */
+  /* opacity: 0;
+  transition: opacity 0.05ms ease-in-out; */
   opacity: 0;
-  transition: opacity 0.05ms ease-in-out;
+  visibility: hidden;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s ease;
 }
-.tampil-menu {
+/* .tampil-menu {
   opacity: 1 !important;
+  visibility: visible;
+} */
+
+#menuPenilaianRsud.tampil-menu,
+#menuPenilaianPkm.tampil-menu,
+#menuUserLogin.tampil-menu,
+#sectionAdminRecap.tampil-menu {
+  opacity: 1;
+  visibility: visible;
 }
