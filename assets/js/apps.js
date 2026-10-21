@@ -957,13 +957,13 @@ async function tarikSemuaDataAdmin() {
               <td>${predikat}</td>
               <td>
                 <button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Lihat Rincian">
-                  <i class="fa fa-solid fa-eye"></i> Detail
+                  <i class="fa fa-solid fa-eye"></i>
                 </button>
                 <button class="btn btn-sm btn-success me-1" onclick="exportToExcel('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Cetak ke Excel Sesuai Template">
-                  <i class="fa fa-solid fa-print"></i> Cetak
+                  <i class="fa fa-solid fa-print"></i>
                 </button>
                 <button class="btn btn-sm btn-danger" onclick="hapusDataAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Hapus Laporan Ini">
-                  <i class="fa fa-solid fa-trash"></i> Hapus
+                  <i class="fa fa-solid fa-trash"></i>
                 </button>
               </td>
           </tr>
