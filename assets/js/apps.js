@@ -24,6 +24,7 @@ let currentNamaInstansi = ""; // Menyimpan nama resmi instansi aktif
 // Variabel Global Baru
 let tribulanAktif = "TW1-2026";
 let tipeKoleksi = ""; // Menyimpan jenis database (rsud / pkm)
+let isSedangMemuat = false;
 
 // ========================================================
 // 2. SISTEM LOGIN & LOGOUT (Multi-Dashboard: RSUD & PKM)
@@ -284,7 +285,7 @@ function logoutUser() {
 // 3. FUNGSI PENYIMPANAN CLOUD FIRESTORE
 // ========================================================
 function simpanKeFirebase(namaPoin, nilaiRealisasi, nilaiTarget, skorAkhir) {
-  if (!currentUser || !formRef) return;
+  if (!currentUser || !formRef || isSedangMemuat) return; // Dicegah jika sedang memuat data
 
   let dataObjek = {};
   dataObjek[`real_${namaPoin}`] = nilaiRealisasi;
