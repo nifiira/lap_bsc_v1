@@ -189,6 +189,10 @@ function aturTampilanBerdasarkanRole(role) {
     if (menuRsud) {
       menuRsud.style.display = "block";
       menuRsud.classList.add("tampil-menu");
+      menuLaporan.style.display = "block";
+      menuLaporan.classList.add("tampil-menu");
+      menuDashboard.style.display = "block";
+      menuDashboard.classList.add("tampil-menu");
     }
   } else if (role === "pkm") {
     // Jika Puskesmas: Hanya tampilkan menu penilaian Puskesmas
