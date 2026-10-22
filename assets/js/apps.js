@@ -790,6 +790,18 @@ function hitungGrandTotal() {
 
   // === FITUR SAPU JAGAT: REKAM SELURUH NILAI DI LAYAR KE FIREBASE ===
   if (currentUser && formRef) {
+    // Tentukan nama instansi: jika admin, ambil dari teks dropdown pilihan OPD
+    let namaInstansiSimpan = currentNamaInstansi;
+    if (currentRole === "admin") {
+      const selectOpd = document.getElementById("pilihOpdAdmin");
+      if (
+        selectOpd &&
+        selectOpd.options[selectOpd.selectedIndex] &&
+        selectOpd.value !== ""
+      ) {
+        namaInstansiSimpan = selectOpd.options[selectOpd.selectedIndex].text;
+      }
+    }
     let dataLengkap = {
       nama_instansi: currentNamaInstansi || "Instansi Resmi",
       grand_total: grandTotal.toFixed(2),
