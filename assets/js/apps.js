@@ -802,8 +802,9 @@ function hitungGrandTotal() {
         namaInstansiSimpan = selectOpd.options[selectOpd.selectedIndex].text;
       }
     }
+
     let dataLengkap = {
-      nama_instansi: currentNamaInstansi || "Instansi Resmi",
+      nama_instansi: namaInstansiSimpan || "Instansi Resmi",
       grand_total: grandTotal.toFixed(2),
       predikat: predikatHasil,
     };
