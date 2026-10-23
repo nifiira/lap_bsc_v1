@@ -24,6 +24,7 @@ let currentNamaInstansi = ""; // Menyimpan nama resmi instansi aktif
 // Variabel Global Baru
 let tribulanAktif = "TW1-2026";
 let tipeKoleksi = ""; // Menyimpan jenis database (rsud / pkm)
+let isSedangMemuat = false;
 
 // ========================================================
 // 2. SISTEM LOGIN & LOGOUT (Multi-Dashboard: RSUD & PKM)
@@ -147,7 +148,7 @@ function aturTampilanBerdasarkanRole(role) {
   const menuDashboard = document.getElementById("menuDashboard");
   const menuLaporan = document.getElementById("menuLaporan");
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
-
+  const wrapperOpdAdmin = document.getElementById("wrapperPilihOpdAdmin");
   // Sembunyikan semua secara default terlebih dahulu
   if (menuRsud) {
     menuRsud.style.display = "none";
@@ -165,6 +166,9 @@ function aturTampilanBerdasarkanRole(role) {
     sectionAdminRecap.style.display = "none";
     sectionAdminRecap.classList.remove("tampil-menu");
   }
+  if (wrapperOpdAdmin) {
+    wrapperOpdAdmin.style.display = "none"; // Default tersembunyi
+  }
 
   if (role === "admin") {
     // Jika Admin: Tampilkan kedua menu penilaian dan tabel rekap admin
@@ -175,6 +179,9 @@ function aturTampilanBerdasarkanRole(role) {
       menuLaporan.classList.add("tampil-menu");
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
+    }
+    if (wrapperOpdAdmin) {
+      wrapperOpdAdmin.style.display = "block";
     }
     if (menuPkm) {
       menuPkm.style.display = "block";
@@ -216,6 +223,75 @@ function aturTampilanBerdasarkanRole(role) {
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
     }
+  }
+}
+
+async function gantiOpdAdmin() {
+  const selectOpd = document.getElementById("pilihOpdAdmin");
+  const selectTribulan = document.getElementById("pilihTribulan");
+  if (!selectOpd || !selectTribulan) return;
+
+  const opdTerpilih = selectOpd.value; // Contoh: "rsud_bangil" atau "pkm_..."
+  const triwulanTerpilih = selectTribulan.value; // Contoh: "TW1-2026"
+
+  if (!opdTerpilih) {
+    // Kosongkan form jika belum memilih instansi
+    document
+      .querySelectorAll('input[type="number"], select')
+      .forEach((input) => {
+        if (input.id !== "pilihTribulan" && input.id !== "pilihOpdAdmin")
+          input.value = "";
+      });
+    document
+      .querySelectorAll('[id^="skor_"], [id^="subTotal_"]')
+      .forEach((el) => (el.innerText = "0.00"));
+    formRef = null;
+    return;
+  }
+
+  // Tentukan jenis koleksi database berdasarkan pilihan OPD
+  if (opdTerpilih.startsWith("rsud_")) {
+    tipeKoleksi = "evaluasi_kinerja_rsud";
+  } else if (opdTerpilih.startsWith("pkm_")) {
+    tipeKoleksi = "evaluasi_kinerja_pkm";
+  }
+
+  try {
+    // 1. Cari data user di koleksi 'users' berdasarkan field 'opd' untuk mendapatkan UID-nya
+    const userSnapshot = await db
+      .collection("users")
+      .where("opd", "==", opdTerpilih)
+      .get();
+
+    if (userSnapshot.empty) {
+      alert("Profil instansi tidak ditemukan di database pengguna sistem.");
+      return;
+    }
+
+    const userData = userSnapshot.docs[0].data();
+    const targetUid = userData.uid;
+
+    // 2. Arahkan formRef ke dokumen yang benar menggunakan pola UID + Triwulan
+    formRef = db
+      .collection(tipeKoleksi)
+      .doc(`${targetUid}_${triwulanTerpilih}`);
+
+    // 3. Reset tampilan form sebelum memuat data baru
+    document
+      .querySelectorAll('input[type="number"], select')
+      .forEach((input) => {
+        if (input.id !== "pilihTribulan" && input.id !== "pilihOpdAdmin")
+          input.value = "";
+      });
+    document
+      .querySelectorAll('[id^="skor_"], [id^="subTotal_"]')
+      .forEach((el) => (el.innerText = "0.00"));
+
+    // 4. Muat nilai dari Firebase ke form
+    muatDataDariFirebase();
+  } catch (error) {
+    console.error("Gagal memuat data instansi untuk admin:", error);
+    alert("Terjadi kesalahan saat mengambil data: " + error.message);
   }
 }
 
@@ -284,7 +360,7 @@ function logoutUser() {
 // 3. FUNGSI PENYIMPANAN CLOUD FIRESTORE
 // ========================================================
 function simpanKeFirebase(namaPoin, nilaiRealisasi, nilaiTarget, skorAkhir) {
-  if (!currentUser || !formRef) return;
+  if (!currentUser || !formRef || isSedangMemuat) return; // Dicegah jika sedang memuat data
 
   let dataObjek = {};
   dataObjek[`real_${namaPoin}`] = nilaiRealisasi;
@@ -300,6 +376,7 @@ function simpanKeFirebase(namaPoin, nilaiRealisasi, nilaiTarget, skorAkhir) {
 
 function muatDataDariFirebase() {
   if (!formRef) return;
+  isSedangMemuat = true; // Kunci aktif
 
   formRef
     .get()
@@ -347,9 +424,15 @@ function muatDataDariFirebase() {
         if (typeof hitungTotalPoin41 === "function") hitungTotalPoin41();
         if (typeof hitungGrandTotal === "function") hitungGrandTotal();
       }
+
+      // Lepas kunci setelah selesai memuat
+      setTimeout(() => {
+        isSedangMemuat = false;
+      }, 500);
     })
     .catch((error) => {
       console.error("Gagal memuat data dari Firebase: ", error);
+      isSedangMemuat = false;
     });
 }
 
@@ -707,8 +790,21 @@ function hitungGrandTotal() {
 
   // === FITUR SAPU JAGAT: REKAM SELURUH NILAI DI LAYAR KE FIREBASE ===
   if (currentUser && formRef) {
+    // Tentukan nama instansi: jika admin, ambil dari teks dropdown pilihan OPD
+    let namaInstansiSimpan = currentNamaInstansi;
+    if (currentRole === "admin") {
+      const selectOpd = document.getElementById("pilihOpdAdmin");
+      if (
+        selectOpd &&
+        selectOpd.options[selectOpd.selectedIndex] &&
+        selectOpd.value !== ""
+      ) {
+        namaInstansiSimpan = selectOpd.options[selectOpd.selectedIndex].text;
+      }
+    }
+
     let dataLengkap = {
-      nama_instansi: currentNamaInstansi || "Instansi Resmi",
+      nama_instansi: namaInstansiSimpan || "Instansi Resmi",
       grand_total: grandTotal.toFixed(2),
       predikat: predikatHasil,
     };
@@ -888,32 +984,24 @@ async function tarikSemuaDataAdmin() {
     let htmlTabel = "";
     let nomor = 1;
 
-    // Tentukan koleksi apa saja yang ditarik berdasarkan role aktif di memori
-    let targetKoleksi = [];
-    if (currentRole === "admin") {
-      targetKoleksi = [
-        { name: "evaluasi_kinerja_rsud", type: "rsud-row" },
-        { name: "evaluasi_kinerja_pkm", type: "pkm-row" },
-      ];
-    } else if (currentRole.startsWith("rsud_")) {
-      targetKoleksi = [{ name: "evaluasi_kinerja_rsud", type: "rsud-row" }];
-    } else if (currentRole.startsWith("pkm_")) {
-      targetKoleksi = [{ name: "evaluasi_kinerja_pkm", type: "pkm-row" }];
-    }
+    let targetKoleksi = [
+      { name: "evaluasi_kinerja_rsud", type: "rsud-row" },
+      { name: "evaluasi_kinerja_pkm", type: "pkm-row" },
+    ];
 
     for (let col of targetKoleksi) {
       const snapshot = await db.collection(col.name).get();
       snapshot.forEach((doc) => {
         const data = doc.data();
 
-        // Jika bukan admin, saring laporan agar hanya milik instansi yang sedang login
-        if (currentRole !== "admin") {
+        // Jika bukan admin, lakukan penyaringan kepemilikan data
+        if (currentRole && currentRole !== "admin") {
           const milikUid =
             currentUser && doc.id.startsWith(currentUser.uid + "_");
           const milikNama =
             currentNamaInstansi && data.nama_instansi === currentNamaInstansi;
           if (!milikUid && !milikNama) {
-            return; // Lewati jika bukan milik instansi ini
+            return;
           }
         }
 
@@ -921,20 +1009,13 @@ async function tarikSemuaDataAdmin() {
         const triwulan = idParts[1] || "Tidak Diketahui";
         const nama = data.nama_instansi || "Instansi (Belum Input)";
 
-        // Perlindungan data: Hitung otomatis jika grand_total di database kosong/0
         let totalVal = parseFloat(data.grand_total) || 0;
         if (totalVal === 0) {
-          let sumTotal = 0;
-          for (let [key, val] of Object.entries(data)) {
-            if (
-              key.includes("_Total") &&
-              !key.includes("grand") &&
-              !isNaN(val)
-            ) {
-              sumTotal += parseFloat(val) || 0;
-            }
-          }
-          if (sumTotal > 0) totalVal = sumTotal;
+          const t1 = parseFloat(data.skor_11_Total) || 0;
+          const t2 = parseFloat(data.skor_21_Total) || 0;
+          const t3 = parseFloat(data.skor_31_Total) || 0;
+          const t4 = parseFloat(data.skor_41_Total) || 0;
+          totalVal = t1 + t2 + t3 + t4;
         }
 
         const total = totalVal.toFixed(2);
@@ -951,11 +1032,12 @@ async function tarikSemuaDataAdmin() {
               <td><strong>${total}</strong></td>
               <td>${predikat}</td>
               <td>
-                <button class="btn btn-sm btn-primary me-1" onclick="lihatDetailAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Lihat Rincian">
-                  <i class="fa fa-solid fa-eye"></i> Detail
-                </button>
+              
                 <button class="btn btn-sm btn-success me-1" onclick="exportToExcel('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Cetak ke Excel Sesuai Template">
-                  <i class="fa fa-solid fa-print"></i> Cetak
+                  <i class="fa fa-solid fa-print"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="hapusDataAdmin('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Hapus Laporan Ini">
+                  <i class="fa fa-solid fa-trash"></i>
                 </button>
               </td>
           </tr>
@@ -964,62 +1046,14 @@ async function tarikSemuaDataAdmin() {
     }
 
     if (htmlTabel === "") {
-      tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada laporan untuk instansi Anda.</td></tr>`;
+      tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada laporan data ditemukan.</td></tr>`;
     } else {
       tabelRef.innerHTML = htmlTabel;
     }
   } catch (error) {
     console.error("Gagal memuat laporan:", error);
-    tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Gagal memuat data laporan.</td></tr>`;
+    tabelRef.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Gagal memuat data laporan: ${error.message}</td></tr>`;
   }
-}
-
-async function lihatDetailAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
-  document.getElementById("modalDetailAdmin").style.display = "block";
-  document.getElementById("judulModal").innerText =
-    `Detail Nilai: ${namaInstansi} (${triwulan})`;
-  const isiRef = document.getElementById("isiModalDetail");
-  isiRef.innerHTML = "<p>Sedang memuat rincian nilai...</p>";
-
-  try {
-    const doc = await db.collection(namaKoleksi).doc(docId).get();
-    if (doc.exists) {
-      const data = doc.data();
-
-      let htmlKonten = `
-    <div style="margin-bottom: 15px;">
-        <button class="btn-excel" style="background-color: #059669; padding: 8px 12px; font-size: 14px;" 
-                onclick="exportToExcel('${namaKoleksi}', '${docId}', '${namaInstansi}', '${triwulan}')">
-            <i class="fa-solid fa-file-excel"></i> Cetak Laporan ${namaInstansi} Sesuai Template
-        </button>
-    </div>
-`;
-      htmlKonten += `<table class="admin-table"><tr><th>Nama Poin / Indikator</th><th>Skor Didapat</th></tr>`;
-
-      const keys = Object.keys(data)
-        .filter(
-          (k) =>
-            k.startsWith("skor_") ||
-            k.startsWith("subTotal_") ||
-            k.startsWith("real_") ||
-            k.startsWith("target_"),
-        )
-        .sort();
-
-      keys.forEach((k) => {
-        htmlKonten += `<tr><td>${k}</td><td><strong>${data[k]}</strong></td></tr>`;
-      });
-      htmlKonten += `</table>`;
-
-      isiRef.innerHTML = htmlKonten;
-    }
-  } catch (error) {
-    isiRef.innerHTML = `<p style="color:red;">Gagal menarik rincian data: ${error.message}</p>`;
-  }
-}
-
-function tutupModalAdmin() {
-  document.getElementById("modalDetailAdmin").style.display = "none";
 }
 
 async function exportExcelAdmin() {
@@ -1337,5 +1371,29 @@ function hapusUserFirestore(uidUser, emailUser) {
       .catch((error) => {
         alert("Gagal menghapus user: " + error.message);
       });
+  }
+}
+
+// ========================================================
+// HAPUS DATA PENILAIAN
+// ========================================================
+async function hapusDataAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
+  const konfirmasi = confirm(
+    `⚠️ PERHATIAN!\n\nApakah Anda yakin ingin MENGHAPUS permanen laporan kinerja untuk:\n- Instansi: ${namaInstansi}\n- Periode: ${triwulan}?`,
+  );
+
+  if (konfirmasi) {
+    try {
+      // Hapus dokumen spesifik dari koleksi Firestore
+      await db.collection(namaKoleksi).doc(docId).delete();
+
+      alert("Data laporan berhasil dihapus dari sistem.");
+
+      // Muat ulang tabel rekap agar baris yang terhapus langsung hilang dari layar
+      tarikSemuaDataAdmin();
+    } catch (error) {
+      console.error("Gagal menghapus data laporan:", error);
+      alert("Terjadi kesalahan saat menghapus data: " + error.message);
+    }
   }
 }
