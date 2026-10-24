@@ -511,6 +511,9 @@ function hitungSkorOtomatis(namaPoin) {
   if (namaPoin === "111_J6" || namaPoin === "111J6") {
     rasio = rasio / 60;
   }
+  if (namaPoin === "212_I" || namaPoin === "212I") {
+    rasio = rasio * 60;
+  }
 
   let skorFinal = null;
   const daftarAturan = aturanPenilaian[namaPoin].kondisiSkor;
