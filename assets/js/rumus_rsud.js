@@ -128,11 +128,11 @@ const aturanPenilaian = {
   },
   "111_J6": {
     kondisiSkor: [
-      { batas: 2, nilai: 0.5 },
-      { batas: 3, nilai: 0.4 },
-      { batas: 4, nilai: 0.3 },
-      { batas: 5, nilai: 0.2 },
-      { batas: Infinity, nilai: 0.1 }, // Mewakili syarat > 5
+      { batas: 2, nilai: 0.5 }, // Mewakili 0 < PAM5 ≤ 2
+      { batas: 3, nilai: 0.4 }, // Mewakili 2 < PAM5 ≤ 3
+      { batas: 4, nilai: 0.3 }, // Mewakili 3 < PAM5 ≤ 4
+      { batas: 5, nilai: 0.2 }, // Mewakili 4 < PAM5 ≤ 5
+      { batas: Infinity, nilai: 0.1 }, // Mewakili PAM5 ≥ 5
     ],
   },
   "111_J7": {
