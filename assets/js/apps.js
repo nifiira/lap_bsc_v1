@@ -49,7 +49,7 @@ auth.onAuthStateChanged((user) => {
         if (doc.exists) {
           const userData = doc.data();
           currentRole = userData.opd; // Misal: "rsud_bangil", "pkm_purworejo", atau "admin"
-          // currentNamaInstansi = userData.namaInstansi || "Administrator";
+          currentNamaInstansi = userData.namaInstansi || "Administrator";
           // PERBAIKAN: Jika di database masih "Administrator", paksa generate dari format role
           if (
             userData.namaInstansi &&
