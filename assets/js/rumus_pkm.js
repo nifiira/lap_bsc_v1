@@ -4,16 +4,16 @@
 const aturanPenilaian = {
   // ===================== KELOMPOK 111 =====================
   rawatInap: {
-    "111_A": {
-      kondisiSkor: [
-        { batas: 0.2, nilai: 0 },
-        { batas: 0.4, nilai: 0.4 },
-        { batas: 0.6, nilai: 0.8 },
-        { batas: 0.8, nilai: 1.2 },
-        { batas: 1.0, nilai: 1.6 },
-        { batas: Infinity, nilai: 2.0 },
-      ],
-    },
+    // "111_A": {
+    //   kondisiSkor: [
+    //     { batas: 0.2, nilai: 0 },
+    //     { batas: 0.4, nilai: 0.4 },
+    //     { batas: 0.6, nilai: 0.8 },
+    //     { batas: 0.8, nilai: 1.2 },
+    //     { batas: 1.0, nilai: 1.6 },
+    //     { batas: Infinity, nilai: 2.0 },
+    //   ],
+    // },
     "111_B": {
       kondisiSkor: [
         { batas: 0.3, nilai: 0.5 },
