@@ -851,7 +851,7 @@ function hitungTotalPoin111A() {
     ambilAngkaSaja("skor_111_A4") +
     ambilAngkaSaja("skor_111_A5") +
     ambilAngkaSaja("skor_111_A6");
-  const elTotal1A = document.getElementById("skor_111_A1_Total");
+  const elTotal1A = document.getElementById("skor_111_A_Total");
   if (elTotal1A) elTotal1A.innerText = total1A.toFixed(2);
 }
 
