@@ -561,32 +561,65 @@ function hitungSkorPkm(namaPoin) {
   let nilaiRealisasi = 0;
   let nilaiTarget = null;
 
+  // Tentukan nama instansi yang benar (mendukung Admin yang sedang memilih OPD)
+  let namaInstansiSimpan = currentNamaInstansi;
+  if (
+    !namaInstansiSimpan ||
+    namaInstansiSimpan === "Administrator" ||
+    namaInstansiSimpan === "admin"
+  ) {
+    if (currentRole.startsWith("pkm_")) {
+      namaInstansiSimpan = formatNamaInstansi(currentRole);
+    }
+  }
+  if (currentRole === "admin") {
+    const selectOpd = document.getElementById("pilihOpdAdmin");
+    if (
+      selectOpd &&
+      selectOpd.options[selectOpd.selectedIndex] &&
+      selectOpd.value !== ""
+    ) {
+      namaInstansiSimpan = selectOpd.options[selectOpd.selectedIndex].text;
+    }
+  }
+
   // Cek apakah elemen menggunakan Select Option (Dropdown a1-a6, dll)
   const elSelect = document.getElementById(`select_${namaPoin}`);
   if (elSelect) {
     const skorPilihan =
       parseFloat(elSelect.value.toString().replace(",", ".")) || 0;
     skorRI = skorPilihan;
-    skorNonRI = skorPilihan; // Jika aturan select sama, atau bisa disesuaikan
+    skorNonRI = skorPilihan;
 
     elSkor.innerText = skorRI.toFixed(2);
     if (elSubTotal) elSubTotal.innerText = skorRI.toFixed(2);
     cekDanHitungTotalKelompok(namaPoin);
 
-    // Simpan paralel select ke 2 dokumen PKM
-    if (currentUser) {
+    // Simpan paralel select ke 2 dokumen PKM berdasarkan formRef aktif
+    if (formRef) {
       let dataBase = {
-        nama_instansi: currentNamaInstansi || "Puskesmas",
+        nama_instansi: namaInstansiSimpan || "Puskesmas",
         updated_at: firebase.firestore.FieldValue.serverTimestamp(),
       };
       dataBase[`select_${namaPoin}`] = skorPilihan;
 
-      const docRI = db
-        .collection("evaluasi_kinerja_pkm")
-        .doc(`${currentUser.uid}_${tribulanAktif}_rawatinap`);
-      const docNonRI = db
-        .collection("evaluasi_kinerja_pkm")
-        .doc(`${currentUser.uid}_${tribulanAktif}_nonrawatinap`);
+      const currentId = formRef.id;
+      let docRI = formRef;
+      let docNonRI;
+      if (currentId.includes("_rawatinap")) {
+        docNonRI = db
+          .collection("evaluasi_kinerja_pkm")
+          .doc(currentId.replace("_rawatinap", "_nonrawatinap"));
+      } else if (currentId.includes("_nonrawatinap")) {
+        docRI = db
+          .collection("evaluasi_kinerja_pkm")
+          .doc(currentId.replace("_nonrawatinap", "_rawatinap"));
+        docNonRI = formRef;
+      } else {
+        docNonRI = db
+          .collection("evaluasi_kinerja_pkm")
+          .doc(currentId + "_nonrawatinap");
+      }
 
       docRI
         .set({ ...dataBase, [`skor_${namaPoin}`]: skorRI }, { merge: true })
@@ -630,7 +663,7 @@ function hitungSkorPkm(namaPoin) {
     rasio = rasio * 1000;
   }
 
-  // Hitung Skor Rawat Inap berdasarkan aturanPenilaian.rawatInap
+  // Hitung Skor Rawat Inap
   if (
     typeof aturanPenilaian !== "undefined" &&
     aturanPenilaian.rawatInap &&
@@ -645,7 +678,7 @@ function hitungSkorPkm(namaPoin) {
     }
   }
 
-  // Hitung Skor Non-Rawat Inap berdasarkan aturanPenilaian.nonRawatInap
+  // Hitung Skor Non-Rawat Inap
   if (
     typeof aturanPenilaian !== "undefined" &&
     aturanPenilaian.nonRawatInap &&
@@ -660,26 +693,36 @@ function hitungSkorPkm(namaPoin) {
     }
   }
 
-  // Tampilkan hasil Rawat Inap di layar form utama PKM
   elSkor.innerText = skorRI.toFixed(2);
   if (elSubTotal) elSubTotal.innerText = skorRI.toFixed(2);
   cekDanHitungTotalKelompok(namaPoin);
 
-  // Simpan otomatis ke 2 dokumen Firestore (Rawat Inap & Non-Rawat Inap)
-  if (currentUser) {
+  // Simpan otomatis ke 2 dokumen Firestore berdasarkan formRef aktif
+  if (formRef) {
     let dataBase = {
-      nama_instansi: currentNamaInstansi || "Puskesmas",
+      nama_instansi: namaInstansiSimpan || "Puskesmas",
       updated_at: firebase.firestore.FieldValue.serverTimestamp(),
     };
     dataBase[`real_${namaPoin}`] = nilaiRealisasi;
     if (nilaiTarget !== null) dataBase[`target_${namaPoin}`] = nilaiTarget;
 
-    const docRefRI = db
-      .collection("evaluasi_kinerja_pkm")
-      .doc(`${currentUser.uid}_${tribulanAktif}_rawatinap`);
-    const docRefNonRI = db
-      .collection("evaluasi_kinerja_pkm")
-      .doc(`${currentUser.uid}_${tribulanAktif}_nonrawatinap`);
+    const currentId = formRef.id;
+    let docRefRI = formRef;
+    let docRefNonRI;
+    if (currentId.includes("_rawatinap")) {
+      docRefNonRI = db
+        .collection("evaluasi_kinerja_pkm")
+        .doc(currentId.replace("_rawatinap", "_nonrawatinap"));
+    } else if (currentId.includes("_nonrawatinap")) {
+      docRefRI = db
+        .collection("evaluasi_kinerja_pkm")
+        .doc(currentId.replace("_nonrawatinap", "_rawatinap"));
+      docRefNonRI = formRef;
+    } else {
+      docRefNonRI = db
+        .collection("evaluasi_kinerja_pkm")
+        .doc(currentId + "_nonrawatinap");
+    }
 
     docRefRI
       .set({ ...dataBase, [`skor_${namaPoin}`]: skorRI }, { merge: true })
