@@ -836,14 +836,6 @@ function cekDanHitungTotalKelompok(namaPoin) {
 // ========================================================
 // 5. TOTAL LEVEL 3 & 6. PENJUMLAHAN AKUMULASI UTAMA
 // ========================================================
-function hitungTotalPoinH() {
-  const totalH =
-    ambilAngkaSaja("skor_111_H1") +
-    ambilAngkaSaja("skor_111_H2") +
-    ambilAngkaSaja("skor_111_H3");
-  const elTotalH = document.getElementById("skor_111_H_Total");
-  if (elTotalH) elTotalH.innerText = totalH.toFixed(2);
-}
 
 function hitungTotalPoin111Pkm() {
   const total =
@@ -870,27 +862,6 @@ function hitungTotalPoin111A() {
   if (elTotal1A) elTotal1A.innerText = total1A.toFixed(2);
 }
 
-function hitungTotalPoinJ() {
-  const totalJ =
-    ambilAngkaSaja("skor_111_J1") +
-    ambilAngkaSaja("skor_111_J2") +
-    ambilAngkaSaja("skor_111_J3") +
-    ambilAngkaSaja("skor_111_J4") +
-    ambilAngkaSaja("skor_111_J5") +
-    ambilAngkaSaja("skor_111_J6") +
-    ambilAngkaSaja("skor_111_J7");
-  const elTotalJ = document.getElementById("skor_111_J_Total");
-  if (elTotalJ) elTotalJ.innerText = totalJ.toFixed(2);
-}
-function hitungTotalPoin314A() {
-  const totalA =
-    ambilAngkaSaja("skor_314_A1") +
-    ambilAngkaSaja("skor_314_A2") +
-    ambilAngkaSaja("skor_314_A3") +
-    ambilAngkaSaja("skor_314_A4");
-  const elTotalA = document.getElementById("skor_314_A_Total");
-  if (elTotalA) elTotalA.innerText = totalA.toFixed(2);
-}
 function hitungTotalPoin111() {
   const total =
     ambilAngkaSaja("subTotal_111_A") +
@@ -906,6 +877,28 @@ function hitungTotalPoin111() {
     ambilAngkaSaja("subTotal_111_K");
   const el = document.getElementById("skor_111_Total");
   if (el) el.innerText = total.toFixed(2);
+}
+
+function hitungTotalPoinH() {
+  const totalH =
+    ambilAngkaSaja("skor_111_H1") +
+    ambilAngkaSaja("skor_111_H2") +
+    ambilAngkaSaja("skor_111_H3");
+  const elTotalH = document.getElementById("skor_111_H_Total");
+  if (elTotalH) elTotalH.innerText = totalH.toFixed(2);
+}
+
+function hitungTotalPoinJ() {
+  const totalJ =
+    ambilAngkaSaja("skor_111_J1") +
+    ambilAngkaSaja("skor_111_J2") +
+    ambilAngkaSaja("skor_111_J3") +
+    ambilAngkaSaja("skor_111_J4") +
+    ambilAngkaSaja("skor_111_J5") +
+    ambilAngkaSaja("skor_111_J6") +
+    ambilAngkaSaja("skor_111_J7");
+  const elTotalJ = document.getElementById("skor_111_J_Total");
+  if (elTotalJ) elTotalJ.innerText = totalJ.toFixed(2);
 }
 
 function hitungTotalPoin211() {
@@ -938,6 +931,7 @@ function hitungTotalPoin212() {
   const el = document.getElementById("skor_212_Total");
   if (el) el.innerText = total.toFixed(2);
 }
+
 function hitungTotalPoin311() {
   const total =
     ambilAngkaSaja("subTotal_311_A") +
@@ -983,11 +977,23 @@ function hitungTotalPoin313() {
   const el = document.getElementById("skor_313_Total");
   if (el) el.innerText = total.toFixed(2);
 }
+
 function hitungTotalPoin314() {
   const skor314Total = ambilAngkaSaja("skor_314_A_Total");
   const el = document.getElementById("skor_314_Total");
   if (el) el.innerText = skor314Total.toFixed(2);
 }
+
+function hitungTotalPoin314A() {
+  const totalA =
+    ambilAngkaSaja("skor_314_A1") +
+    ambilAngkaSaja("skor_314_A2") +
+    ambilAngkaSaja("skor_314_A3") +
+    ambilAngkaSaja("skor_314_A4");
+  const elTotalA = document.getElementById("skor_314_A_Total");
+  if (elTotalA) elTotalA.innerText = totalA.toFixed(2);
+}
+
 function hitungTotalPoin315() {
   const skor315Total = ambilAngkaSaja("subTotal_315_A");
   const el = document.getElementById("skor_315_Total");
