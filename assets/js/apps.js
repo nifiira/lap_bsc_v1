@@ -844,14 +844,15 @@ function hitungTotalPoinH() {
   if (elTotalH) elTotalH.innerText = totalH.toFixed(2);
 }
 function hitungTotalPoin1A() {
-  ambilAngkaSaja("skor_111_A1") +
+  const total1A =
+    ambilAngkaSaja("skor_111_A1") +
     ambilAngkaSaja("skor_111_A2") +
     ambilAngkaSaja("skor_111_A3") +
     ambilAngkaSaja("skor_111_A4") +
     ambilAngkaSaja("skor_111_A5") +
     ambilAngkaSaja("skor_111_A6");
-  const elTotalA = document.getElementById("skor_111_A_Total");
-  if (elTotalA) elTotalA.innerText = totalA.toFixed(2);
+  const elTotal1A = document.getElementById("skor_111_A1_Total");
+  if (elTotal1A) elTotal1A.innerText = total1A.toFixed(2);
 }
 
 function hitungTotalPoinJ() {
