@@ -842,7 +842,7 @@ function hitungTotalPoinH() {
   const elTotalH = document.getElementById("skor_111_H_Total");
   if (elTotalH) elTotalH.innerText = totalH.toFixed(2);
 }
-function hitungTotalPoinA() {
+function hitungTotalPoin1A() {
   ambilAngkaSaja("skor_111_A1") +
     ambilAngkaSaja("skor_111_A2") +
     ambilAngkaSaja("skor_111_A3") +
