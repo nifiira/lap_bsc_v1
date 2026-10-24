@@ -295,6 +295,7 @@ async function gantiOpdAdmin() {
       .querySelectorAll('[id^="skor_"], [id^="subTotal_"]')
       .forEach((el) => (el.innerText = "0.00"));
 
+    // Gunakan fungsi yang benar tanpa kata 'Async' di belakangnya
     muatDataDariFirebase();
   } catch (error) {
     console.error("Gagal memuat data instansi untuk admin:", error);
