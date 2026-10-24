@@ -847,10 +847,10 @@ function hitungTotalPoinH() {
 
 function hitungTotalPoin111Pkm() {
   const total =
-    ambilAngkaSaja("subTotal_111_A") +
-    ambilAngkaSaja("subTotal_111_B") +
-    ambilAngkaSaja("subTotal_111_C") +
-    ambilAngkaSaja("subTotal_111_D") +
+    ambilAngkaSaja("skor_111_A_Total") +
+    ambilAngkaSaja("skor_111_B_Total") +
+    ambilAngkaSaja("skor_111_C_Total") +
+    ambilAngkaSaja("skor_111_D_Total") +
     ambilAngkaSaja("subTotal_111_E") +
     ambilAngkaSaja("subTotal_111_F") +
     ambilAngkaSaja("subTotal_111_G");
