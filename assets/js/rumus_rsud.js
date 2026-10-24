@@ -23,10 +23,10 @@ const aturanPenilaian = {
   },
   "111_C": {
     kondisiSkor: [
-      { batas: 0.2, nilai: 2.5 },
-      { batas: 0.4, nilai: 2.0 },
-      { batas: 0.6, nilai: 0.75 },
-      { batas: Infinity, nilai: 0.5 },
+      { batas: 0.2, nilai: 0.5 },
+      { batas: 0.4, nilai: 0.7 },
+      { batas: 0.6, nilai: 2 },
+      { batas: Infinity, nilai: 2.5 },
     ],
   },
   "111_D": {
