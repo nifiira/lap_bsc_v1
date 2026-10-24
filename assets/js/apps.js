@@ -508,6 +508,9 @@ function hitungSkorOtomatis(namaPoin) {
   if (namaPoin === "212_K" || namaPoin === "212K") {
     rasio = rasio * 1000;
   }
+  if (namaPoin === "111_J6" || namaPoin === "111J6") {
+    rasio = rasio / 60;
+  }
 
   let skorFinal = null;
   const daftarAturan = aturanPenilaian[namaPoin].kondisiSkor;
@@ -613,9 +616,6 @@ function hitungSkorPkm(namaPoin) {
 
   if (namaPoin === "212_K" || namaPoin === "212K") {
     rasio = rasio * 1000;
-  }
-  if (namaPoin === "111_J6") {
-    rasio = rasio / 60;
   }
 
   // Hitung Skor Rawat Inap berdasarkan aturanPenilaian.rawatInap
