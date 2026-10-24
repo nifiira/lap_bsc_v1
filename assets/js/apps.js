@@ -1246,12 +1246,13 @@ async function tarikSemuaDataAdmin() {
         const triwulan = idParts[1] || "Tidak Diketahui";
 
         // Deteksi kategori layanan khusus PKM
+        // Deteksi kategori layanan khusus PKM (Cek nonrawatinap terlebih dahulu)
         let tambahanLabel = "";
         if (col.name === "evaluasi_kinerja_pkm") {
-          if (doc.id.includes("rawatinap")) {
-            tambahanLabel = " (Rawat Inap)";
-          } else if (doc.id.includes("nonrawatinap")) {
+          if (doc.id.includes("nonrawatinap")) {
             tambahanLabel = " (Non-Rawat Inap)";
+          } else if (doc.id.includes("rawatinap")) {
+            tambahanLabel = " (Rawat Inap)";
           }
         }
 
