@@ -789,7 +789,7 @@ function cekDanHitungTotalKelompok(namaPoin) {
   if (namaPoin.includes("111_H")) hitungTotalPoinH();
   else if (namaPoin.includes("111_J")) hitungTotalPoinJ();
   else if (namaPoin.includes("314_A")) hitungTotalPoin314A();
-  else if (namaPoin.includes("111_A")) hitungTotalPoin314A();
+  else if (namaPoin.includes("111_A")) hitungTotalPoin111A();
 
   if (namaPoin.startsWith("111_")) {
     hitungTotalPoin111();
