@@ -51,14 +51,6 @@ auth.onAuthStateChanged((user) => {
           currentRole = userData.opd; // Misal: "rsud_bangil", "pkm_purworejo", atau "admin"
           currentNamaInstansi = userData.namaInstansi || "Administrator";
           // PERBAIKAN: Jika di database masih "Administrator", paksa generate dari format role
-          if (
-            userData.namaInstansi &&
-            userData.namaInstansi !== "Administrator"
-          ) {
-            currentNamaInstansi = userData.namaInstansi;
-          } else {
-            currentNamaInstansi = formatNamaInstansi(currentRole);
-          }
 
           // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
           document.querySelectorAll(".namaUser").forEach((el) => {
