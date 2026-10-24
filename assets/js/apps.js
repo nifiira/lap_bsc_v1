@@ -1002,6 +1002,16 @@ function hitungGrandTotal() {
   // === FITUR SAPU JAGAT: REKAM SELURUH NILAI KE FIREBASE ===
   if (currentUser && formRef) {
     let namaInstansiSimpan = currentNamaInstansi;
+
+    // Cegah agar "Administrator" tidak ikut tersimpan sebagai nama instansi instansi operasional
+    if (!namaInstansiSimpan || namaInstansiSimpan === "Administrator") {
+      if (currentRole.startsWith("pkm_")) {
+        namaInstansiSimpan = formatNamaInstansi(currentRole); // Otomatis jadi "Puskesmas [Nama]"
+      } else if (currentRole.startsWith("rsud_")) {
+        namaInstansiSimpan = formatNamaInstansi(currentRole); // Otomatis jadi "RSUD [Nama]"
+      }
+    }
+
     if (currentRole === "admin") {
       const selectOpd = document.getElementById("pilihOpdAdmin");
       if (
@@ -1035,13 +1045,10 @@ function hitungGrandTotal() {
 
     // Jika koleksi PKM, simpan total ganda secara otomatis ke dua dokumen (RI & NRI)
     if (tipeKoleksi === "evaluasi_kinerja_pkm") {
-      // Hitung total ulang khusus Non-Rawat Inap untuk grand total non-RI
-      // (Bisa disesuaikan jika formula grand total berbeda total skornya)
       formRef.set(dataLengkap, { merge: true }).catch((err) => {
         console.error("Gagal menyimpan rekap laporan ke Firestore:", err);
       });
 
-      // Simpan juga salinannya ke dokumen non-rawat inap dengan grand_total versi non-RI jika ada
       const docIdRaw = formRef.id;
       if (docIdRaw.includes("_rawatinap")) {
         const docIdNonRI = docIdRaw.replace("_rawatinap", "_nonrawatinap");
@@ -1057,7 +1064,6 @@ function hitungGrandTotal() {
     }
   }
 }
-
 function tentukanPredikat(skor) {
   if (skor < 60) return "C (Kurang)";
   if (skor < 70) return "B (Cukup)";
