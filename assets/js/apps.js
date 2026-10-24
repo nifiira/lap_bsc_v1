@@ -794,7 +794,7 @@ function cekDanHitungTotalKelompok(namaPoin) {
   if (namaPoin.startsWith("111_")) {
     hitungTotalPoin111();
     hitungTotalPoin11();
-    hitungTotalPoin111A();
+    hitungTotalPoin1A();
   } else if (namaPoin.startsWith("211_")) {
     hitungTotalPoin211();
     hitungTotalPoin21();
