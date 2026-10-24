@@ -453,6 +453,13 @@ function ambilAngkaSaja(idElement) {
 }
 
 function hitungSkorOtomatis(namaPoin) {
+  // === JIKA SEDANG DI PUSKESMAS, LEMPAR KE FUNGSI KHUSUS PKM ===
+  if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+    hitungSkorPkm(namaPoin);
+    return;
+  }
+
+  // === LOGIKA ASLI RSUD (DIJAMIN TIDAK BERUBAH / AMAN) ===
   const elSkor = document.getElementById(`skor_${namaPoin}`);
   const elSubTotal = document.getElementById(`subTotal_${namaPoin}`);
 
@@ -464,7 +471,6 @@ function hitungSkorOtomatis(namaPoin) {
       parseFloat(elSelect.value.toString().replace(",", ".")) || 0;
     elSkor.innerText = skorPilihan.toFixed(2);
     if (elSubTotal) elSubTotal.innerText = skorPilihan.toFixed(2);
-
     cekDanHitungTotalKelompok(namaPoin);
     simpanKeFirebase(namaPoin, skorPilihan, null, skorPilihan);
     return;
@@ -483,7 +489,6 @@ function hitungSkorOtomatis(namaPoin) {
 
   const elTarget = document.getElementById(`target_${namaPoin}`);
   const realisasi = parseFloat(elReal.value.replace(",", ".")) || 0;
-
   let rasio = 0;
 
   if (elTarget) {
@@ -504,45 +509,169 @@ function hitungSkorOtomatis(namaPoin) {
     rasio = rasio * 1000;
   }
 
-  // Cek apakah menggunakan aturan PKM (rawatInap / nonRawatInap) atau aturan RSUD biasa
-  if (
-    tipeKoleksi === "evaluasi_kinerja_pkm" &&
-    typeof aturanPenilaian !== "undefined"
-  ) {
-    // Hitung secara paralel untuk Rawat Inap & Non-Rawat Inap
-    hitungDanSimpanPkmParalel(
-      namaPoin,
-      realisasi,
-      elTarget ? parseFloat(elTarget.value.replace(",", ".")) || 0 : null,
-      rasio,
-    );
-  } else {
-    // Mode RSUD Standard
-    let skorFinal = null;
-    const daftarAturan = aturanPenilaian[namaPoin].kondisiSkor;
+  let skorFinal = null;
+  const daftarAturan = aturanPenilaian[namaPoin].kondisiSkor;
 
-    for (let i = 0; i < daftarAturan.length; i++) {
-      if (rasio <= daftarAturan[i].batas) {
-        skorFinal = daftarAturan[i].nilai;
+  for (let i = 0; i < daftarAturan.length; i++) {
+    if (rasio <= daftarAturan[i].batas) {
+      skorFinal = daftarAturan[i].nilai;
+      break;
+    }
+  }
+
+  if (skorFinal === null) {
+    elSkor.innerText = "Salah";
+    if (elSubTotal) elSubTotal.innerText = "Salah";
+    skorFinal = 0;
+  } else {
+    elSkor.innerText = skorFinal.toFixed(2);
+    if (elSubTotal) elSubTotal.innerText = skorFinal.toFixed(2);
+  }
+
+  cekDanHitungTotalKelompok(namaPoin);
+
+  const nilaiTarget = elTarget
+    ? parseFloat(elTarget.value.replace(",", ".")) || 0
+    : null;
+  simpanKeFirebase(namaPoin, realisasi, nilaiTarget, skorFinal);
+}
+
+function hitungSkorPkm(namaPoin) {
+  const elSkor = document.getElementById(`skor_${namaPoin}`);
+  const elSubTotal = document.getElementById(`subTotal_${namaPoin}`);
+  if (!elSkor) return;
+
+  let skorRI = 0;
+  let skorNonRI = 0;
+  let nilaiRealisasi = 0;
+  let nilaiTarget = null;
+
+  // Cek apakah elemen menggunakan Select Option (Dropdown a1-a6, dll)
+  const elSelect = document.getElementById(`select_${namaPoin}`);
+  if (elSelect) {
+    const skorPilihan =
+      parseFloat(elSelect.value.toString().replace(",", ".")) || 0;
+    skorRI = skorPilihan;
+    skorNonRI = skorPilihan; // Jika aturan select sama, atau bisa disesuaikan
+
+    elSkor.innerText = skorRI.toFixed(2);
+    if (elSubTotal) elSubTotal.innerText = skorRI.toFixed(2);
+    cekDanHitungTotalKelompok(namaPoin);
+
+    // Simpan paralel select ke 2 dokumen PKM
+    if (currentUser) {
+      let dataBase = {
+        nama_instansi: currentNamaInstansi || "Puskesmas",
+        updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+      dataBase[`select_${namaPoin}`] = skorPilihan;
+
+      const docRI = db
+        .collection("evaluasi_kinerja_pkm")
+        .doc(`${currentUser.uid}_${tribulanAktif}_rawatinap`);
+      const docNonRI = db
+        .collection("evaluasi_kinerja_pkm")
+        .doc(`${currentUser.uid}_${tribulanAktif}_nonrawatinap`);
+
+      docRI
+        .set({ ...dataBase, [`skor_${namaPoin}`]: skorRI }, { merge: true })
+        .catch((err) => console.error(err));
+      docNonRI
+        .set({ ...dataBase, [`skor_${namaPoin}`]: skorNonRI }, { merge: true })
+        .catch((err) => console.error(err));
+    }
+    return;
+  }
+
+  // Jika menggunakan Input Realisasi & Target biasa
+  const elReal = document.getElementById(`real_${namaPoin}`);
+  if (!elReal) return;
+
+  if (elReal.value.trim() === "") {
+    elSkor.innerText = "Salah";
+    if (elSubTotal) elSubTotal.innerText = "Salah";
+    cekDanHitungTotalKelompok(namaPoin);
+    return;
+  }
+
+  const elTarget = document.getElementById(`target_${namaPoin}`);
+  nilaiRealisasi = parseFloat(elReal.value.replace(",", ".")) || 0;
+  let rasio = 0;
+
+  if (elTarget) {
+    nilaiTarget = parseFloat(elTarget.value.replace(",", ".")) || 0;
+    if (nilaiTarget === 0) {
+      elSkor.innerText = "0.00";
+      if (elSubTotal) elSubTotal.innerText = "0.00";
+      cekDanHitungTotalKelompok(namaPoin);
+      return;
+    }
+    rasio = nilaiRealisasi / nilaiTarget;
+  } else {
+    rasio = nilaiRealisasi;
+  }
+
+  if (namaPoin === "212_K" || namaPoin === "212K") {
+    rasio = rasio * 1000;
+  }
+
+  // Hitung Skor Rawat Inap berdasarkan aturanPenilaian.rawatInap
+  if (
+    typeof aturanPenilaian !== "undefined" &&
+    aturanPenilaian.rawatInap &&
+    aturanPenilaian.rawatInap[namaPoin]
+  ) {
+    const aturanRI = aturanPenilaian.rawatInap[namaPoin].kondisiSkor;
+    for (let item of aturanRI) {
+      if (rasio <= item.batas) {
+        skorRI = item.nilai;
         break;
       }
     }
+  }
 
-    if (skorFinal === null) {
-      elSkor.innerText = "Salah";
-      if (elSubTotal) elSubTotal.innerText = "Salah";
-      skorFinal = 0;
-    } else {
-      elSkor.innerText = skorFinal.toFixed(2);
-      if (elSubTotal) elSubTotal.innerText = skorFinal.toFixed(2);
+  // Hitung Skor Non-Rawat Inap berdasarkan aturanPenilaian.nonRawatInap
+  if (
+    typeof aturanPenilaian !== "undefined" &&
+    aturanPenilaian.nonRawatInap &&
+    aturanPenilaian.nonRawatInap[namaPoin]
+  ) {
+    const aturanNonRI = aturanPenilaian.nonRawatInap[namaPoin].kondisiSkor;
+    for (let item of aturanNonRI) {
+      if (rasio <= item.batas) {
+        skorNonRI = item.nilai;
+        break;
+      }
     }
+  }
 
-    cekDanHitungTotalKelompok(namaPoin);
+  // Tampilkan hasil Rawat Inap di layar form utama PKM
+  elSkor.innerText = skorRI.toFixed(2);
+  if (elSubTotal) elSubTotal.innerText = skorRI.toFixed(2);
+  cekDanHitungTotalKelompok(namaPoin);
 
-    const nilaiTarget = elTarget
-      ? parseFloat(elTarget.value.replace(",", ".")) || 0
-      : null;
-    simpanKeFirebase(namaPoin, realisasi, nilaiTarget, skorFinal);
+  // Simpan otomatis ke 2 dokumen Firestore (Rawat Inap & Non-Rawat Inap)
+  if (currentUser) {
+    let dataBase = {
+      nama_instansi: currentNamaInstansi || "Puskesmas",
+      updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    dataBase[`real_${namaPoin}`] = nilaiRealisasi;
+    if (nilaiTarget !== null) dataBase[`target_${namaPoin}`] = nilaiTarget;
+
+    const docRefRI = db
+      .collection("evaluasi_kinerja_pkm")
+      .doc(`${currentUser.uid}_${tribulanAktif}_rawatinap`);
+    const docRefNonRI = db
+      .collection("evaluasi_kinerja_pkm")
+      .doc(`${currentUser.uid}_${tribulanAktif}_nonrawatinap`);
+
+    docRefRI
+      .set({ ...dataBase, [`skor_${namaPoin}`]: skorRI }, { merge: true })
+      .catch((err) => console.error(err));
+    docRefNonRI
+      .set({ ...dataBase, [`skor_${namaPoin}`]: skorNonRI }, { merge: true })
+      .catch((err) => console.error(err));
   }
 }
 
