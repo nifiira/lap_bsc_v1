@@ -1159,15 +1159,14 @@ function hitungGrandTotal() {
     });
 
     // Jika koleksi PKM, simpan juga dokumen Non-Rawat Inap dengan skorNonRI yang terekam
+    // Jika koleksi PKM, simpan juga dokumen Non-Rawat Inap berdasarkan skorNonRI yang tampil di layar
     if (tipeKoleksi === "evaluasi_kinerja_pkm") {
       const docIdRaw = formRef.id;
       if (docIdRaw.includes("_rawatinap")) {
         const docIdNonRI = docIdRaw.replace("_rawatinap", "_nonrawatinap");
 
-        // Rekam elemen skor Non-Rawat Inap dari layar jika ada
         let dataNonRI = { ...dataLengkap };
         const elemenNonRI = document.querySelectorAll('[id^="skorNonRI_"]');
-        let totalSkorNonRI = 0;
 
         elemenNonRI.forEach((el) => {
           const namaPoin = el.id.replace("skorNonRI_", "");
