@@ -584,8 +584,25 @@ function hitungSkorPkm(namaPoin) {
     skorRI = skorPilihan;
     skorNonRI = skorPilihan;
 
+    // Tampilkan skor Rawat Inap di kotak utama
     elSkor.innerText = skorRI.toFixed(2);
     if (elSubTotal) elSubTotal.innerText = skorRI.toFixed(2);
+
+    // === OTOMATIS TAMBAHKAN KOTAK SKOR NON-RAWAT INAP DI SAMPINGNYA ===
+    let elSkorNonRI = document.getElementById(`skorNonRI_${namaPoin}`);
+    if (!elSkorNonRI && elSkor.parentElement) {
+      elSkorNonRI = document.createElement("span");
+      elSkorNonRI.id = `skorNonRI_${namaPoin}`;
+      // Meniru kelas CSS kotak skor asli agar tampilannya tetap rapi & seragam
+      elSkorNonRI.className = elSkor.className;
+      elSkorNonRI.style.marginLeft = "6px";
+      elSkorNonRI.title = "Skor Non-Rawat Inap";
+      elSkor.parentElement.appendChild(elSkorNonRI);
+    }
+    if (elSkorNonRI) {
+      elSkorNonRI.innerText = skorNonRI.toFixed(2);
+    }
+
     cekDanHitungTotalKelompok(namaPoin);
 
     // Simpan paralel select ke 2 dokumen PKM berdasarkan formRef aktif
