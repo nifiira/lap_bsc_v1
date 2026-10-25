@@ -1138,23 +1138,69 @@ function hitungGrandTotal() {
     });
 
     // Jika koleksi PKM, simpan total ganda secara otomatis ke dua dokumen (RI & NRI)
+    // Jika koleksi PKM, simpan total ganda secara otomatis ke dua dokumen (RI & NRI)
     if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+      // 1. Simpan dokumen Rawat Inap apa adanya dari UI
       formRef.set(dataLengkap, { merge: true }).catch((err) => {
-        console.error("Gagal menyimpan rekap laporan ke Firestore:", err);
+        console.error("Gagal menyimpan rekap laporan ke Firestore (RI):", err);
       });
 
       const docIdRaw = formRef.id;
       if (docIdRaw.includes("_rawatinap")) {
         const docIdNonRI = docIdRaw.replace("_rawatinap", "_nonrawatinap");
+
+        // 2. SALINAN OTOMATIS UNTUK NON-RAWAT INAP MENGGUNAKAN LOOPING
+        let dataNonRI = { ...dataLengkap };
+        let selisihTotal = 0;
+
+        if (
+          typeof aturanPenilaian !== "undefined" &&
+          aturanPenilaian.nonRawatInap
+        ) {
+          for (let namaPoin of Object.keys(aturanPenilaian.nonRawatInap)) {
+            let real = dataNonRI[`real_${namaPoin}`];
+            if (real !== undefined) {
+              let target = dataNonRI[`target_${namaPoin}`];
+              let rasio =
+                target !== undefined && target !== 0 ? real / target : real;
+
+              const aturanNonRI =
+                aturanPenilaian.nonRawatInap[namaPoin].kondisiSkor;
+              let skorNonRIBaru = 0;
+              for (let item of aturanNonRI) {
+                if (rasio <= item.batas) {
+                  skorNonRIBaru = item.nilai;
+                  break;
+                }
+              }
+
+              let skorRILama = dataNonRI[`skor_${namaPoin}`] || 0;
+
+              dataNonRI[`skor_${namaPoin}`] = skorNonRIBaru;
+              if (dataNonRI[`subTotal_${namaPoin}`] !== undefined) {
+                dataNonRI[`subTotal_${namaPoin}`] = skorNonRIBaru;
+              }
+
+              selisihTotal += skorNonRIBaru - skorRILama;
+            }
+          }
+        }
+
+        let gtLama = parseFloat(dataNonRI["grand_total"]) || 0;
+        let gtBaru = gtLama + selisihTotal;
+        dataNonRI["grand_total"] = gtBaru.toFixed(2);
+        dataNonRI["predikat"] = tentukanPredikat(gtBaru);
+
         db.collection("evaluasi_kinerja_pkm")
           .doc(docIdNonRI)
-          .set(dataLengkap, { merge: true })
-          .catch((err) => console.error(err));
+          .set(dataNonRI, { merge: true })
+          .catch((err) =>
+            console.error(
+              "Gagal menyimpan rekap laporan ke Firestore (Non-RI):",
+              err,
+            ),
+          );
       }
-    } else {
-      formRef.set(dataLengkap, { merge: true }).catch((err) => {
-        console.error("Gagal menyimpan rekap laporan ke Firestore:", err);
-      });
     }
   }
 }
