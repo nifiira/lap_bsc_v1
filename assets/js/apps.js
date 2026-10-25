@@ -602,7 +602,6 @@ function hitungSkorPkm(namaPoin) {
     if (elSkorNonRI) {
       elSkorNonRI.innerText = skorNonRI.toFixed(2);
     }
-
     cekDanHitungTotalKelompok(namaPoin);
 
     // Simpan paralel select ke 2 dokumen PKM berdasarkan formRef aktif
