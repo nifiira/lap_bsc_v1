@@ -1149,17 +1149,21 @@ function hitungGrandTotal() {
       if (docIdRaw.includes("_rawatinap")) {
         const docIdNonRI = docIdRaw.replace("_rawatinap", "_nonrawatinap");
 
-        // 2. SALINAN OTOMATIS UNTUK NON-RAWAT INAP MENGGUNAKAN LOOPING
+        // 2. Buat salinan untuk Non-Rawat Inap secara presisi
         let dataNonRI = { ...dataLengkap };
         let selisihTotal = 0;
 
+        // Cari tahu poin mana saja yang memiliki aturan Non-Rawat Inap,
+        // lalu hitung ulang HANYA untuk poin yang realisasinya sudah diisi oleh user (> 0 atau ada datanya)
         if (
           typeof aturanPenilaian !== "undefined" &&
           aturanPenilaian.nonRawatInap
         ) {
           for (let namaPoin of Object.keys(aturanPenilaian.nonRawatInap)) {
             let real = dataNonRI[`real_${namaPoin}`];
-            if (real !== undefined) {
+
+            // HANYA HITUNG JIKA POIN TERSEBUT BENAR-BENAR DIISI DI FORM
+            if (real !== undefined && real !== "" && !isNaN(real)) {
               let target = dataNonRI[`target_${namaPoin}`];
               let rasio =
                 target !== undefined && target !== 0 ? real / target : real;
