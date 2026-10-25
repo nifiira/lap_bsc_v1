@@ -1034,7 +1034,7 @@ function hitungTotalPoin41() {
   const el = document.getElementById("skor_41_Total");
   if (el) el.innerText = total41.toFixed(2);
 }
-
+// Function Rumus PKM
 function hitungTotalPoin111Pkm() {
   const total =
     ambilAngkaSaja("skor_111_A_Total") +
@@ -1044,7 +1044,7 @@ function hitungTotalPoin111Pkm() {
     ambilAngkaSaja("subTotal_111_E") +
     ambilAngkaSaja("subTotal_111_F") +
     ambilAngkaSaja("subTotal_111_G");
-  const el = document.getElementById("skor_111_Total");
+  const el = document.getElementById("skor_111_Total_Pkm");
   if (el) el.innerText = total.toFixed(2);
 }
 
