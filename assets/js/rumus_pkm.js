@@ -50,12 +50,12 @@ const aturanPenilaian = {
     // ===================== KELOMPOK 211 =====================
     "211_A": {
       kondisiSkor: [
-        { batas: 0.8499, nilai: 0.5 }, // Mewakili syarat < 0.85
-        { batas: 0.8999, nilai: 1.0 }, // Mewakili syarat < 0.9
-        { batas: 0.9499, nilai: 1.5 }, // Mewakili syarat < 0.95
-        { batas: 0.9999, nilai: 2.0 }, // Mewakili syarat < 1.0
-        { batas: 1.0999, nilai: 2.5 }, // Mewakili syarat < 1.1
-        { batas: Infinity, nilai: 3.0 }, // Mewakili syarat >= 1.1
+        { batas: 0.8499, nilai: 0.0 }, // Mewakili RJ < 0,85
+        { batas: 0.8999, nilai: 0.4 }, // Mewakili 0,85 ≤ RJ < 0,90
+        { batas: 0.9499, nilai: 0.8 }, // Mewakili 0,90 ≤ RJ < 0,95
+        { batas: 0.9999, nilai: 1.0 }, // Mewakili 0,95 ≤ RJ < 1,00
+        { batas: 1.0999, nilai: 1.5 }, // Mewakili 1,00 ≤ RJ < 1,10
+        { batas: Infinity, nilai: 2.0 }, // Mewakili RJ ≥ 1,10
       ],
     },
     "211_B": {
@@ -623,12 +623,12 @@ const aturanPenilaian = {
     // ===================== KELOMPOK 211 =====================
     "211_A": {
       kondisiSkor: [
-        { batas: 0.8499, nilai: 0.5 }, // Mewakili syarat < 0.85
-        { batas: 0.8999, nilai: 1.0 }, // Mewakili syarat < 0.9
-        { batas: 0.9499, nilai: 1.5 }, // Mewakili syarat < 0.95
-        { batas: 0.9999, nilai: 2.0 }, // Mewakili syarat < 1.0
-        { batas: 1.0999, nilai: 2.5 }, // Mewakili syarat < 1.1
-        { batas: Infinity, nilai: 3.0 }, // Mewakili syarat >= 1.1
+        { batas: 0.8499, nilai: 0.0 }, // Mewakili RJ < 0,85
+        { batas: 0.8999, nilai: 0.5 }, // Mewakili 0,85 ≤ RJ < 0,90
+        { batas: 0.9499, nilai: 1.0 }, // Mewakili 0,90 ≤ RJ < 0,95
+        { batas: 0.9999, nilai: 1.5 }, // Mewakili 0,95 ≤ RJ < 1,00
+        { batas: 1.0999, nilai: 2.0 }, // Mewakili 1,00 ≤ RJ < 1,10
+        { batas: Infinity, nilai: 3.0 }, // Mewakili RJ ≥ 1,10
       ],
     },
     "211_B": {
