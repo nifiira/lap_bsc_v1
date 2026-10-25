@@ -1006,14 +1006,14 @@ const aturanPenilaian = {
     },
 
     // ===================== KELOMPOK 313 =====================
-    "313_A": {
-      kondisiSkor: [
-        { batas: 0.0999, nilai: 0.4 }, // Mewakili < 0.1
-        { batas: 0.2, nilai: 0.6 }, // Mewakili <= 0.2
-        { batas: 0.3, nilai: 0.8 }, // Mewakili <= 0.3
-        { batas: Infinity, nilai: 1.0 }, // Mewakili > 0.3
-      ],
-    },
+    // "313_A": {
+    //   kondisiSkor: [
+    //     { batas: 0.0999, nilai: 0.4 }, // Mewakili < 0.1
+    //     { batas: 0.2, nilai: 0.6 }, // Mewakili <= 0.2
+    //     { batas: 0.3, nilai: 0.8 }, // Mewakili <= 0.3
+    //     { batas: Infinity, nilai: 1.0 }, // Mewakili > 0.3
+    //   ],
+    // },
     "313_B": {
       kondisiSkor: [
         { batas: 0.5, nilai: 0.4 }, // Mewakili <= 0.5
