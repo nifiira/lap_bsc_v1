@@ -652,9 +652,7 @@ function hitungSkorPkm(namaPoin) {
     rasio = nilaiRealisasi;
   }
 
-  if (namaPoin === "212_K" || namaPoin === "212K") {
-    rasio = rasio * 1000;
-  }
+  // (Blok 212_K / 212K dikhususkan untuk RSUD, dihapus dari PKM sesuai permintaan)
 
   // Hitung Skor Rawat Inap
   if (
@@ -1160,6 +1158,7 @@ function hitungGrandTotal() {
     }
   }
 }
+
 function tentukanPredikat(skor) {
   if (skor < 60) return "C (Kurang)";
   if (skor < 70) return "B (Cukup)";
