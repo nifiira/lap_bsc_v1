@@ -789,7 +789,7 @@ function cekDanHitungTotalKelompok(namaPoin) {
   if (namaPoin.includes("111_H")) hitungTotalPoinH();
   else if (namaPoin.includes("111_J")) hitungTotalPoinJ();
   else if (namaPoin.includes("314_A")) hitungTotalPoin314A();
-  // else if (namaPoin.includes("111_A")) hitungTotalPoin111APkm();
+  else if (namaPoin.includes("111_A")) hitungTotalPoin111APkm();
 
   if (namaPoin.startsWith("111_")) {
     hitungTotalPoin111();
@@ -829,6 +829,9 @@ function cekDanHitungTotalKelompok(namaPoin) {
   } else if (namaPoin.startsWith("414_")) {
     if (typeof hitungTotalPoin414 === "function") hitungTotalPoin414();
     hitungTotalPoin41();
+  } else if (namaPoin.startsWith("111_")) {
+    hitungTotalPoin111Pkm();
+    hitungTotalPoin111APkm();
   }
   hitungGrandTotal();
 }
