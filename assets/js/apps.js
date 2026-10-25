@@ -786,16 +786,29 @@ function hitungDanSimpanPkmParalel(namaPoin, realisasi, nilaiTarget, rasio) {
 }
 
 function cekDanHitungTotalKelompok(namaPoin) {
+  // 1. Penanganan sub-poin spesifik
   if (namaPoin.includes("111_H")) hitungTotalPoinH();
   else if (namaPoin.includes("111_J")) hitungTotalPoinJ();
   else if (namaPoin.includes("314_A")) hitungTotalPoin314A();
-  else if (namaPoin.includes("111_A")) hitungTotalPoin111APkm();
 
+  // Sub-poin khusus PKM hanya dipanggil jika tipe koleksinya PKM
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("111_A")) {
+    if (typeof hitungTotalPoin111APkm === "function") hitungTotalPoin111APkm();
+  }
+
+  // 2. Penanganan kelompok utama berdasarkan awalan
   if (namaPoin.startsWith("111_")) {
-    hitungTotalPoin111();
-    hitungTotalPoin11();
-    hitungTotalPoin111Pkm();
-    hitungTotalPoin111APkm();
+    if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+      // Jalankan rumus khusus total 111 milik PKM
+      if (typeof hitungTotalPoin111Pkm === "function") hitungTotalPoin111Pkm();
+      if (typeof hitungTotalPoin111APkm === "function")
+        hitungTotalPoin111APkm();
+      hitungTotalPoin11(); // Akumulasi ke total level 11
+    } else {
+      // Jalankan murni rumus RSUD tanpa terganggu PKM
+      hitungTotalPoin111();
+      hitungTotalPoin11();
+    }
   } else if (namaPoin.startsWith("211_")) {
     hitungTotalPoin211();
     hitungTotalPoin21();
@@ -829,9 +842,6 @@ function cekDanHitungTotalKelompok(namaPoin) {
   } else if (namaPoin.startsWith("414_")) {
     if (typeof hitungTotalPoin414 === "function") hitungTotalPoin414();
     hitungTotalPoin41();
-    // } else if (namaPoin.startsWith("111_")) {
-    //   hitungTotalPoin111Pkm();
-    //   hitungTotalPoin111APkm();
   }
   hitungGrandTotal();
 }
@@ -1034,7 +1044,10 @@ function hitungTotalPoin41() {
   const el = document.getElementById("skor_41_Total");
   if (el) el.innerText = total41.toFixed(2);
 }
-// Function Rumus PKM
+
+// ========================================================
+// RUMUS PENJUMLAHAN PUSKESMAS
+// ========================================================
 function hitungTotalPoin111Pkm() {
   const total =
     ambilAngkaSaja("skor_111_A_Total") +
