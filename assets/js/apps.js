@@ -1097,12 +1097,12 @@ function hitungGrandTotal() {
   if (currentUser && formRef) {
     let namaInstansiSimpan = currentNamaInstansi;
 
-    // Cegah agar "Administrator" tidak ikut tersimpan sebagai nama instansi instansi operasional
+    // Cegah agar "Administrator" tidak ikut tersimpan sebagai nama instansi operasional
     if (!namaInstansiSimpan || namaInstansiSimpan === "Administrator") {
       if (currentRole.startsWith("pkm_")) {
-        namaInstansiSimpan = formatNamaInstansi(currentRole); // Otomatis jadi "Puskesmas [Nama]"
+        namaInstansiSimpan = formatNamaInstansi(currentRole);
       } else if (currentRole.startsWith("rsud_")) {
-        namaInstansiSimpan = formatNamaInstansi(currentRole); // Otomatis jadi "RSUD [Nama]"
+        namaInstansiSimpan = formatNamaInstansi(currentRole);
       }
     }
 
@@ -1137,73 +1137,33 @@ function hitungGrandTotal() {
       dataLengkap[el.id] = nilai;
     });
 
-    // Jika koleksi PKM, simpan total ganda secara otomatis ke dua dokumen (RI & NRI)
-    // Jika koleksi PKM, simpan total ganda secara otomatis ke dua dokumen (RI & NRI)
-    if (tipeKoleksi === "evaluasi_kinerja_pkm") {
-      // 1. Simpan dokumen Rawat Inap apa adanya dari UI
-      formRef.set(dataLengkap, { merge: true }).catch((err) => {
-        console.error("Gagal menyimpan rekap laporan ke Firestore (RI):", err);
-      });
+    // Simpan data Rawat Inap ke dokumen aktif
+    formRef.set(dataLengkap, { merge: true }).catch((err) => {
+      console.error("Gagal menyimpan rekap laporan ke Firestore:", err);
+    });
 
+    // Jika koleksi PKM, simpan juga dokumen Non-Rawat Inap dengan skorNonRI yang terekam
+    if (tipeKoleksi === "evaluasi_kinerja_pkm") {
       const docIdRaw = formRef.id;
       if (docIdRaw.includes("_rawatinap")) {
         const docIdNonRI = docIdRaw.replace("_rawatinap", "_nonrawatinap");
 
-        // 2. Buat salinan untuk Non-Rawat Inap secara presisi
+        // Rekam elemen skor Non-Rawat Inap dari layar jika ada
         let dataNonRI = { ...dataLengkap };
-        let selisihTotal = 0;
+        const elemenNonRI = document.querySelectorAll('[id^="skorNonRI_"]');
+        let totalSkorNonRI = 0;
 
-        // Cari tahu poin mana saja yang memiliki aturan Non-Rawat Inap,
-        // lalu hitung ulang HANYA untuk poin yang realisasinya sudah diisi oleh user (> 0 atau ada datanya)
-        if (
-          typeof aturanPenilaian !== "undefined" &&
-          aturanPenilaian.nonRawatInap
-        ) {
-          for (let namaPoin of Object.keys(aturanPenilaian.nonRawatInap)) {
-            let real = dataNonRI[`real_${namaPoin}`];
-
-            // HANYA HITUNG JIKA POIN TERSEBUT BENAR-BENAR DIISI DI FORM
-            if (real !== undefined && real !== "" && !isNaN(real)) {
-              let target = dataNonRI[`target_${namaPoin}`];
-              let rasio =
-                target !== undefined && target !== 0 ? real / target : real;
-
-              const aturanNonRI =
-                aturanPenilaian.nonRawatInap[namaPoin].kondisiSkor;
-              let skorNonRIBaru = 0;
-              for (let item of aturanNonRI) {
-                if (rasio <= item.batas) {
-                  skorNonRIBaru = item.nilai;
-                  break;
-                }
-              }
-
-              let skorRILama = dataNonRI[`skor_${namaPoin}`] || 0;
-
-              dataNonRI[`skor_${namaPoin}`] = skorNonRIBaru;
-              if (dataNonRI[`subTotal_${namaPoin}`] !== undefined) {
-                dataNonRI[`subTotal_${namaPoin}`] = skorNonRIBaru;
-              }
-
-              selisihTotal += skorNonRIBaru - skorRILama;
-            }
-          }
-        }
-
-        let gtLama = parseFloat(dataNonRI["grand_total"]) || 0;
-        let gtBaru = gtLama + selisihTotal;
-        dataNonRI["grand_total"] = gtBaru.toFixed(2);
-        dataNonRI["predikat"] = tentukanPredikat(gtBaru);
+        elemenNonRI.forEach((el) => {
+          const namaPoin = el.id.replace("skorNonRI_", "");
+          const valNonRI = parseFloat(el.innerText.replace(",", ".")) || 0;
+          dataNonRI[`skor_${namaPoin}`] = valNonRI;
+          dataNonRI[`subTotal_${namaPoin}`] = valNonRI;
+        });
 
         db.collection("evaluasi_kinerja_pkm")
           .doc(docIdNonRI)
           .set(dataNonRI, { merge: true })
-          .catch((err) =>
-            console.error(
-              "Gagal menyimpan rekap laporan ke Firestore (Non-RI):",
-              err,
-            ),
-          );
+          .catch((err) => console.error("Gagal menyimpan Non-RI:", err));
       }
     }
   }
