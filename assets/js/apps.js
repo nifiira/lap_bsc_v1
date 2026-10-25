@@ -554,7 +554,7 @@ function hitungSkorPkm(namaPoin) {
   let nilaiRealisasi = 0;
   let nilaiTarget = null;
 
-  // Tentukan nama instansi yang benar (mendukung Admin yang sedang memilih OPD)
+  // Tentukan nama instansi
   let namaInstansiSimpan = currentNamaInstansi;
   if (
     !namaInstansiSimpan ||
@@ -576,7 +576,7 @@ function hitungSkorPkm(namaPoin) {
     }
   }
 
-  // Cek apakah elemen menggunakan Select Option (Dropdown a1-a6, dll)
+  // Cek apakah elemen menggunakan Select Option
   const elSelect = document.getElementById(`select_${namaPoin}`);
   if (elSelect) {
     const skorPilihan =
@@ -584,59 +584,11 @@ function hitungSkorPkm(namaPoin) {
     skorRI = skorPilihan;
     skorNonRI = skorPilihan;
 
-    // Tampilkan skor Rawat Inap di kotak utama
     elSkor.innerText = skorRI.toFixed(2);
     if (elSubTotal) elSubTotal.innerText = skorRI.toFixed(2);
 
-    // === OTOMATIS TAMBAHKAN KOTAK SKOR NON-RAWAT INAP DI SAMPINGNYA ===
-    let elSkorNonRI = document.getElementById(`skorNonRI_${namaPoin}`);
-    if (!elSkorNonRI && elSkor.parentElement) {
-      elSkorNonRI = document.createElement("span");
-      elSkorNonRI.id = `skorNonRI_${namaPoin}`;
-      // Meniru kelas CSS kotak skor asli agar tampilannya tetap rapi & seragam
-      elSkorNonRI.className = elSkor.className;
-      elSkorNonRI.style.marginLeft = "6px";
-      elSkorNonRI.title = "Skor Non-Rawat Inap";
-      elSkor.parentElement.appendChild(elSkorNonRI);
-    }
-    if (elSkorNonRI) {
-      elSkorNonRI.innerText = skorNonRI.toFixed(2);
-    }
+    tampilkanKotakNonRI(elSkor, namaPoin, skorNonRI);
     cekDanHitungTotalKelompok(namaPoin);
-
-    // Simpan paralel select ke 2 dokumen PKM berdasarkan formRef aktif
-    if (formRef) {
-      let dataBase = {
-        nama_instansi: namaInstansiSimpan || "Puskesmas",
-        updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-      };
-      dataBase[`select_${namaPoin}`] = skorPilihan;
-
-      const currentId = formRef.id;
-      let docRI = formRef;
-      let docNonRI;
-      if (currentId.includes("_rawatinap")) {
-        docNonRI = db
-          .collection("evaluasi_kinerja_pkm")
-          .doc(currentId.replace("_rawatinap", "_nonrawatinap"));
-      } else if (currentId.includes("_nonrawatinap")) {
-        docRI = db
-          .collection("evaluasi_kinerja_pkm")
-          .doc(currentId.replace("_nonrawatinap", "_rawatinap"));
-        docNonRI = formRef;
-      } else {
-        docNonRI = db
-          .collection("evaluasi_kinerja_pkm")
-          .doc(currentId + "_nonrawatinap");
-      }
-
-      docRI
-        .set({ ...dataBase, [`skor_${namaPoin}`]: skorRI }, { merge: true })
-        .catch((err) => console.error(err));
-      docNonRI
-        .set({ ...dataBase, [`skor_${namaPoin}`]: skorNonRI }, { merge: true })
-        .catch((err) => console.error(err));
-    }
     return;
   }
 
@@ -647,6 +599,7 @@ function hitungSkorPkm(namaPoin) {
   if (elReal.value.trim() === "") {
     elSkor.innerText = "Salah";
     if (elSubTotal) elSubTotal.innerText = "Salah";
+    hapusKotakNonRI(namaPoin);
     cekDanHitungTotalKelompok(namaPoin);
     return;
   }
@@ -660,6 +613,7 @@ function hitungSkorPkm(namaPoin) {
     if (nilaiTarget === 0) {
       elSkor.innerText = "0.00";
       if (elSubTotal) elSubTotal.innerText = "0.00";
+      tampilkanKotakNonRI(elSkor, namaPoin, 0);
       cekDanHitungTotalKelompok(namaPoin);
       return;
     }
@@ -667,8 +621,6 @@ function hitungSkorPkm(namaPoin) {
   } else {
     rasio = nilaiRealisasi;
   }
-
-  // (Blok 212_K / 212K dikhususkan untuk RSUD, dihapus dari PKM sesuai permintaan)
 
   // Hitung Skor Rawat Inap
   if (
@@ -700,44 +652,36 @@ function hitungSkorPkm(namaPoin) {
     }
   }
 
+  // Tampilkan skor Rawat Inap di kotak utama
   elSkor.innerText = skorRI.toFixed(2);
   if (elSubTotal) elSubTotal.innerText = skorRI.toFixed(2);
+
+  // TAMPILKAN KOTAK NON-RAWAT INAP DI SAMPINGNYA SECARA OTOMATIS
+  tampilkanKotakNonRI(elSkor, namaPoin, skorNonRI);
+
   cekDanHitungTotalKelompok(namaPoin);
+}
 
-  // Simpan otomatis ke 2 dokumen Firestore berdasarkan formRef aktif
-  if (formRef) {
-    let dataBase = {
-      nama_instansi: namaInstansiSimpan || "Puskesmas",
-      updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-    };
-    dataBase[`real_${namaPoin}`] = nilaiRealisasi;
-    if (nilaiTarget !== null) dataBase[`target_${namaPoin}`] = nilaiTarget;
-
-    const currentId = formRef.id;
-    let docRefRI = formRef;
-    let docRefNonRI;
-    if (currentId.includes("_rawatinap")) {
-      docRefNonRI = db
-        .collection("evaluasi_kinerja_pkm")
-        .doc(currentId.replace("_rawatinap", "_nonrawatinap"));
-    } else if (currentId.includes("_nonrawatinap")) {
-      docRefRI = db
-        .collection("evaluasi_kinerja_pkm")
-        .doc(currentId.replace("_nonrawatinap", "_rawatinap"));
-      docRefNonRI = formRef;
-    } else {
-      docRefNonRI = db
-        .collection("evaluasi_kinerja_pkm")
-        .doc(currentId + "_nonrawatinap");
-    }
-
-    docRefRI
-      .set({ ...dataBase, [`skor_${namaPoin}`]: skorRI }, { merge: true })
-      .catch((err) => console.error(err));
-    docRefNonRI
-      .set({ ...dataBase, [`skor_${namaPoin}`]: skorNonRI }, { merge: true })
-      .catch((err) => console.error(err));
+// Fungsi Bantu untuk Menampilkan / Memperbarui Kotak Non-RI di Layar
+function tampilkanKotakNonRI(elSkor, namaPoin, skorNonRI) {
+  let elSkorNonRI = document.getElementById(`skorNonRI_${namaPoin}`);
+  if (!elSkorNonRI && elSkor.parentElement) {
+    elSkorNonRI = document.createElement("span");
+    elSkorNonRI.id = `skorNonRI_${namaPoin}`;
+    elSkorNonRI.className = elSkor.className; // Meniru gaya kotak skor asli
+    elSkorNonRI.style.marginLeft = "8px";
+    elSkorNonRI.style.backgroundColor = "#e2e8f0"; // Warna latar sedikit berbeda agar bisa dibedakan
+    elSkorNonRI.title = "Skor Non-Rawat Inap";
+    elSkor.parentElement.appendChild(elSkorNonRI);
   }
+  if (elSkorNonRI) {
+    elSkorNonRI.innerText = skorNonRI.toFixed(2);
+  }
+}
+
+function hapusKotakNonRI(namaPoin) {
+  const elSkorNonRI = document.getElementById(`skorNonRI_${namaPoin}`);
+  if (elSkorNonRI) elSkorNonRI.remove();
 }
 
 // Fungsi Bantu Kalkulasi Paralel Khusus PKM (Input Sekali, 2 Hasil)
