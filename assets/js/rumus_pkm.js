@@ -601,7 +601,7 @@ const aturanPenilaian = {
         { batas: Infinity, nilai: 1.0 }, // Untuk PSA = 1
       ],
     },
-
+    //111_C Sudah sesuai Rumus
     // ===================== KELOMPOK 211 =====================
     "211_A": {
       kondisiSkor: [
