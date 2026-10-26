@@ -71,14 +71,13 @@ const aturanPenilaian = {
         { batas: Infinity, nilai: 2.0 }, // Untuk PKIH = 1
       ],
     },
-    "212_B": {
+    "212_B1": {
       kondisiSkor: [
-        { batas: 0.2, nilai: 0.0 }, // Mewakili syarat <= 0.2
-        { batas: 0.3, nilai: 0.4 }, // Mewakili syarat <= 0.3
-        { batas: 0.4, nilai: 0.8 }, // Mewakili syarat <= 0.4
-        { batas: 0.6, nilai: 1.2 }, // Mewakili syarat <= 0.6
-        { batas: 0.8, nilai: 1.6 }, // Mewakili syarat <= 0.8
-        { batas: Infinity, nilai: 2.0 }, // Mewakili syarat > 0.8
+        { batas: 0.1, nilai: 0.0 }, // Untuk PKIB < 0,10[cite: 7]
+        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PKIB < 0,50[cite: 7]
+        { batas: 0.75, nilai: 0.6 }, // Untuk 0,50 <= PKIB < 0,75[cite: 7]
+        { batas: 1.0, nilai: 0.8 }, // Untuk 0,75 <= PKIB <= 0,99[cite: 7]
+        { batas: Infinity, nilai: 1.0 }, // Untuk PKIB = 1[cite: 7]
       ],
     },
     "212_C": {
@@ -579,14 +578,13 @@ const aturanPenilaian = {
         { batas: Infinity, nilai: 2.0 }, // Untuk PKIH = 1
       ],
     },
-    "212_B": {
+    "212_B1": {
       kondisiSkor: [
-        { batas: 0.2, nilai: 0.0 }, // Mewakili syarat <= 0.2
-        { batas: 0.3, nilai: 0.4 }, // Mewakili syarat <= 0.3
-        { batas: 0.4, nilai: 0.8 }, // Mewakili syarat <= 0.4
-        { batas: 0.6, nilai: 1.2 }, // Mewakili syarat <= 0.6
-        { batas: 0.8, nilai: 1.6 }, // Mewakili syarat <= 0.8
-        { batas: Infinity, nilai: 2.0 }, // Mewakili syarat > 0.8
+        { batas: 0.1, nilai: 0.0 }, // Untuk PKIB < 0,10[cite: 7]
+        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PKIB < 0,50[cite: 7]
+        { batas: 0.75, nilai: 0.6 }, // Untuk 0,50 <= PKIB < 0,75[cite: 7]
+        { batas: 1.0, nilai: 0.8 }, // Untuk 0,75 <= PKIB <= 0,99[cite: 7]
+        { batas: Infinity, nilai: 1.0 }, // Untuk PKIB = 1[cite: 7]
       ],
     },
     "212_C": {
