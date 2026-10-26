@@ -1070,6 +1070,8 @@ function hitungGrandTotal() {
     predikatHasil = tentukanPredikat(grandTotal);
     elPredikat.innerText = predikatHasil;
   }
+  // 🛑 PENTING: JANGAN SIMPAN KE FIREBASE JIKA SEDANG DALAM PROSES MEMUAT DATA!
+  if (isSedangMemuat) return;
 
   // === FITUR SAPU JAGAT: REKAM SELURUH NILAI KE FIREBASE ===
   if (currentUser && formRef) {
