@@ -1366,7 +1366,6 @@ async function exportToExcel(
   namaInstansi = null,
   triwulan = null,
 ) {
-  // Fungsi helper internal untuk menampilkan notifikasi mengambang non-blocking
   function tampilkanNotif(pesan, jenis = "info", durasi = 0) {
     let container = document.getElementById("alertExportContainer");
     if (!container) {
@@ -1381,7 +1380,7 @@ async function exportToExcel(
     }
 
     let alertClass = "alert-info";
-    let iconClass = "fa-spinner fa-spin"; // Ikon berputar saat proses berjalan
+    let iconClass = "fa-spinner fa-spin";
     if (jenis === "success") {
       alertClass = "alert-success";
       iconClass = "fa-check-circle";
@@ -1405,11 +1404,14 @@ async function exportToExcel(
   }
 
   try {
-    // Ganti alert biasa dengan notifikasi mengambang tanpa tombol OK
     tampilkanNotif(
       "Sedang mengambil template dan menyuntikkan data... Mohon tunggu.",
       "info",
     );
+
+    // TAMBAHKAN JEDA BUATAN (misal 800 milidetik) agar animasi loading sempat terlihat
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
     let dataAdmin = null;
 
     if (namaKoleksi && docId) {
@@ -1484,11 +1486,10 @@ async function exportToExcel(
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
 
-    // Tampilkan notifikasi sukses sebentar lalu hilang otomatis
+    // Notifikasi sukses tampil dengan stabil
     tampilkanNotif("Laporan Excel berhasil diunduh!", "success", 4000);
   } catch (error) {
     console.error("Gagal export:", error);
-    // Tampilkan notifikasi error tanpa pop-up OK
     tampilkanNotif("Terjadi kesalahan: " + error.message, "danger", 6000);
   }
 }
