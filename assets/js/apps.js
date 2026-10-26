@@ -325,50 +325,76 @@ function gantiTribulan() {
   muatDataDariFirebase();
 }
 
+let alertTimeout = null;
+
 function aksiLogin() {
   const emailLengkap = document.getElementById("inputEmail").value.trim();
   const password = document.getElementById("inputPassword").value;
 
-  // Sediakan container otomatis yang posisinya mengambang di pojok kanan bawah
   let container = document.getElementById("alertLoginContainer");
   if (!container) {
     container = document.createElement("div");
     container.id = "alertLoginContainer";
     container.style.position = "fixed";
-    container.style.bottom = "20px";
+    container.style.top = "20px"; // Diubah ke pojok kanan atas
     container.style.right = "20px";
     container.style.zIndex = "9999";
     container.style.maxWidth = "400px";
     document.body.appendChild(container);
   }
 
+  if (alertTimeout) clearTimeout(alertTimeout);
+
+  function tampilkanAlert(htmlContent, durasi = 4000) {
+    container.innerHTML = htmlContent;
+
+    alertTimeout = setTimeout(() => {
+      const alertEl = container.querySelector(".alert");
+      if (alertEl) {
+        alertEl.classList.remove("show");
+        setTimeout(() => {
+          container.innerHTML = "";
+        }, 150);
+      }
+    }, durasi);
+  }
+
   if (!emailLengkap || !password) {
-    container.innerHTML = `
+    tampilkanAlert(
+      `
       <div class="alert alert-warning alert-dismissible fade show shadow-lg mb-0" role="alert">
         <i class="fa fa-exclamation-circle me-2"></i>Harap isi Email dan Password dengan lengkap!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
-    `;
+    `,
+      4000,
+    );
     return;
   }
 
   auth
     .signInWithEmailAndPassword(emailLengkap, password)
     .then((userCredential) => {
-      container.innerHTML = `
+      tampilkanAlert(
+        `
         <div class="alert alert-success alert-dismissible fade show shadow-lg mb-0" role="alert">
           <i class="fa fa-check-circle me-2"></i>Berhasil masuk sebagai ${emailLengkap}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-      `;
+      `,
+        3000,
+      );
     })
     .catch((error) => {
-      container.innerHTML = `
+      tampilkanAlert(
+        `
         <div class="alert alert-danger alert-dismissible fade show shadow-lg mb-0" role="alert">
           <i class="fa fa-exclamation-circle me-2"></i>Login Gagal: ${error.message}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-      `;
+      `,
+        5000,
+      );
     });
 }
 
