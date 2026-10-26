@@ -293,7 +293,7 @@ async function gantiOpdAdmin() {
 
     // Gunakan fungsi yang benar tanpa kata 'Async' di belakangnya
     muatDataDariFirebase();
-    muatRingkasanDashboard();
+    // muatRingkasanDashboard();
   } catch (error) {
     console.error("Gagal memuat data instansi untuk admin:", error);
     alert("Terjadi kesalahan saat mengambil data: " + error.message);
@@ -323,7 +323,7 @@ function gantiTribulan() {
     .forEach((el) => (el.innerText = "0.00"));
 
   muatDataDariFirebase();
-  muatRingkasanDashboard();
+  // muatRingkasanDashboard();
 }
 
 function aksiLogin() {
