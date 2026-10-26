@@ -22,10 +22,10 @@ const aturanPenilaian = {
     },
     "111_C3": {
       kondisiSkor: [
-        { batas: 0.2, nilai: 2.5 },
-        { batas: 0.4, nilai: 2.0 },
-        { batas: 0.6, nilai: 0.75 },
-        { batas: Infinity, nilai: 0.5 },
+        { batas: 0.1, nilai: 0.0 }, // Untuk PSA < 0,10
+        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PSA < 0,50
+        { batas: 1.0, nilai: 0.8 }, // Untuk 0,50 <= PSA <= 0,99
+        { batas: Infinity, nilai: 1.0 }, // Untuk PSA = 1
       ],
     },
 
@@ -595,10 +595,10 @@ const aturanPenilaian = {
     },
     "111_C3": {
       kondisiSkor: [
-        { batas: 0.2, nilai: 2.5 },
-        { batas: 0.4, nilai: 2.0 },
-        { batas: 0.6, nilai: 0.75 },
-        { batas: Infinity, nilai: 0.5 },
+        { batas: 0.1, nilai: 0.0 }, // Untuk PSA < 0,10
+        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PSA < 0,50
+        { batas: 1.0, nilai: 0.8 }, // Untuk 0,50 <= PSA <= 0,99
+        { batas: Infinity, nilai: 1.0 }, // Untuk PSA = 1
       ],
     },
 
