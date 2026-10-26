@@ -2357,6 +2357,7 @@
                         >
                       </summary>
 
+                      <!-- A. Emergency Response Time Rate -->
                       <details>
                         <summary class="px-4 border-bottom dotted">
                           A. Emergency Response Time Rate
@@ -2369,17 +2370,18 @@
                           <li
                             class="list-group-item bg-transparent question-item"
                           >
-                            <div class="q-number">1</div>
+                            <div class="q-number">a</div>
                             <div class="q-content">
                               <div class="q-title">
-                                Emergency Response Time Rate (ERT) dalam menit
+                                Emergency Response Time Rate (ERT)/menit
                               </div>
                               <div class="formula-box">
                                 <div class="formula-row">
                                   <label
-                                    >Rata-rata waktu tunggu penanganan gawat
-                                    darurat (menit) :</label
-                                  ><input
+                                    >Rata-rata lama waktu tunggu penanganan
+                                    pasien gawat darurat (dalam menit) :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-realisasi"
                                     id="real_311_A"
@@ -2395,6 +2397,7 @@
                         </ul>
                       </details>
 
+                      <!-- B. Length of Stay Non BPJS -->
                       <details>
                         <summary class="px-4 border-bottom dotted">
                           B. Length of Stay Non BPJS
@@ -2407,17 +2410,18 @@
                           <li
                             class="list-group-item bg-transparent question-item"
                           >
-                            <div class="q-number">1</div>
+                            <div class="q-number">a</div>
                             <div class="q-content">
                               <div class="q-title">
-                                Length of Stay Non BPJS (LOSNB) / Hari
+                                Length of Stay (LOSNB)/Hari
                               </div>
                               <div class="formula-box">
                                 <div class="formula-row">
                                   <label
                                     >Jumlah lama pasien non BPJS dirawat
                                     :</label
-                                  ><input
+                                  >
+                                  <input
                                     type="number"
                                     class="val-realisasi"
                                     id="real_311_B"
@@ -2427,8 +2431,8 @@
                                   />
                                 </div>
                                 <div class="formula-row">
-                                  <label>Jumlah pasien non BPJS keluar :</label
-                                  ><input
+                                  <label>Jumlah pasien non BPJS keluar :</label>
+                                  <input
                                     type="number"
                                     class="val-target"
                                     id="target_311_B"
@@ -2444,6 +2448,7 @@
                         </ul>
                       </details>
 
+                      <!-- C. Length of Stay BPJS -->
                       <details>
                         <summary class="px-4 border-bottom dotted">
                           C. Length of Stay BPJS
@@ -2456,16 +2461,17 @@
                           <li
                             class="list-group-item bg-transparent question-item"
                           >
-                            <div class="q-number">1</div>
+                            <div class="q-number">a</div>
                             <div class="q-content">
                               <div class="q-title">
-                                Length of Stay BPJS (LOSB) / Hari
+                                Length of Stay BPJS (LOSB)/Hari
                               </div>
                               <div class="formula-box">
                                 <div class="formula-row">
                                   <label
                                     >Jumlah lama pasien BPJS dirawat :</label
-                                  ><input
+                                  >
+                                  <input
                                     type="number"
                                     class="val-realisasi"
                                     id="real_311_C"
@@ -2475,8 +2481,8 @@
                                   />
                                 </div>
                                 <div class="formula-row">
-                                  <label>Jumlah pasien BPJS keluar :</label
-                                  ><input
+                                  <label>Jumlah pasien BPJS keluar :</label>
+                                  <input
                                     type="number"
                                     class="val-target"
                                     id="target_311_C"
@@ -2492,9 +2498,10 @@
                         </ul>
                       </details>
 
+                      <!-- D. Waktu Tunggu Hasil Laboratorium Pemeriksaan HB -->
                       <details>
                         <summary class="px-4 border-bottom dotted">
-                          D. Waktu Tunggu Hasil Lab Pemeriksaan HB
+                          D. Waktu Tunggu Hasil Laboratorium Pemeriksaan HB
                           <span
                             class="score-badge score-plus bg-white text-dark"
                             >Nilai : <span id="subTotal_311_D">0.00</span></span
@@ -2504,17 +2511,19 @@
                           <li
                             class="list-group-item bg-transparent question-item"
                           >
-                            <div class="q-number">1</div>
+                            <div class="q-number">a</div>
                             <div class="q-content">
                               <div class="q-title">
-                                Waktu Tunggu Hasil Lab HB (WTL) / Jam
+                                Waktu Tunggu Hasil Laboratorium (WTL)/Jam
                               </div>
                               <div class="formula-box">
                                 <div class="formula-row">
                                   <label
-                                    >Rata-rata lama waktu tunggu hasil lab HB
-                                    (jam) :</label
-                                  ><input
+                                    >Rata-rata lama waktu menunggu hasil
+                                    laboratorium Pemeriksaan HB (dalam jam)
+                                    :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-realisasi"
                                     id="real_311_D"
@@ -2530,6 +2539,7 @@
                         </ul>
                       </details>
 
+                      <!-- E. Kepatuhan Kebersihan Tangan -->
                       <details>
                         <summary class="px-4 border-bottom dotted">
                           E. Kepatuhan Kebersihan Tangan
@@ -2542,7 +2552,7 @@
                           <li
                             class="list-group-item bg-transparent question-item"
                           >
-                            <div class="q-number">1</div>
+                            <div class="q-number">a</div>
                             <div class="q-content">
                               <div class="q-title">
                                 Kepatuhan Kebersihan Tangan (KKT)
@@ -2550,9 +2560,10 @@
                               <div class="formula-box">
                                 <div class="formula-row">
                                   <label
-                                    >Tindakan kebersihan tangan dilakukan
-                                    :</label
-                                  ><input
+                                    >Jumlah tindakan kebersihan tangan yang
+                                    dilakukan :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-realisasi"
                                     id="real_311_E"
@@ -2563,8 +2574,10 @@
                                 </div>
                                 <div class="formula-row">
                                   <label
-                                    >Jumlah peluang kebersihan tangan :</label
-                                  ><input
+                                    >Jumlah peluang kebersihan tangan yang
+                                    seharusnya dilakukan :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-target"
                                     id="target_311_E"
@@ -2580,9 +2593,10 @@
                         </ul>
                       </details>
 
+                      <!-- F. Kepatuhan Penggunaan Alat Pelindung Diri (APD) -->
                       <details>
                         <summary class="px-4 border-bottom dotted">
-                          F. Kepatuhan Penggunaan APD
+                          F. Kepatuhan Penggunaan Alat Pelindung Diri (APD)
                           <span
                             class="score-badge score-plus bg-white text-dark"
                             >Nilai : <span id="subTotal_311_F">0.00</span></span
@@ -2592,15 +2606,18 @@
                           <li
                             class="list-group-item bg-transparent question-item"
                           >
-                            <div class="q-number">1</div>
+                            <div class="q-number">a</div>
                             <div class="q-content">
                               <div class="q-title">
-                                Kepatuhan Penggunaan APD (KAPD)
+                                Kepatuhan Penggunaan Alat Pelindung Diri (KAPD)
                               </div>
                               <div class="formula-box">
                                 <div class="formula-row">
-                                  <label>Jumlah petugas menggunakan APD :</label
-                                  ><input
+                                  <label
+                                    >Jumlah petugas yang menggunakan APD
+                                    :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-realisasi"
                                     id="real_311_F"
@@ -2611,9 +2628,10 @@
                                 </div>
                                 <div class="formula-row">
                                   <label
-                                    >Petugas terindikasi menggunakan APD
-                                    :</label
-                                  ><input
+                                    >Jumlah seluruh petugas yang terindikasi
+                                    menggunakan APD :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-target"
                                     id="target_311_F"
@@ -2629,6 +2647,7 @@
                         </ul>
                       </details>
 
+                      <!-- G. Kepatuhan Identifikasi Pasien -->
                       <details>
                         <summary class="px-4 border-bottom dotted">
                           G. Kepatuhan Identifikasi Pasien
@@ -2641,7 +2660,7 @@
                           <li
                             class="list-group-item bg-transparent question-item"
                           >
-                            <div class="q-number">1</div>
+                            <div class="q-number">a</div>
                             <div class="q-content">
                               <div class="q-title">
                                 Kepatuhan Identifikasi Pasien (KIP)
@@ -2649,8 +2668,10 @@
                               <div class="formula-box">
                                 <div class="formula-row">
                                   <label
-                                    >Pemberi layanan identifikasi benar :</label
-                                  ><input
+                                    >Jumlah pemberi layanan yang melakukan
+                                    identifikasi pasien secara benar :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-realisasi"
                                     id="real_311_G"
@@ -2660,8 +2681,8 @@
                                   />
                                 </div>
                                 <div class="formula-row">
-                                  <label>Jumlah pemberi layanan :</label
-                                  ><input
+                                  <label>Jumlah pemberi layanan :</label>
+                                  <input
                                     type="number"
                                     class="val-target"
                                     id="target_311_G"
@@ -2677,6 +2698,7 @@
                         </ul>
                       </details>
 
+                      <!-- H. Angka Kematian >= 48 Jam -->
                       <details>
                         <summary class="px-4 border-bottom dotted">
                           H. Angka Kematian &gt;= 48 Jam
@@ -2689,7 +2711,7 @@
                           <li
                             class="list-group-item bg-transparent question-item"
                           >
-                            <div class="q-number">1</div>
+                            <div class="q-number">a</div>
                             <div class="q-content">
                               <div class="q-title">
                                 Angka Kematian Gawat Darurat (AKG)
@@ -2699,7 +2721,8 @@
                                   <label
                                     >Jumlah pasien meninggal &gt;= 48 jam
                                     dirawat :</label
-                                  ><input
+                                  >
+                                  <input
                                     type="number"
                                     class="val-realisasi"
                                     id="real_311_H"
@@ -2710,9 +2733,10 @@
                                 </div>
                                 <div class="formula-row">
                                   <label
-                                    >Jumlah pasien keluar (hidup / mati)
+                                    >Jumlah pasien yang keluar (hidup atau mati)
                                     :</label
-                                  ><input
+                                  >
+                                  <input
                                     type="number"
                                     class="val-target"
                                     id="target_311_H"
@@ -2728,9 +2752,10 @@
                         </ul>
                       </details>
 
+                      <!-- I. Angka Kesembuhan Pasien TB -->
                       <details>
                         <summary class="px-4 border-bottom dotted">
-                          I. Pelayanan dan Kesembuhan TBC
+                          I. Angka Kesembuhan Pasien TB
                           <span
                             class="score-badge score-plus bg-white text-dark"
                             >Nilai :
@@ -2741,14 +2766,17 @@
                           <li
                             class="list-group-item bg-transparent question-item"
                           >
-                            <div class="q-number">1</div>
+                            <div class="q-number">a</div>
                             <div class="q-content">
                               <div class="q-title">Pelayanan TBC (PTBC)</div>
                               <div class="formula-box">
                                 <div class="formula-row">
                                   <label
-                                    >Terduga TBC diperiksa penunjang :</label
-                                  ><input
+                                    >Jumlah orang terduga TBC yang dilakukan
+                                    pemeriksaan penunjang dalam 1 periode
+                                    :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-realisasi"
                                     id="real_311_I1"
@@ -2758,8 +2786,11 @@
                                   />
                                 </div>
                                 <div class="formula-row">
-                                  <label>Jumlah terduga TBC :</label
-                                  ><input
+                                  <label
+                                    >Jumlah orang terduga TBC dalam kurun waktu
+                                    periode yang sama :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-target"
                                     id="target_311_I1"
@@ -2775,7 +2806,7 @@
                           <li
                             class="list-group-item bg-transparent question-item"
                           >
-                            <div class="q-number">2</div>
+                            <div class="q-number">b</div>
                             <div class="q-content">
                               <div class="q-title">
                                 Angka Kesembuhan Pasien TB (AKP)
@@ -2783,9 +2814,10 @@
                               <div class="formula-box">
                                 <div class="formula-row">
                                   <label
-                                    >Pasien TB SO sembuh &amp; pengobatan
-                                    lengkap :</label
-                                  ><input
+                                    >Jumlah semua pasien TB SO yang sembuh dan
+                                    pengobatan lengkap dalam 1 periode :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-realisasi"
                                     id="real_311_I2"
@@ -2795,8 +2827,11 @@
                                   />
                                 </div>
                                 <div class="formula-row">
-                                  <label>Kasus TB SO yang diobati :</label
-                                  ><input
+                                  <label
+                                    >Jumlah semua kasus TB SO yang diobati pada
+                                    periode yang sama :</label
+                                  >
+                                  <input
                                     type="number"
                                     class="val-target"
                                     id="target_311_I2"
