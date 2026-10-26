@@ -14,10 +14,10 @@ const aturanPenilaian = {
     },
     "111_C2": {
       kondisiSkor: [
-        { batas: 0.2, nilai: 2.5 },
-        { batas: 0.4, nilai: 2.0 },
-        { batas: 0.6, nilai: 0.75 },
-        { batas: Infinity, nilai: 0.5 },
+        { batas: 0.1, nilai: 0.0 }, // Untuk PKB < 0,10
+        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PKB < 0,50
+        { batas: 1.0, nilai: 0.8 }, // Untuk 0,50 <= PKB <= 0,99
+        { batas: Infinity, nilai: 1.0 }, // Untuk PKB = 1
       ],
     },
     "111_C3": {
@@ -587,10 +587,10 @@ const aturanPenilaian = {
     },
     "111_C2": {
       kondisiSkor: [
-        { batas: 0.2, nilai: 2.5 },
-        { batas: 0.4, nilai: 2.0 },
-        { batas: 0.6, nilai: 0.75 },
-        { batas: Infinity, nilai: 0.5 },
+        { batas: 0.1, nilai: 0.0 }, // Untuk PKB < 0,10
+        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PKB < 0,50
+        { batas: 1.0, nilai: 0.8 }, // Untuk 0,50 <= PKB <= 0,99
+        { batas: Infinity, nilai: 1.0 }, // Untuk PKB = 1
       ],
     },
     "111_C3": {
