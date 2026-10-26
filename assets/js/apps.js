@@ -377,9 +377,9 @@ function aksiLogin() {
     .then((userCredential) => {
       tampilkanAlert(
         `
-        <div class="alert alert-success alert-dismissible fade show shadow-lg mb-0" role="alert">
+        <div class="alert alert-success fade show shadow-lg mb-0" role="alert">
           <i class="fa fa-check-circle me-2"></i>Berhasil masuk sebagai ${emailLengkap}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          
         </div>
       `,
         3000,
