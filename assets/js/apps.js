@@ -753,6 +753,10 @@ function cekDanHitungTotalKelompok(namaPoin) {
   if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("111_A")) {
     if (typeof hitungTotalPoin111APkm === "function") hitungTotalPoin111APkm();
   }
+  // Panggil Skor Total 111_B
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("111_B")) {
+    if (typeof hitungTotalPoin111BPkm === "function") hitungTotalPoin111BPkm();
+  }
 
   // 2. Penanganan kelompok utama berdasarkan awalan
   if (namaPoin.startsWith("111_")) {
@@ -761,6 +765,8 @@ function cekDanHitungTotalKelompok(namaPoin) {
       if (typeof hitungTotalPoin111Pkm === "function") hitungTotalPoin111Pkm();
       if (typeof hitungTotalPoin111APkm === "function")
         hitungTotalPoin111APkm();
+      if (typeof hitungTotalPoin111BPkm === "function")
+        hitungTotalPoin111BPkm();
       hitungTotalPoin11(); // Akumulasi ke total level 11
     } else {
       // Jalankan murni rumus RSUD tanpa terganggu PKM
@@ -806,6 +812,9 @@ function cekDanHitungTotalKelompok(namaPoin) {
 
 // ========================================================
 // 5. TOTAL LEVEL 3 & 6. PENJUMLAHAN AKUMULASI UTAMA
+// ========================================================
+// ========================================================
+// RUMUS PENJUMLAHAN RSUD
 // ========================================================
 function hitungTotalPoin111() {
   const total =
@@ -1029,6 +1038,15 @@ function hitungTotalPoin111APkm() {
     ambilAngkaSaja("skor_111_A6");
   const elTotal1A = document.getElementById("skor_111_A_Total");
   if (elTotal1A) elTotal1A.innerText = total1A.toFixed(2);
+}
+
+function hitungTotalPoin111BPkm() {
+  const total1B =
+    ambilAngkaSaja("skor_111_B1") +
+    ambilAngkaSaja("skor_111_B2") +
+    ambilAngkaSaja("skor_111_B3");
+  const elTotal1B = document.getElementById("skor_111_B_Total");
+  if (elTotal1B) elTotal1B.innerText = total1B.toFixed(2);
 }
 
 // ========================================================
