@@ -80,6 +80,12 @@ const aturanPenilaian = {
         { batas: Infinity, nilai: 1.0 }, // Untuk PKIB = 1[cite: 7]
       ],
     },
+    "212_B2": {
+      kondisiSkor: [
+        { batas: 0, nilai: 1.0 }, // Untuk AKI = 0[cite: 8]
+        { batas: Infinity, nilai: 0.0 }, // Untuk AKI > 0[cite: 8]
+      ],
+    },
     "212_C": {
       kondisiSkor: [
         { batas: 0.01, nilai: 2.0 }, // Mewakili syarat <= 0.01
@@ -585,6 +591,12 @@ const aturanPenilaian = {
         { batas: 0.75, nilai: 0.6 }, // Untuk 0,50 <= PKIB < 0,75[cite: 7]
         { batas: 1.0, nilai: 0.8 }, // Untuk 0,75 <= PKIB <= 0,99[cite: 7]
         { batas: Infinity, nilai: 1.0 }, // Untuk PKIB = 1[cite: 7]
+      ],
+    },
+    "212_B2": {
+      kondisiSkor: [
+        { batas: 0, nilai: 1.0 }, // Untuk AKI = 0[cite: 8]
+        { batas: Infinity, nilai: 0.0 }, // Untuk AKI > 0[cite: 8]
       ],
     },
     "212_C": {
