@@ -445,6 +445,84 @@ function muatDataDariFirebase() {
 }
 
 // ========================================================
+// TARIK DATA KHUSUS UNTUK DASHBOARD ADMIN
+// ========================================================
+async function muatRekapPredikatAdmin() {
+  const tabelRef = document.getElementById("tabelRekapPredikatAdmin");
+  if (!tabelRef) return;
+
+  tabelRef.innerHTML = `<tr><td colspan="5" class="text-center">Mengambil data rekap...</td></tr>`;
+
+  try {
+    let htmlTabel = "";
+    let nomor = 1;
+
+    let targetKoleksi = ["evaluasi_kinerja_rsud", "evaluasi_kinerja_pkm"];
+
+    for (let colName of targetKoleksi) {
+      const snapshot = await db.collection(colName).get();
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const idParts = doc.id.split("_");
+        const triwulan = idParts[1] || "-";
+
+        let tambahanLabel = "";
+        if (colName === "evaluasi_kinerja_pkm") {
+          if (doc.id.includes("nonrawatinap"))
+            tambahanLabel = " (Non-Rawat Inap)";
+          else if (doc.id.includes("rawatinap"))
+            tambahanLabel = " (Rawat Inap)";
+        }
+
+        const namaInstansi = (data.nama_instansi || "Instansi") + tambahanLabel;
+
+        let totalVal = parseFloat(data.grand_total) || 0;
+        if (totalVal === 0) {
+          const t1 = parseFloat(data.skor_11_Total) || 0;
+          const t2 = parseFloat(data.skor_21_Total) || 0;
+          const t3 = parseFloat(data.skor_31_Total) || 0;
+          const t4 = parseFloat(data.skor_41_Total) || 0;
+          totalVal = t1 + t2 + t3 + t4;
+        }
+
+        const totalStr = totalVal.toFixed(2);
+        const predikat =
+          data.predikat && data.predikat !== "-"
+            ? data.predikat
+            : tentukanPredikat(totalVal);
+
+        // Badge warna predikat agar menarik
+        let badgeClass = "bg-secondary";
+        if (predikat.startsWith("AA")) badgeClass = "bg-success";
+        else if (predikat.startsWith("A")) badgeClass = "bg-primary";
+        else if (predikat.startsWith("BB")) badgeClass = "bg-info text-dark";
+        else if (predikat.startsWith("B")) badgeClass = "bg-warning text-dark";
+        else if (predikat.startsWith("C")) badgeClass = "bg-danger";
+
+        htmlTabel += `
+          <tr>
+            <td>${nomor++}</td>
+            <td><strong>${namaInstansi}</strong></td>
+            <td>${triwulan}</td>
+            <td><strong>${totalStr}</strong></td>
+            <td><span class="badge ${badgeClass}">${predikat}</span></td>
+          </tr>
+        `;
+      });
+    }
+
+    if (htmlTabel === "") {
+      tabelRef.innerHTML = `<tr><td colspan="5" class="text-center">Belum ada data rekapitulasi ditemukan.</td></tr>`;
+    } else {
+      tabelRef.innerHTML = htmlTabel;
+    }
+  } catch (error) {
+    console.error("Gagal memuat rekap admin:", error);
+    tabelRef.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Gagal memuat data: ${error.message}</td></tr>`;
+  }
+}
+
+// ========================================================
 // 4. FUNGSI KALKULASI & PENJUMLAHAN (Mendukung RI & NRI PKM)
 // ========================================================
 function ambilAngkaSaja(idElement) {
