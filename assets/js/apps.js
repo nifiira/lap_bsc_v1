@@ -323,27 +323,71 @@ function gantiTribulan() {
     .forEach((el) => (el.innerText = "0.00"));
 
   muatDataDariFirebase();
-  // muatRingkasanDashboard();
 }
 
 function aksiLogin() {
   const emailLengkap = document.getElementById("inputEmail").value.trim();
   const password = document.getElementById("inputPassword").value;
 
+  // Sediakan container otomatis di atas form jika belum ada
+  let container = document.getElementById("alertLoginContainer");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "alertLoginContainer";
+    const form =
+      document.querySelector("form") || document.getElementById("formLogin");
+    if (form) form.prepend(container);
+    else document.body.prepend(container);
+  }
+
   if (!emailLengkap || !password) {
-    alert("Harap isi Email dan Password dengan lengkap!");
+    container.innerHTML = `
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fa fa-exclamation-circle me-2"></i>Harap isi Email dan Password dengan lengkap!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    `;
     return;
   }
 
   auth
     .signInWithEmailAndPassword(emailLengkap, password)
     .then((userCredential) => {
-      alert("Berhasil masuk sebagai " + emailLengkap);
+      container.innerHTML = `
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="fa fa-check-circle me-2"></i>Berhasil masuk sebagai ${emailLengkap}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
     })
     .catch((error) => {
-      alert("Login Gagal: " + error.message);
+      container.innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="fa fa-exclamation-circle me-2"></i>Login Gagal: ${error.message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
     });
 }
+
+// function aksiLogin() {
+//   const emailLengkap = document.getElementById("inputEmail").value.trim();
+//   const password = document.getElementById("inputPassword").value;
+
+//   if (!emailLengkap || !password) {
+//     alert("Harap isi Email dan Password dengan lengkap!");
+//     return;
+//   }
+
+//   auth
+//     .signInWithEmailAndPassword(emailLengkap, password)
+//     .then((userCredential) => {
+//       alert("Berhasil masuk sebagai " + emailLengkap);
+//     })
+//     .catch((error) => {
+//       alert("Login Gagal: " + error.message);
+//     });
+// }
 
 function togglePassword() {
   const input = document.getElementById("inputPassword");
