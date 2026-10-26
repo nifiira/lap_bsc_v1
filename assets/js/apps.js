@@ -336,7 +336,7 @@ function aksiLogin() {
     container = document.createElement("div");
     container.id = "alertLoginContainer";
     container.style.position = "fixed";
-    container.style.top = "20px"; // Diubah ke pojok kanan atas
+    container.style.top = "20px";
     container.style.right = "20px";
     container.style.zIndex = "9999";
     container.style.maxWidth = "400px";
@@ -384,6 +384,11 @@ function aksiLogin() {
       `,
         3000,
       );
+
+      // BERIKAN JEDA 2 DETIK SEBELUM BERPINDAH KE DASHBOARD
+      setTimeout(() => {
+        window.location.href = "dashboard.html"; // Sesuaikan jika pengalihan halaman diatur di auth state change
+      }, 2000);
     })
     .catch((error) => {
       tampilkanAlert(
