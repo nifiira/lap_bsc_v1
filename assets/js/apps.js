@@ -363,7 +363,15 @@ function togglePassword() {
 function logoutUser() {
   const konfirmasi = confirm("Apakah Anda yakin ingin keluar?");
   if (konfirmasi) {
-    auth.signOut();
+    auth
+      .signOut()
+      .then(() => {
+        window.location.href = "index.html";
+      })
+      .catch((error) => {
+        console.error("Gagal keluar:", error);
+        window.location.href = "index.html"; // Paksa pindah meski error
+      });
   }
 }
 
