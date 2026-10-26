@@ -6,10 +6,10 @@ const aturanPenilaian = {
   rawatInap: {
     "111_C1": {
       kondisiSkor: [
-        { batas: 0.2, nilai: 2.5 },
-        { batas: 0.4, nilai: 2.0 },
-        { batas: 0.6, nilai: 0.75 },
-        { batas: Infinity, nilai: 0.5 },
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.4 },
+        { batas: 1.0, nilai: 0.8 },
+        { batas: Infinity, nilai: 1.0 },
       ],
     },
     "111_C2": {
@@ -579,10 +579,10 @@ const aturanPenilaian = {
   nonRawatInap: {
     "111_C1": {
       kondisiSkor: [
-        { batas: 0.2, nilai: 2.5 },
-        { batas: 0.4, nilai: 2.0 },
-        { batas: 0.6, nilai: 0.75 },
-        { batas: Infinity, nilai: 0.5 },
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.4 },
+        { batas: 1.0, nilai: 0.8 },
+        { batas: Infinity, nilai: 1.0 },
       ],
     },
     "111_C2": {
