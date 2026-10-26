@@ -589,6 +589,8 @@ function hitungSkorPkm(namaPoin) {
 
     tampilkanKotakNonRI(elSkor, namaPoin, skorNonRI);
     cekDanHitungTotalKelompok(namaPoin);
+    // === CUKUP TAMBAHKAN BARIS INI (SAMA SEPERTI RSUD) ===
+    simpanKeFirebase(namaPoin, skorPilihan, null, skorPilihan);
     return;
   }
 
