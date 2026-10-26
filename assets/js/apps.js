@@ -329,20 +329,22 @@ function aksiLogin() {
   const emailLengkap = document.getElementById("inputEmail").value.trim();
   const password = document.getElementById("inputPassword").value;
 
-  // Sediakan container otomatis di atas form jika belum ada
+  // Sediakan container otomatis yang posisinya mengambang di pojok kanan bawah
   let container = document.getElementById("alertLoginContainer");
   if (!container) {
     container = document.createElement("div");
     container.id = "alertLoginContainer";
-    const form =
-      document.querySelector("form") || document.getElementById("formLogin");
-    if (form) form.prepend(container);
-    else document.body.prepend(container);
+    container.style.position = "fixed";
+    container.style.bottom = "20px";
+    container.style.right = "20px";
+    container.style.zIndex = "9999";
+    container.style.maxWidth = "400px";
+    document.body.appendChild(container);
   }
 
   if (!emailLengkap || !password) {
     container.innerHTML = `
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <div class="alert alert-warning alert-dismissible fade show shadow-lg mb-0" role="alert">
         <i class="fa fa-exclamation-circle me-2"></i>Harap isi Email dan Password dengan lengkap!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
@@ -354,7 +356,7 @@ function aksiLogin() {
     .signInWithEmailAndPassword(emailLengkap, password)
     .then((userCredential) => {
       container.innerHTML = `
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show shadow-lg mb-0" role="alert">
           <i class="fa fa-check-circle me-2"></i>Berhasil masuk sebagai ${emailLengkap}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -362,7 +364,7 @@ function aksiLogin() {
     })
     .catch((error) => {
       container.innerHTML = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show shadow-lg mb-0" role="alert">
           <i class="fa fa-exclamation-circle me-2"></i>Login Gagal: ${error.message}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
