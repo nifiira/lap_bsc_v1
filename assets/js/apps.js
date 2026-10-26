@@ -589,7 +589,7 @@ function hitungSkorPkm(namaPoin) {
 
     tampilkanKotakNonRI(elSkor, namaPoin, skorNonRI);
     cekDanHitungTotalKelompok(namaPoin);
-    simpanKeFirebase(namaPoin, skorNonRI, skorRI);
+    simpanKeFirebase(namaPoin, skorPilihan);
     return;
   }
 
