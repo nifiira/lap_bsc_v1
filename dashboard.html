@@ -390,6 +390,61 @@
                           </div>
                         </div>
                       </div>
+
+                      <!-- === PANEL REKAP PREDIKAT SEMUA OPD (KHUSUS ADMIN) === -->
+                      <div
+                        class="row g-4 mt-2"
+                        id="sectionAdminRekapPredikat"
+                        style="display: none"
+                      >
+                        <div class="col-12">
+                          <div class="bg-white rounded shadow-sm p-4">
+                            <div
+                              class="d-flex align-items-center justify-content-between mb-3"
+                            >
+                              <h5 class="fw-bold text-dark mb-0">
+                                <i class="fa fa-users-cog text-primary me-2"></i
+                                >Rekapitulasi Predikat Kinerja Seluruh OPD &
+                                Puskesmas
+                              </h5>
+                              <button
+                                class="btn btn-sm btn-outline-primary"
+                                onclick="muatRekapPredikatAdmin()"
+                              >
+                                <i class="fa fa-sync-alt me-1"></i> Refresh Data
+                              </button>
+                            </div>
+                            <p class="text-muted small">
+                              Tabel berikut menampilkan ringkasan predikat
+                              kinerja dari seluruh instansi yang terdaftar di
+                              sistem.
+                            </p>
+
+                            <div class="table-responsive">
+                              <table
+                                class="table table-bordered table-striped align-middle mb-0"
+                              >
+                                <thead class="table-dark">
+                                  <tr>
+                                    <th style="width: 5%">No</th>
+                                    <th>Nama Instansi / OPD</th>
+                                    <th style="width: 15%">Periode (TW)</th>
+                                    <th style="width: 15%">Grand Total</th>
+                                    <th style="width: 20%">Predikat</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="tabelRekapPredikatAdmin">
+                                  <tr>
+                                    <td colspan="5" class="text-center">
+                                      Memuat data rekapitulasi...
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
