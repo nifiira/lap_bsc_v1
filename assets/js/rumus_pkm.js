@@ -52,12 +52,12 @@ const aturanPenilaian = {
     },
     "211_C": {
       kondisiSkor: [
-        { batas: 0.8499, nilai: 0.0 }, // Mewakili syarat < 0.85
-        { batas: 0.8999, nilai: 0.4 }, // Mewakili syarat < 0.9
-        { batas: 0.9499, nilai: 0.8 }, // Mewakili syarat < 0.95
-        { batas: 0.9999, nilai: 1.2 }, // Mewakili syarat < 1.0
-        { batas: 1.0999, nilai: 1.6 }, // Mewakili syarat < 1.1
-        { batas: Infinity, nilai: 2.0 }, // Mewakili syarat >= 1.1
+        { batas: 0.85, nilai: 0.0 }, // Untuk PL < 0,85
+        { batas: 0.9, nilai: 0.4 }, // Untuk 0,85 <= PL < 0,90
+        { batas: 0.95, nilai: 0.8 }, // Untuk 0,90 <= PL < 0,95
+        { batas: 1.0, nilai: 1.0 }, // Untuk 0,95 <= PL < 1,00
+        { batas: 1.1, nilai: 1.5 }, // Untuk 1,00 <= PL < 1,10
+        { batas: Infinity, nilai: 2.0 }, // Untuk PL >= 1,10
       ],
     },
     "211_D": {
@@ -615,22 +615,17 @@ const aturanPenilaian = {
     },
     "211_B": {
       kondisiSkor: [
-        { batas: 0.8499, nilai: 0.0 }, // Mewakili syarat < 0.85
-        { batas: 0.8999, nilai: 0.4 }, // Mewakili syarat < 0.9
-        { batas: 0.9499, nilai: 0.8 }, // Mewakili syarat < 0.95
-        { batas: 0.9999, nilai: 1.2 }, // Mewakili syarat < 1.0
-        { batas: 1.0999, nilai: 1.6 }, // Mewakili syarat < 1.1
-        { batas: Infinity, nilai: 2.0 }, // Mewakili syarat >= 1.1
+        { batas: Infinity, nilai: 0.0 }, // Seluruh kategori bernilai 0 untuk Non Inap
       ],
     },
     "211_C": {
       kondisiSkor: [
-        { batas: 0.8499, nilai: 0.0 }, // Mewakili syarat < 0.85
-        { batas: 0.8999, nilai: 0.4 }, // Mewakili syarat < 0.9
-        { batas: 0.9499, nilai: 0.8 }, // Mewakili syarat < 0.95
-        { batas: 0.9999, nilai: 1.2 }, // Mewakili syarat < 1.0
-        { batas: 1.0999, nilai: 1.6 }, // Mewakili syarat < 1.1
-        { batas: Infinity, nilai: 2.0 }, // Mewakili syarat >= 1.1
+        { batas: 0.85, nilai: 0.0 }, // Untuk PL < 0,85
+        { batas: 0.9, nilai: 0.5 }, // Untuk 0,85 <= PL < 0,90
+        { batas: 0.95, nilai: 1.0 }, // Untuk 0,90 <= PL < 0,95
+        { batas: 1.0, nilai: 1.5 }, // Untuk 0,95 <= PL < 1,00
+        { batas: 1.1, nilai: 2.0 }, // Untuk 1,00 <= PL < 1,10
+        { batas: Infinity, nilai: 3.0 }, // Untuk PL >= 1,10
       ],
     },
     "211_D": {
