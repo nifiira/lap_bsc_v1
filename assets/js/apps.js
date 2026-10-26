@@ -185,6 +185,9 @@ function aturTampilanBerdasarkanRole(role) {
     if (wrapperOpdAdmin) {
       wrapperOpdAdmin.style.display = "block";
     }
+    if (rekappredikat) {
+      rekappredikat.style.display = "block";
+    }
     if (menuPkm) {
       menuPkm.style.display = "block";
       menuPkm.classList.add("tampil-menu");
