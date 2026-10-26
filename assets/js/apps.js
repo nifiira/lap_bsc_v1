@@ -759,6 +759,10 @@ function cekDanHitungTotalKelompok(namaPoin) {
   if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("111_B")) {
     if (typeof hitungTotalPoin111BPkm === "function") hitungTotalPoin111BPkm();
   }
+  // Panggil Skor Total 111_B
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("111_C")) {
+    if (typeof hitungTotalPoin111CPkm === "function") hitungTotalPoin111CPkm();
+  }
 
   // 2. Penanganan kelompok utama berdasarkan awalan
   if (namaPoin.startsWith("111_")) {
@@ -769,6 +773,8 @@ function cekDanHitungTotalKelompok(namaPoin) {
         hitungTotalPoin111APkm();
       if (typeof hitungTotalPoin111BPkm === "function")
         hitungTotalPoin111BPkm();
+      if (typeof hitungTotalPoin111BPkm === "function")
+        hitungTotalPoin111CPkm();
       hitungTotalPoin11(); // Akumulasi ke total level 11
     } else {
       // Jalankan murni rumus RSUD tanpa terganggu PKM
