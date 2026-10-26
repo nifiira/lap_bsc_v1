@@ -201,123 +201,174 @@
                     <div class="row mb-4">
                       <div class="col-12">
                         <div class="p-4 bg-white rounded shadow-sm">
-                          <div style="flex: 1; min-width: 280px">
-                            <label
-                              for="pilihOpdAdmin"
-                              class="form-label fw-bold text-dark mb-2"
-                              style="font-size: 0.9rem"
-                            >
-                              <i class="fa fa-hospital text-danger me-2"></i
-                              >Pilih Instansi :
-                            </label>
-                            <select
-                              name=""
-                              id=""
-                              class="form-select bg-light fw-bold text-dark shadow-none"
-                            >
-                              <option value="">-- Pilih Instansi --</option>
-                              <option value="rsud_bangil">RSUD Bangil</option>
-                              <option value="rsud_grati">RSUD Grati</option>
-                              <option value="pkm_purwodadi">
-                                UOBF PUSKESMAS PURWODADI
-                              </option>
-                              <option value="pkm_nongkojajar">
-                                UOBF PUSKESMAS NONGKOJAJAR
-                              </option>
-                              <option value="pkm_sumberpitu">
-                                UOBF PUSKESMAS SUMBERPITU
-                              </option>
-                              <option value="pkm_puspo">
-                                UOBF PUSKESMAS PUSPO
-                              </option>
-                              <option value="pkm_tosari">
-                                UOBF PUSKESMAS TOSARI
-                              </option>
-                              <option value="pkm_lumbang">
-                                UOBF PUSKESMAS LUMBANG
-                              </option>
-                              <option value="pkm_pasrepan">
-                                UOBF PUSKESMAS PASREPAN
-                              </option>
-                              <option value="pkm_kejayan">
-                                UOBF PUSKESMAS KEJAYAN
-                              </option>
-                              <option value="pkm_ambal_ambil">
-                                UOBF PUSKESMAS AMBAL-AMBIL
-                              </option>
-                              <option value="pkm_wonorejo">
-                                UOBF PUSKESMAS WONOREJO
-                              </option>
-                              <option value="pkm_purwosari">
-                                UOBF PUSKESMAS PURWOSARI
-                              </option>
-                              <option value="pkm_karangrejo">
-                                UOBF PUSKESMAS KARANGREJO
-                              </option>
-                              <option value="pkm_prigen">
-                                UOBF PUSKESMAS PRIGEN
-                              </option>
-                              <option value="pkm_bulukandang">
-                                UOBF PUSKESMAS BULUKANDANG
-                              </option>
-                              <option value="pkm_sukorejo">
-                                UOBF PUSKESMAS SUKOREJO
-                              </option>
-                              <option value="pkm_pandaan">
-                                UOBF PUSKESMAS PANDAAN
-                              </option>
-                              <option value="pkm_sebani">
-                                UOBF PUSKESMAS SEBANI
-                              </option>
-                              <option value="pkm_gempol">
-                                UOBF PUSKESMAS GEMPOL
-                              </option>
-                              <option value="pkm_kepulungan">
-                                UOBF PUSKESMAS KEPULUNGAN
-                              </option>
-                              <option value="pkm_beji">
-                                UOBF PUSKESMAS BEJI
-                              </option>
-                              <option value="pkm_bangil">
-                                UOBF PUSKESMAS BANGIL
-                              </option>
-                              <option value="pkm_raci">
-                                UOBF PUSKESMAS RACI
-                              </option>
-                              <option value="pkm_rembang">
-                                UOBF PUSKESMAS REMBANG
-                              </option>
-                              <option value="pkm_kraton">
-                                UOBF PUSKESMAS KRATON
-                              </option>
-                              <option value="pkm_ngempit">
-                                UOBF PUSKESMAS NGEMPIT
-                              </option>
-                              <option value="pkm_pohjentrek">
-                                UOBF PUSKESMAS POHJENTREK
-                              </option>
-                              <option value="pkm_gondangwetan">
-                                UOBF PUSKESMAS GONDANGWETAN
-                              </option>
-                              <option value="pkm_rejoso">
-                                UOBF PUSKESMAS REJOSO
-                              </option>
-                              <option value="pkm_winongan">
-                                UOBF PUSKESMAS WINONGAN
-                              </option>
-                              <option value="pkm_grati">
-                                UOBF PUSKESMAS GRATI
-                              </option>
-                              <option value="pkm_kedawungwetan">
-                                UOBF PUSKESMAS KEDAWUNGWETAN
-                              </option>
-                              <option value="pkm_lekok">
-                                UOBF PUSKESMAS LEKOK
-                              </option>
-                              <option value="pkm_nguling">
-                                UOBF PUSKESMAS NGULING
-                              </option>
-                            </select>
+                          <div
+                            class="d-flex flex-wrap align-items-center justify-content-between gap-3"
+                          >
+                            <div style="flex: 1; min-width: 280px">
+                              <label
+                                for="pilihTribulan"
+                                class="form-label fw-bold text-dark mb-2"
+                                style="font-size: 0.9rem"
+                              >
+                                <i
+                                  class="fa fa-calendar-alt text-primary me-2"
+                                ></i
+                                >Periode Laporan Kinerja:
+                              </label>
+                              <div class="input-group">
+                                <span
+                                  class="input-group-text bg-light border-end-0 text-primary ps-3"
+                                  style="
+                                    border-top-left-radius: 8px;
+                                    border-bottom-left-radius: 8px;
+                                  "
+                                >
+                                  <i class="fa fa-clock"></i>
+                                </span>
+                                <select
+                                  id="pilihTribulan"
+                                  onchange="gantiTribulan()"
+                                  class="form-select border-start-0 bg-light fw-bold text-dark shadow-none"
+                                  style="
+                                    cursor: pointer;
+                                    border-top-right-radius: 8px;
+                                    border-bottom-right-radius: 8px;
+                                  "
+                                >
+                                  <option value="TW1-2026">
+                                    Triwulan 1 (2026)
+                                  </option>
+                                  <option value="TW2-2026">
+                                    Triwulan 2 (2026)
+                                  </option>
+                                  <option value="TW3-2026">
+                                    Triwulan 3 (2026)
+                                  </option>
+                                  <option value="TW4-2026">
+                                    Triwulan 4 (2026)
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div style="flex: 1; min-width: 280px">
+                              <label
+                                for="pilihOpdAdmin"
+                                class="form-label fw-bold text-dark mb-2"
+                                style="font-size: 0.9rem"
+                              >
+                                <i class="fa fa-hospital text-danger me-2"></i
+                                >Pilih Instansi :
+                              </label>
+                              <select
+                                name=""
+                                id=""
+                                class="form-select bg-light fw-bold text-dark shadow-none"
+                                onchange="gantiOpdAdmin()"
+                              >
+                                <option value="">-- Pilih Instansi --</option>
+                                <option value="rsud_bangil">RSUD Bangil</option>
+                                <option value="rsud_grati">RSUD Grati</option>
+                                <option value="pkm_purwodadi">
+                                  UOBF PUSKESMAS PURWODADI
+                                </option>
+                                <option value="pkm_nongkojajar">
+                                  UOBF PUSKESMAS NONGKOJAJAR
+                                </option>
+                                <option value="pkm_sumberpitu">
+                                  UOBF PUSKESMAS SUMBERPITU
+                                </option>
+                                <option value="pkm_puspo">
+                                  UOBF PUSKESMAS PUSPO
+                                </option>
+                                <option value="pkm_tosari">
+                                  UOBF PUSKESMAS TOSARI
+                                </option>
+                                <option value="pkm_lumbang">
+                                  UOBF PUSKESMAS LUMBANG
+                                </option>
+                                <option value="pkm_pasrepan">
+                                  UOBF PUSKESMAS PASREPAN
+                                </option>
+                                <option value="pkm_kejayan">
+                                  UOBF PUSKESMAS KEJAYAN
+                                </option>
+                                <option value="pkm_ambal_ambil">
+                                  UOBF PUSKESMAS AMBAL-AMBIL
+                                </option>
+                                <option value="pkm_wonorejo">
+                                  UOBF PUSKESMAS WONOREJO
+                                </option>
+                                <option value="pkm_purwosari">
+                                  UOBF PUSKESMAS PURWOSARI
+                                </option>
+                                <option value="pkm_karangrejo">
+                                  UOBF PUSKESMAS KARANGREJO
+                                </option>
+                                <option value="pkm_prigen">
+                                  UOBF PUSKESMAS PRIGEN
+                                </option>
+                                <option value="pkm_bulukandang">
+                                  UOBF PUSKESMAS BULUKANDANG
+                                </option>
+                                <option value="pkm_sukorejo">
+                                  UOBF PUSKESMAS SUKOREJO
+                                </option>
+                                <option value="pkm_pandaan">
+                                  UOBF PUSKESMAS PANDAAN
+                                </option>
+                                <option value="pkm_sebani">
+                                  UOBF PUSKESMAS SEBANI
+                                </option>
+                                <option value="pkm_gempol">
+                                  UOBF PUSKESMAS GEMPOL
+                                </option>
+                                <option value="pkm_kepulungan">
+                                  UOBF PUSKESMAS KEPULUNGAN
+                                </option>
+                                <option value="pkm_beji">
+                                  UOBF PUSKESMAS BEJI
+                                </option>
+                                <option value="pkm_bangil">
+                                  UOBF PUSKESMAS BANGIL
+                                </option>
+                                <option value="pkm_raci">
+                                  UOBF PUSKESMAS RACI
+                                </option>
+                                <option value="pkm_rembang">
+                                  UOBF PUSKESMAS REMBANG
+                                </option>
+                                <option value="pkm_kraton">
+                                  UOBF PUSKESMAS KRATON
+                                </option>
+                                <option value="pkm_ngempit">
+                                  UOBF PUSKESMAS NGEMPIT
+                                </option>
+                                <option value="pkm_pohjentrek">
+                                  UOBF PUSKESMAS POHJENTREK
+                                </option>
+                                <option value="pkm_gondangwetan">
+                                  UOBF PUSKESMAS GONDANGWETAN
+                                </option>
+                                <option value="pkm_rejoso">
+                                  UOBF PUSKESMAS REJOSO
+                                </option>
+                                <option value="pkm_winongan">
+                                  UOBF PUSKESMAS WINONGAN
+                                </option>
+                                <option value="pkm_grati">
+                                  UOBF PUSKESMAS GRATI
+                                </option>
+                                <option value="pkm_kedawungwetan">
+                                  UOBF PUSKESMAS KEDAWUNGWETAN
+                                </option>
+                                <option value="pkm_lekok">
+                                  UOBF PUSKESMAS LEKOK
+                                </option>
+                                <option value="pkm_nguling">
+                                  UOBF PUSKESMAS NGULING
+                                </option>
+                              </select>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -362,47 +413,6 @@
                             class="text-success bg-light-success p-3 rounded-circle"
                           >
                             <i class="fa fa-award fa-2x"></i>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Kartu Periode Aktif -->
-                      <div class="col-sm-6 col-xl-3">
-                        <div
-                          class="bg-white rounded shadow-sm p-4 d-flex align-items-center justify-content-between"
-                        >
-                          <div>
-                            <p class="text-muted mb-1">Periode Aktif</p>
-                            <h5
-                              class="fw-bold text-dark mb-0"
-                              id="infoTribulanAktif"
-                            >
-                              Triwulan 1 - 2026
-                            </h5>
-                          </div>
-                          <div
-                            class="text-warning bg-light-warning p-3 rounded-circle"
-                          >
-                            <i class="fa fa-calendar-alt fa-2x"></i>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Kartu Status Akses -->
-                      <div class="col-sm-6 col-xl-3">
-                        <div
-                          class="bg-white rounded shadow-sm p-4 d-flex align-items-center justify-content-between"
-                        >
-                          <div>
-                            <p class="text-muted mb-1">Status Sistem</p>
-                            <h5 class="fw-bold text-info mb-0">
-                              Online / Aktif
-                            </h5>
-                          </div>
-                          <div
-                            class="text-info bg-light-info p-3 rounded-circle"
-                          >
-                            <i class="fa fa-shield-alt fa-2x"></i>
                           </div>
                         </div>
                       </div>
