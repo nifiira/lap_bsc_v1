@@ -88,12 +88,13 @@ const aturanPenilaian = {
     },
     "212_C": {
       kondisiSkor: [
-        { batas: 0.01, nilai: 2.0 }, // Mewakili syarat <= 0.01
-        { batas: 0.02, nilai: 1.5 }, // Mewakili syarat <= 0.02
-        { batas: 0.03, nilai: 1.0 }, // Mewakili syarat <= 0.03
-        { batas: Infinity, nilai: 0.5 }, // Mewakili syarat > 0.03
+        { batas: 0.1, nilai: 0.0 }, // Untuk KBBL < 0,10[cite: 9]
+        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= KBBL < 0,50[cite: 9]
+        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= KBBL < 0,75[cite: 9]
+        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= KBBL <= 0,99[cite: 9]
+        { batas: Infinity, nilai: 2.0 }, // Untuk KBBL = 1[cite: 9]
       ],
-    },
+    }, //212 C sudah dirumus
     "212_D": {
       kondisiSkor: [
         { batas: 0.01, nilai: 2.0 }, // Mewakili syarat <= 0.01
@@ -601,10 +602,11 @@ const aturanPenilaian = {
     },
     "212_C": {
       kondisiSkor: [
-        { batas: 0.01, nilai: 2.0 }, // Mewakili syarat <= 0.01
-        { batas: 0.02, nilai: 1.5 }, // Mewakili syarat <= 0.02
-        { batas: 0.03, nilai: 1.0 }, // Mewakili syarat <= 0.03
-        { batas: Infinity, nilai: 0.5 }, // Mewakili syarat > 0.03
+        { batas: 0.1, nilai: 0.0 }, // Untuk KBBL < 0,10[cite: 9]
+        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= KBBL < 0,50[cite: 9]
+        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= KBBL < 0,75[cite: 9]
+        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= KBBL <= 0,99[cite: 9]
+        { batas: Infinity, nilai: 2.0 }, // Untuk KBBL = 1[cite: 9]
       ],
     },
     "212_D": {
