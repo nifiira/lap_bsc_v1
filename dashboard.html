@@ -178,7 +178,221 @@
           <div class="row g-4 justify-content-center">
             <div class="col-sm-12 col-xl-12">
               <div class="bg-light rounded h-100">
-                <div class="py-1">lkjasdkjlasldkjasd</div>
+                <div class="py-1">
+                  <!-- === KONTEN DASHBOARD UTAMA === -->
+                  <div class="p-4">
+                    <!-- 1. PANEL SAMBUTAN & INFORMASI INSTANSI -->
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <div
+                          class="p-4 bg-white rounded shadow-sm border-start border-primary border-4"
+                        >
+                          <h4 class="fw-bold text-dark mb-1">
+                            Selamat Datang,
+                            <span class="namaUser text-primary">Memuat...</span>
+                          </h4>
+                          <p class="text-muted mb-0">
+                            Sistem Evaluasi Kinerja BLUD (RSUD & Puskesmas)
+                            Kabupaten Pasuruan.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 2. KARTU RINGKASAN STATISTIK (SUMMARY CARDS) -->
+                    <div class="row g-4 mb-4">
+                      <!-- Kartu Grand Total -->
+                      <div class="col-sm-6 col-xl-3">
+                        <div
+                          class="bg-white rounded shadow-sm p-4 d-flex align-items-center justify-content-between"
+                        >
+                          <div>
+                            <p class="text-muted mb-1">Grand Total Skor</p>
+                            <h3 class="fw-bold text-dark mb-0" id="grandTotal">
+                              0.00
+                            </h3>
+                          </div>
+                          <div
+                            class="text-primary bg-light-primary p-3 rounded-circle"
+                          >
+                            <i class="fa fa-chart-line fa-2x"></i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Kartu Predikat -->
+                      <div class="col-sm-6 col-xl-3">
+                        <div
+                          class="bg-white rounded shadow-sm p-4 d-flex align-items-center justify-content-between"
+                        >
+                          <div>
+                            <p class="text-muted mb-1">Predikat Kinerja</p>
+                            <h3
+                              class="fw-bold text-success mb-0"
+                              id="predikatGrandTotal"
+                            >
+                              -
+                            </h3>
+                          </div>
+                          <div
+                            class="text-success bg-light-success p-3 rounded-circle"
+                          >
+                            <i class="fa fa-award fa-2x"></i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Kartu Periode Aktif -->
+                      <div class="col-sm-6 col-xl-3">
+                        <div
+                          class="bg-white rounded shadow-sm p-4 d-flex align-items-center justify-content-between"
+                        >
+                          <div>
+                            <p class="text-muted mb-1">Periode Aktif</p>
+                            <h5
+                              class="fw-bold text-dark mb-0"
+                              id="infoTribulanAktif"
+                            >
+                              Triwulan 1 - 2026
+                            </h5>
+                          </div>
+                          <div
+                            class="text-warning bg-light-warning p-3 rounded-circle"
+                          >
+                            <i class="fa fa-calendar-alt fa-2x"></i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Kartu Status Akses -->
+                      <div class="col-sm-6 col-xl-3">
+                        <div
+                          class="bg-white rounded shadow-sm p-4 d-flex align-items-center justify-content-between"
+                        >
+                          <div>
+                            <p class="text-muted mb-1">Status Sistem</p>
+                            <h5 class="fw-bold text-info mb-0">
+                              Online / Aktif
+                            </h5>
+                          </div>
+                          <div
+                            class="text-info bg-light-info p-3 rounded-circle"
+                          >
+                            <i class="fa fa-shield-alt fa-2x"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 3. TOMBOL PINTASAN & TABEL ACUAN PREDIKAT -->
+                    <div class="row g-4">
+                      <!-- Tombol Pintasan Cepat -->
+                      <div class="col-xl-6">
+                        <div class="bg-white rounded shadow-sm p-4 h-100">
+                          <h5 class="fw-bold text-dark mb-3">
+                            <i class="fa fa-bolt text-warning me-2"></i>Pintasan
+                            Cepat
+                          </h5>
+                          <p class="text-muted small mb-4">
+                            Gunakan tombol di bawah untuk akses cepat ke menu
+                            utama pengisian dan cetak laporan.
+                          </p>
+
+                          <div class="d-grid gap-3">
+                            <a
+                              href="penilaian-pkm.html"
+                              id="menuPenilaianPkm"
+                              class="btn btn-outline-primary py-2 text-start"
+                            >
+                              <i class="fa fa-file-alt me-2"></i> Buka Form
+                              Penilaian BLUD Puskesmas
+                            </a>
+                            <a
+                              href="penilaian-rsud.html"
+                              id="menuPenilaianRsud"
+                              class="btn btn-outline-success py-2 text-start"
+                              style="display: none"
+                            >
+                              <i class="fa fa-hospital me-2"></i> Buka Form
+                              Penilaian BLUD RSUD
+                            </a>
+                            <a
+                              href="laporan.html"
+                              class="btn btn-outline-secondary py-2 text-start"
+                            >
+                              <i class="fa fa-print me-2"></i> Lihat
+                              Rekapitulasi & Cetak Laporan
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Tabel Acuan Rentang Predikat -->
+                      <div class="col-xl-6">
+                        <div class="bg-white rounded shadow-sm p-4 h-100">
+                          <h5 class="fw-bold text-dark mb-3">
+                            <i class="fa fa-info-circle text-info me-2"></i
+                            >Acuan Rentang Predikat Kinerja
+                          </h5>
+                          <div class="table-responsive">
+                            <table
+                              class="table table-bordered table-sm align-middle mb-0"
+                            >
+                              <thead class="table-light">
+                                <tr>
+                                  <th>Rentang Skor</th>
+                                  <th>Predikat Kinerja</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>90.00 - 100</td>
+                                  <td>
+                                    <span class="badge bg-success"
+                                      >AA (Memuaskan)</span
+                                    >
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>80.00 - 89.99</td>
+                                  <td>
+                                    <span class="badge bg-primary"
+                                      >A (Sangat Baik)</span
+                                    >
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>70.00 - 79.99</td>
+                                  <td>
+                                    <span class="badge bg-info text-dark"
+                                      >BB (Baik)</span
+                                    >
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>60.00 - 69.99</td>
+                                  <td>
+                                    <span class="badge bg-warning text-dark"
+                                      >B (Cukup)</span
+                                    >
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>&lt; 60.00</td>
+                                  <td>
+                                    <span class="badge bg-danger"
+                                      >C (Kurang)</span
+                                    >
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
