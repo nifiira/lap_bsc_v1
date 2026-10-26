@@ -293,6 +293,7 @@ async function gantiOpdAdmin() {
 
     // Gunakan fungsi yang benar tanpa kata 'Async' di belakangnya
     muatDataDariFirebase();
+    muatRingkasanDashboard();
   } catch (error) {
     console.error("Gagal memuat data instansi untuk admin:", error);
     alert("Terjadi kesalahan saat mengambil data: " + error.message);
@@ -322,6 +323,7 @@ function gantiTribulan() {
     .forEach((el) => (el.innerText = "0.00"));
 
   muatDataDariFirebase();
+  muatRingkasanDashboard();
 }
 
 function aksiLogin() {
@@ -1813,120 +1815,99 @@ async function hapusDataAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
 // ========================================================
 // FUNCTION MENGATUR DASHBOARD
 // ========================================================
-async function muatRingkasanDashboardAdmin() {
-  const selectOpd = document.getElementById("pilihOpdAdmin");
-  const selectTribulan = document.getElementById("pilihTribulan");
+async function muatRingkasanDashboard() {
   const elGrandTotal = document.getElementById("grandTotal");
   const elPredikat = document.getElementById("predikatGrandTotal");
+  if (!elGrandTotal || !elPredikat) return;
 
-  if (!selectOpd || !selectTribulan) return;
+  // === JIKA YANG LOGIN ADALAH ADMIN ===
+  if (currentRole === "admin") {
+    const selectOpd = document.getElementById("pilihOpdAdmin");
+    const selectTribulan = document.getElementById("pilihTribulan");
+    if (!selectOpd || !selectTribulan) return;
 
-  const opdTerpilih = selectOpd.value;
-  const triwulanTerpilih = selectTribulan.value;
+    const opdTerpilih = selectOpd.value;
+    const triwulanTerpilih = selectTribulan.value;
 
-  // Jika belum memilih instansi, set ke default 0
-  if (!opdTerpilih) {
-    if (elGrandTotal) elGrandTotal.innerText = "0.00";
-    if (elPredikat) elPredikat.innerText = "-";
-    return;
-  }
-
-  let namaKoleksi = "";
-  if (opdTerpilih.startsWith("rsud_")) {
-    namaKoleksi = "evaluasi_kinerja_rsud";
-  } else if (opdTerpilih.startsWith("pkm_")) {
-    namaKoleksi = "evaluasi_kinerja_pkm";
-  }
-
-  try {
-    // Cari UID user berdasarkan OPD yang dipilih
-    const userSnapshot = await db
-      .collection("users")
-      .where("opd", "==", opdTerpilih)
-      .get();
-    if (userSnapshot.empty) {
-      if (elGrandTotal) elGrandTotal.innerText = "0.00";
-      if (elPredikat) elPredikat.innerText = "-";
+    if (!opdTerpilih) {
+      elGrandTotal.innerText = "0.00";
+      elPredikat.innerText = "-";
       return;
     }
 
-    const targetUid = userSnapshot.docs[0].data().uid;
-    let docId = `${targetUid}_${triwulanTerpilih}`;
+    let namaKoleksi = opdTerpilih.startsWith("rsud_")
+      ? "evaluasi_kinerja_rsud"
+      : "evaluasi_kinerja_pkm";
 
-    // Jika Puskesmas, secara default ambil dokumen rawat inap atau gabungan
-    if (namaKoleksi === "evaluasi_kinerja_pkm") {
-      docId += "_rawatinap";
-    }
-
-    const docSnap = await db.collection(namaKoleksi).doc(docId).get();
-
-    if (docSnap.exists) {
-      const data = docSnap.data();
-      let totalVal = parseFloat(data.grand_total) || 0;
-
-      // Hitung manual jika grand_total belum tersimpan
-      if (totalVal === 0) {
-        const t1 = parseFloat(data.skor_11_Total) || 0;
-        const t2 = parseFloat(data.skor_21_Total) || 0;
-        const t3 = parseFloat(data.skor_31_Total) || 0;
-        const t4 = parseFloat(data.skor_41_Total) || 0;
-        totalVal = t1 + t2 + t3 + t4;
+    try {
+      const userSnapshot = await db
+        .collection("users")
+        .where("opd", "==", opdTerpilih)
+        .get();
+      if (userSnapshot.empty) {
+        elGrandTotal.innerText = "0.00";
+        elPredikat.innerText = "-";
+        return;
       }
 
-      const predikatHasil =
-        data.predikat && data.predikat !== "-"
-          ? data.predikat
-          : tentukanPredikat(totalVal);
-
-      if (elGrandTotal) elGrandTotal.innerText = totalVal.toFixed(2);
-      if (elPredikat) elPredikat.innerText = predikatHasil;
-    } else {
-      // Jika data belum diisi oleh instansi tersebut pada periode ini
-      if (elGrandTotal) elGrandTotal.innerText = "0.00";
-      if (elPredikat) elPredikat.innerText = "- (Belum Ada Data)";
-    }
-  } catch (error) {
-    console.error("Gagal memuat ringkasan dashboard:", error);
-    if (elGrandTotal) elGrandTotal.innerText = "0.00";
-    if (elPredikat) elPredikat.innerText = "Error";
-  }
-}
-
-async function muatRingkasanDashboardUser() {
-  if (!currentUser || !formRef) return;
-
-  const elGrandTotal = document.getElementById("grandTotal");
-  const elPredikat = document.getElementById("predikatGrandTotal");
-
-  try {
-    const docSnap = await formRef.get();
-
-    if (docSnap.exists) {
-      const data = docSnap.data();
-      let totalVal = parseFloat(data.grand_total) || 0;
-
-      if (totalVal === 0) {
-        const t1 = parseFloat(data.skor_11_Total) || 0;
-        const t2 = parseFloat(data.skor_21_Total) || 0;
-        const t3 = parseFloat(data.skor_31_Total) || 0;
-        const t4 = parseFloat(data.skor_41_Total) || 0;
-        totalVal = t1 + t2 + t3 + t4;
+      const targetUid = userSnapshot.docs[0].data().uid;
+      let docId = `${targetUid}_${triwulanTerpilih}`;
+      if (namaKoleksi === "evaluasi_kinerja_pkm") {
+        docId += "_rawatinap";
       }
 
-      const predikatHasil =
-        data.predikat && data.predikat !== "-"
-          ? data.predikat
-          : tentukanPredikat(totalVal);
-
-      if (elGrandTotal) elGrandTotal.innerText = totalVal.toFixed(2);
-      if (elPredikat) elPredikat.innerText = predikatHasil;
-    } else {
-      if (elGrandTotal) elGrandTotal.innerText = "0.00";
-      if (elPredikat) elPredikat.innerText = "- (Belum Ada Data)";
+      const docSnap = await db.collection(namaKoleksi).doc(docId).get();
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        let totalVal = parseFloat(data.grand_total) || 0;
+        if (totalVal === 0) {
+          const t1 = parseFloat(data.skor_11_Total) || 0;
+          const t2 = parseFloat(data.skor_21_Total) || 0;
+          const t3 = parseFloat(data.skor_31_Total) || 0;
+          const t4 = parseFloat(data.skor_41_Total) || 0;
+          totalVal = t1 + t2 + t3 + t4;
+        }
+        const predikatHasil =
+          data.predikat && data.predikat !== "-"
+            ? data.predikat
+            : tentukanPredikat(totalVal);
+        elGrandTotal.innerText = totalVal.toFixed(2);
+        elPredikat.innerText = predikatHasil;
+      } else {
+        elGrandTotal.innerText = "0.00";
+        elPredikat.innerText = "- (Belum Ada Data)";
+      }
+    } catch (error) {
+      console.error("Gagal memuat ringkasan admin:", error);
     }
-  } catch (error) {
-    console.error("Gagal memuat ringkasan user:", error);
-    if (elGrandTotal) elGrandTotal.innerText = "0.00";
-    if (elPredikat) elPredikat.innerText = "Error";
+  } else {
+    // === JIKA YANG LOGIN ADALAH USER (RSUD / PKM) ===
+    if (!currentUser || !formRef) return;
+
+    try {
+      const docSnap = await formRef.get();
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        let totalVal = parseFloat(data.grand_total) || 0;
+        if (totalVal === 0) {
+          const t1 = parseFloat(data.skor_11_Total) || 0;
+          const t2 = parseFloat(data.skor_21_Total) || 0;
+          const t3 = parseFloat(data.skor_31_Total) || 0;
+          const t4 = parseFloat(data.skor_41_Total) || 0;
+          totalVal = t1 + t2 + t3 + t4;
+        }
+        const predikatHasil =
+          data.predikat && data.predikat !== "-"
+            ? data.predikat
+            : tentukanPredikat(totalVal);
+        elGrandTotal.innerText = totalVal.toFixed(2);
+        elPredikat.innerText = predikatHasil;
+      } else {
+        elGrandTotal.innerText = "0.00";
+        elPredikat.innerText = "- (Belum Ada Data)";
+      }
+    } catch (error) {
+      console.error("Gagal memuat ringkasan user:", error);
+    }
   }
 }
