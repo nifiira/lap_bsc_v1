@@ -227,7 +227,10 @@
                                 </span>
                                 <select
                                   id="pilihTribulan"
-                                  onchange="gantiTribulan()"
+                                  onchange="
+                                    gantiTribulan();
+                                    muatRingkasanDashboard();
+                                  "
                                   class="form-select border-start-0 bg-light fw-bold text-dark shadow-none"
                                   style="
                                     cursor: pointer;
@@ -266,7 +269,10 @@
                                 name=""
                                 id="pilihOpdAdmin"
                                 class="form-select bg-light fw-bold text-dark shadow-none"
-                                onchange="gantiOpdAdmin()"
+                                onchange="
+                                  gantiOpdAdmin();
+                                  muatRingkasanDashboard();
+                                "
                               >
                                 <option value="">-- Pilih Instansi --</option>
                                 <option value="rsud_bangil">RSUD Bangil</option>
