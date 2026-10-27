@@ -740,5 +740,59 @@ const aturanPenilaian = {
         { batas: Infinity, nilai: 2.0 },
       ],
     },
+    "212_K": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
+      ],
+    },
+    "212_L": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
+      ],
+    },
+    "212_M": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
+      ],
+    },
+    "212_N": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
+      ],
+    },
+    "212_P": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.25 },
+        { batas: 0.75, nilai: 0.5 },
+        { batas: 1.0, nilai: 0.75 },
+        { batas: Infinity, nilai: 1.0 },
+      ],
+    },
+    "212_Q": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.25 },
+        { batas: 0.75, nilai: 0.5 },
+        { batas: 1.0, nilai: 0.75 },
+        { batas: Infinity, nilai: 1.0 },
+      ],
+    },
   },
 };
