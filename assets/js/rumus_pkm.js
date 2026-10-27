@@ -251,10 +251,10 @@ const aturanPenilaian = {
     },
     "311_D": {
       kondisiSkor: [
-        { batas: 14.9999, nilai: 1.0 }, // Mewakili < 15
-        { batas: 19.9999, nilai: 0.8 }, // Mewakili < 20
-        { batas: 29.9999, nilai: 0.6 }, // Mewakili < 30
-        { batas: Infinity, nilai: 0.4 }, // Mewakili >= 30
+        { batas: 3.0, nilai: 2.0 }, // Untuk WTL <= 3[cite: 15]
+        { batas: 4.0, nilai: 1.5 }, // Untuk 3 < WTL <= 4[cite: 15]
+        { batas: 5.0, nilai: 1.0 }, // Untuk 4 < WTL <= 5[cite: 15]
+        { batas: Infinity, nilai: 0.5 }, // Untuk WTL > 5[cite: 15]
       ],
     },
     "311_E": {
