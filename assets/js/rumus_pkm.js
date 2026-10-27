@@ -323,7 +323,7 @@ const aturanPenilaian = {
         { batas: Infinity, nilai: 0.25 }, // Mewakili > 0.65
       ],
     },
-    "312_C": {
+    "312_C1": {
       kondisiSkor: [
         { batas: 0.2, nilai: 1.0 }, // Mewakili <= 0.2
         { batas: 0.5, nilai: 0.75 }, // Mewakili <= 0.5
@@ -331,43 +331,12 @@ const aturanPenilaian = {
         { batas: Infinity, nilai: 0.25 }, // Mewakili > 1.0
       ],
     },
-    "312_D": {
+    "312_C2": {
       kondisiSkor: [
         { batas: 0.0149, nilai: 0.5 }, // Mewakili < 0.015
         { batas: 0.05, nilai: 0.4 }, // Mewakili <= 0.05
         { batas: 0.1, nilai: 0.3 }, // Mewakili <= 0.1
         { batas: Infinity, nilai: 0.2 }, // Mewakili > 0.1
-      ],
-    },
-    "312_E": {
-      kondisiSkor: [
-        { batas: 0.0149, nilai: 0.5 }, // Mewakili < 0.015
-        { batas: 0.05, nilai: 0.4 }, // Mewakili <= 0.05
-        { batas: 0.1, nilai: 0.3 }, // Mewakili <= 0.1
-        { batas: Infinity, nilai: 0.2 }, // Mewakili > 0.1
-      ],
-    },
-    "312_F": {
-      kondisiSkor: [
-        { batas: 0.0149, nilai: 0.5 }, // Mewakili < 0.015
-        { batas: 0.05, nilai: 0.25 }, // Mewakili <= 0.05
-        { batas: 0.1, nilai: 0.1 }, // Mewakili <= 0.1
-      ],
-    },
-    "312_G": {
-      kondisiSkor: [
-        { batas: 0.0149, nilai: 0.5 }, // Mewakili < 0.015
-        { batas: 0.05, nilai: 0.4 }, // Mewakili <= 0.05
-        { batas: 0.1, nilai: 0.3 }, // Mewakili <= 0.1
-        { batas: Infinity, nilai: 0.2 }, // Mewakili > 0.1
-      ],
-    },
-    "312_H": {
-      kondisiSkor: [
-        { batas: 0.0099, nilai: 1.0 }, // Mewakili < 0.01
-        { batas: 0.02, nilai: 0.75 }, // Mewakili <= 0.02
-        { batas: 0.03, nilai: 0.5 }, // Mewakili <= 0.03
-        { batas: Infinity, nilai: 0.25 }, // Mewakili > 0.03
       ],
     },
 
