@@ -45,8 +45,8 @@ const aturanPenilaian = {
         { batas: 0.8499, nilai: 0.0 }, // Mewakili syarat < 0.85
         { batas: 0.8999, nilai: 0.4 }, // Mewakili syarat < 0.9
         { batas: 0.9499, nilai: 0.8 }, // Mewakili syarat < 0.95
-        { batas: 0.9999, nilai: 1.2 }, // Mewakili syarat < 1.0
-        { batas: 1.0999, nilai: 1.6 }, // Mewakili syarat < 1.1
+        { batas: 0.9999, nilai: 1.0 }, // Mewakili syarat < 1.0
+        { batas: 1.0999, nilai: 1.5 }, // Mewakili syarat < 1.1
         { batas: Infinity, nilai: 2.0 }, // Mewakili syarat >= 1.1
       ],
     },
