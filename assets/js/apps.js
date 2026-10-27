@@ -1348,6 +1348,13 @@ function hitungTotalPoin311IPkm() {
   if (elTotal311I) elTotal311I.innerText = total311I.toFixed(2);
 }
 
+function hitungTotalPoin312CPkm() {
+  const total312C =
+    ambilAngkaSaja("skor_312_C1") + ambilAngkaSaja("skor_312_C2");
+  const elTotal312C = document.getElementById("skor_312_C_Total");
+  if (elTotal312C) elTotal312C.innerText = total312C.toFixed(2);
+}
+
 // ========================================================
 // 7. FUNGSI GRAND TOTAL & "SAPU JAGAT" DATABASE
 // ========================================================
