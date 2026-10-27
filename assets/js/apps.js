@@ -984,6 +984,11 @@ function cekDanHitungTotalKelompok(namaPoin) {
     }
   } else if (namaPoin.startsWith("311_")) {
     if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+      // Jalankan Rumus Khusus Total 311 PKM
+      if (typeof hitungTotalPoin311Pkm === "function") hitungTotalPoin311Pkm();
+      if (typeof hitungTotalPoin311IPkm === "function")
+        hitungTotalPoin311IPkm();
+      if (typeof hitungTotalPoin311IPkm === "function") hitungTotalPoin31();
     } else {
       hitungTotalPoin311();
       hitungTotalPoin31();
@@ -1221,6 +1226,9 @@ function hitungTotalPoin41() {
 // ========================================================
 // RUMUS PENJUMLAHAN PUSKESMAS
 // ========================================================
+// ========================================================
+// POINT 1
+// ========================================================
 function hitungTotalPoin111Pkm() {
   const total =
     ambilAngkaSaja("skor_111_A_Total") +
@@ -1273,6 +1281,9 @@ function hitungTotalPoin111DPkm() {
   if (elTotal1D) elTotal1D.innerText = total1D.toFixed(2);
 }
 
+// ========================================================
+// POINT 2
+// ========================================================
 function hitungTotalPoin212Pkm() {
   const total =
     ambilAngkaSaja("subTotal_212_A") +
@@ -1310,6 +1321,31 @@ function hitungTotalPoin212IPkm() {
     ambilAngkaSaja("skor_212_I3");
   const elTotal212I = document.getElementById("skor_212_I_Total");
   if (elTotal212I) elTotal212I.innerText = total212I.toFixed(2);
+}
+
+// ========================================================
+// POINT 3
+// ========================================================
+function hitungTotalPoin311Pkm() {
+  const total =
+    ambilAngkaSaja("subTotal_311_A") +
+    ambilAngkaSaja("subTotal_311_B") +
+    ambilAngkaSaja("subTotal_311_C") +
+    ambilAngkaSaja("subTotal_311_D") +
+    ambilAngkaSaja("subTotal_311_E") +
+    ambilAngkaSaja("subTotal_311_F") +
+    ambilAngkaSaja("subTotal_311_G") +
+    ambilAngkaSaja("subTotal_311_H") +
+    ambilAngkaSaja("skor_311_I_Total");
+  const el = document.getElementById("skor_311_Total");
+  if (el) el.innerText = total.toFixed(2);
+}
+
+function hitungTotalPoin311IPkm() {
+  const total311I =
+    ambilAngkaSaja("skor_311_I1") + ambilAngkaSaja("skor_311_I2");
+  const elTotal311I = document.getElementById("skor_311_I_Total");
+  if (elTotal311I) elTotal311I.innerText = total311I.toFixed(2);
 }
 
 // ========================================================
