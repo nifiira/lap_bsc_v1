@@ -821,5 +821,64 @@ const aturanPenilaian = {
         { batas: Infinity, nilai: 0.0 }, // Untuk KOLASA > 0,5[cite: 25]
       ],
     },
+    // ===================== KELOMPOK 411 =====================
+    "411_A": {
+      kondisiSkor: [
+        { batas: 30.0, nilai: 2.0 }, // Untuk PPP < 30 hari[cite: 21]
+        { batas: 40.0, nilai: 1.6 }, // Untuk 30 <= PPP < 40 hari[cite: 21]
+        { batas: 60.0, nilai: 1.2 }, // Untuk 40 <= PPP < 60 hari[cite: 21]
+        { batas: 80.0, nilai: 0.8 }, // Untuk 60 <= PPP < 80 hari[cite: 21]
+        { batas: 100.0, nilai: 0.4 }, // Untuk 80 <= PPP < 100 hari[cite: 21]
+        { batas: Infinity, nilai: 0.0 }, // Untuk PPP > 100 hari[cite: 21]
+      ],
+    },
+    "411_B": {
+      kondisiSkor: [
+        { batas: 0.0, nilai: 0.0 }, // Untuk PAT = 0[cite: 22]
+        { batas: 5.0, nilai: 0.25 }, // Untuk 0 < PAT < 5[cite: 22]
+        { batas: 10.0, nilai: 0.5 }, // Untuk 5 < PAT < 10[cite: 22]
+        { batas: 15.0, nilai: 1.0 }, // Untuk 10 < PAT < 15[cite: 22]
+        { batas: 20.0, nilai: 1.5 }, // Untuk 15 < PAT < 20[cite: 22]
+        { batas: Infinity, nilai: 2.0 }, // Untuk PAT > 20[cite: 22]
+      ],
+    },
+    "411_C": {
+      kondisiSkor: [
+        { batas: 5.0, nilai: 0.0 }, // Untuk 0 < PP < 5[cite: 23]
+        { batas: 15.0, nilai: 0.5 }, // Untuk 5 < PP < 15[cite: 23]
+        { batas: 25.0, nilai: 1.0 }, // Untuk 15 < PP < 25[cite: 23]
+        { batas: 30.0, nilai: 1.5 }, // Untuk 25 < PP < 30[cite: 23]
+        { batas: 35.0, nilai: 2.0 }, // Untuk 30 < PP < 35[cite: 23]
+        { batas: 45.0, nilai: 1.5 }, // Untuk 35 < PP < 45[cite: 23]
+        { batas: 55.0, nilai: 1.0 }, // Untuk 45 < PP < 55[cite: 23]
+        { batas: 60.0, nilai: 0.5 }, // Untuk 55 < PP < 60[cite: 23]
+        { batas: Infinity, nilai: 0.0 }, // Untuk PP > 60[cite: 23]
+      ],
+    },
+    "411_D": {
+      kondisiSkor: [
+        { batas: 0.01, nilai: 0.0 }, // Untuk ROFA <= 0,01[cite: 24]
+        { batas: 0.02, nilai: 0.1 }, // Untuk 0,01 < ROFA <= 0,02[cite: 24]
+        { batas: 0.03, nilai: 0.2 }, // Untuk 0,02 < ROFA <= 0,03[cite: 24]
+        { batas: 0.04, nilai: 0.4 }, // Untuk 0,03 < ROFA <= 0,04[cite: 24]
+        { batas: 0.05, nilai: 0.6 }, // Untuk 0,04 < ROFA <= 0,05[cite: 24]
+        { batas: 0.06, nilai: 0.8 }, // Untuk 0,05 < ROFA <= 0,06[cite: 24]
+        { batas: Infinity, nilai: 1.0 }, // Untuk ROFA > 0,06[cite: 24]
+      ],
+    },
+    "411_E": {
+      kondisiSkor: [
+        { batas: 0.0, nilai: 0.0 }, // Untuk ROE = 0[cite: 25]
+        { batas: 0.01, nilai: 0.2 }, // Untuk 0 < ROE <= 0,01[cite: 25]
+        { batas: 0.02, nilai: 0.3 }, // Untuk 0,01 < ROE <= 0,02[cite: 25]
+        { batas: 0.03, nilai: 0.4 }, // Untuk 0,02 < ROE <= 0,03[cite: 25]
+        { batas: 0.04, nilai: 0.5 }, // Untuk 0,03 < ROE <= 0,04[cite: 25]
+        { batas: 0.05, nilai: 0.6 }, // Untuk 0,04 < ROE <= 0,05[cite: 25]
+        { batas: 0.06, nilai: 0.7 }, // Untuk 0,05 < ROE <= 0,06[cite: 25]
+        { batas: 0.07, nilai: 0.8 }, // Untuk 0,06 < ROE <= 0,07[cite: 25]
+        { batas: 0.08, nilai: 0.9 }, // Untuk 0,07 < ROE <= 0,08[cite: 25]
+        { batas: Infinity, nilai: 1.0 }, // Untuk ROE > 0,08[cite: 25]
+      ],
+    },
   },
 };
