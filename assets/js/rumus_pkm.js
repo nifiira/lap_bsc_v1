@@ -232,11 +232,11 @@ const aturanPenilaian = {
     },
     "311_B": {
       kondisiSkor: [
-        { batas: 0, nilai: 0.0 }, // Mewakili = 0
-        { batas: 0.3, nilai: 1.0 }, // Mewakili <= 0.3
-        { batas: 0.5, nilai: 0.8 }, // Mewakili <= 0.5
-        { batas: 0.8, nilai: 0.6 }, // Mewakili <= 0.8
-        { batas: Infinity, nilai: 0.4 }, // Mewakili >= 0.8
+        { batas: 6.0, nilai: 2.0 }, // Untuk LOSNB < 6[cite: 13]
+        { batas: 9.0, nilai: 1.5 }, // Untuk 6 <= LOSNB <= 9[cite: 13]
+        { batas: 12.0, nilai: 1.0 }, // Untuk 9 < LOSNB <= 12[cite: 13]
+        { batas: 15.0, nilai: 0.7 }, // Untuk 12 < LOSNB <= 15[cite: 13]
+        { batas: Infinity, nilai: 0.2 }, // Untuk LOSNB > 15[cite: 13]
       ],
     },
     "311_C": {
@@ -800,6 +800,11 @@ const aturanPenilaian = {
         { batas: 15.0, nilai: 2.0 }, // Untuk 8 < ERT <= 15[cite: 12]
         { batas: 30.0, nilai: 1.0 }, // Untuk 15 < ERT <= 30[cite: 12]
         { batas: Infinity, nilai: 0.5 }, // Untuk ERT > 30[cite: 12]
+      ],
+    },
+    "311_B": {
+      kondisiSkor: [
+        { batas: Infinity, nilai: 0.0 }, // Seluruh kategori bernilai 0 untuk Non Inap[cite: 13]
       ],
     },
   },
