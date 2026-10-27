@@ -377,12 +377,12 @@ const aturanPenilaian = {
     // ===================== KELOMPOK 411 =====================
     "411_A": {
       kondisiSkor: [
-        { batas: 29.9999, nilai: 2.0 }, // Mewakili < 30
-        { batas: 39.9999, nilai: 1.6 }, // Mewakili < 40
-        { batas: 59.9999, nilai: 1.2 }, // Mewakili < 60
-        { batas: 79.9999, nilai: 0.8 }, // Mewakili < 80
-        { batas: 99.9999, nilai: 0.4 }, // Mewakili < 100
-        { batas: Infinity, nilai: 0.0 }, // Mewakili > 100
+        { batas: 30.0, nilai: 2.0 }, // Untuk PPP < 30 hari[cite: 21]
+        { batas: 40.0, nilai: 1.6 }, // Untuk 30 <= PPP < 40 hari[cite: 21]
+        { batas: 60.0, nilai: 1.2 }, // Untuk 40 <= PPP < 60 hari[cite: 21]
+        { batas: 80.0, nilai: 0.8 }, // Untuk 60 <= PPP < 80 hari[cite: 21]
+        { batas: 100.0, nilai: 0.4 }, // Untuk 80 <= PPP < 100 hari[cite: 21]
+        { batas: Infinity, nilai: 0.0 }, // Untuk PPP > 100 hari[cite: 21]
       ],
     },
     "411_B": {
