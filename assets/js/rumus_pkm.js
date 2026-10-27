@@ -160,18 +160,65 @@ const aturanPenilaian = {
     },
     "212_J": {
       kondisiSkor: [
-        { batas: 0.7, nilai: 0.25 }, // Mewakili syarat <= 0.7
-        { batas: 0.8, nilai: 0.5 }, // Mewakili syarat <= 0.8
-        { batas: 0.9, nilai: 0.8 }, // Mewakili syarat <= 0.9
-        { batas: Infinity, nilai: 1.0 }, // Mewakili syarat >= 1 (atau > 0.9)
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
       ],
     },
     "212_K": {
       kondisiSkor: [
-        { batas: 25, nilai: 1.0 }, // Mewakili syarat <= 25
-        { batas: 50, nilai: 0.75 }, // Mewakili syarat <= 50
-        { batas: 75, nilai: 0.5 }, // Mewakili syarat <= 75
-        { batas: Infinity, nilai: 0.25 }, // Mewakili syarat > 75
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
+      ],
+    },
+    "212_L": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
+      ],
+    },
+    "212_M": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
+      ],
+    },
+    "212_N": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
+      ],
+    },
+    "212_P": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.25 },
+        { batas: 0.75, nilai: 0.5 },
+        { batas: 1.0, nilai: 0.75 },
+        { batas: Infinity, nilai: 1.0 },
+      ],
+    },
+    "212_Q": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.25 },
+        { batas: 0.75, nilai: 0.5 },
+        { batas: 1.0, nilai: 0.75 },
+        { batas: Infinity, nilai: 1.0 },
       ],
     },
     // ===================== KELOMPOK 311 =====================
@@ -686,10 +733,11 @@ const aturanPenilaian = {
     },
     "212_J": {
       kondisiSkor: [
-        { batas: 0.7, nilai: 0.25 }, // Mewakili syarat <= 0.7
-        { batas: 0.8, nilai: 0.5 }, // Mewakili syarat <= 0.8
-        { batas: 0.9, nilai: 0.8 }, // Mewakili syarat <= 0.9
-        { batas: Infinity, nilai: 1.0 }, // Mewakili syarat >= 1 (atau > 0.9)
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
       ],
     },
     "212_K": {
