@@ -115,32 +115,40 @@ const aturanPenilaian = {
     },
     "212_F": {
       kondisiSkor: [
-        { batas: 0.01, nilai: 2.0 }, // Mewakili syarat <= 0.01
-        { batas: 0.02, nilai: 1.5 }, // Mewakili syarat <= 0.02
-        { batas: 0.03, nilai: 1.0 }, // Mewakili syarat <= 0.03
-        { batas: Infinity, nilai: 0.5 }, // Mewakili syarat > 0.03
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
       ],
     },
     "212_G": {
       kondisiSkor: [
-        { batas: 49.99, nilai: 0.5 }, // Mewakili syarat < 50
-        { batas: 59.99, nilai: 1.0 }, // Mewakili syarat < 60
-        { batas: 69.99, nilai: 1.5 }, // Mewakili syarat < 70
-        { batas: 79.99, nilai: 2.0 }, // Mewakili syarat < 80
-        { batas: 89.99, nilai: 1.5 }, // Mewakili syarat < 90
-        { batas: 99.99, nilai: 1.0 }, // Mewakili syarat < 100
-        { batas: Infinity, nilai: 0.5 }, // Mewakili syarat >= 100
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.25 },
+        { batas: 0.75, nilai: 0.5 },
+        { batas: 1.0, nilai: 1.0 },
+        { batas: Infinity, nilai: 1.5 },
       ],
     },
-    // "212_H": {
-    //   kondisiSkor: [
-    //     { batas: 0.01, nilai: 1.0 }, // Mewakili syarat <= 0.01
-    //     { batas: 0.02, nilai: 0.75 }, // Mewakili syarat <= 0.02
-    //     { batas: 0.03, nilai: 0.5 }, // Mewakili syarat <= 0.03
-    //     { batas: Infinity, nilai: 0.25 }, // Mewakili syarat > 0.03
-    //   ],
-    // },
-    "212_I": {
+    "212_I1": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.1 },
+        { batas: 0.75, nilai: 0.2 },
+        { batas: 1.0, nilai: 0.4 },
+        { batas: Infinity, nilai: 0.5 },
+      ],
+    },
+    "212_I2": {
+      kondisiSkor: [
+        { batas: 60, nilai: 1.0 }, // Mewakili syarat <= 60
+        { batas: 90, nilai: 0.75 }, // Mewakili syarat <= 90
+        { batas: 120, nilai: 0.5 }, // Mewakili syarat <= 120
+        { batas: Infinity, nilai: 0.25 }, // Mewakili syarat > 120
+      ],
+    },
+    "212_I3": {
       kondisiSkor: [
         { batas: 60, nilai: 1.0 }, // Mewakili syarat <= 60
         { batas: 90, nilai: 0.75 }, // Mewakili syarat <= 90
@@ -631,32 +639,40 @@ const aturanPenilaian = {
     },
     "212_F": {
       kondisiSkor: [
-        { batas: 0.01, nilai: 2.0 }, // Mewakili syarat <= 0.01
-        { batas: 0.02, nilai: 1.5 }, // Mewakili syarat <= 0.02
-        { batas: 0.03, nilai: 1.0 }, // Mewakili syarat <= 0.03
-        { batas: Infinity, nilai: 0.5 }, // Mewakili syarat > 0.03
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.5 },
+        { batas: 0.75, nilai: 1.0 },
+        { batas: 1.0, nilai: 1.5 },
+        { batas: Infinity, nilai: 2.0 },
       ],
     },
     "212_G": {
       kondisiSkor: [
-        { batas: 49.99, nilai: 0.5 }, // Mewakili syarat < 50
-        { batas: 59.99, nilai: 1.0 }, // Mewakili syarat < 60
-        { batas: 69.99, nilai: 1.5 }, // Mewakili syarat < 70
-        { batas: 79.99, nilai: 2.0 }, // Mewakili syarat < 80
-        { batas: 89.99, nilai: 1.5 }, // Mewakili syarat < 90
-        { batas: 99.99, nilai: 1.0 }, // Mewakili syarat < 100
-        { batas: Infinity, nilai: 0.5 }, // Mewakili syarat >= 100
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.25 },
+        { batas: 0.75, nilai: 0.5 },
+        { batas: 1.0, nilai: 1.0 },
+        { batas: Infinity, nilai: 1.5 },
       ],
     },
-    // "212_H": {
-    //   kondisiSkor: [
-    //     { batas: 0.01, nilai: 1.0 }, // Mewakili syarat <= 0.01
-    //     { batas: 0.02, nilai: 0.75 }, // Mewakili syarat <= 0.02
-    //     { batas: 0.03, nilai: 0.5 }, // Mewakili syarat <= 0.03
-    //     { batas: Infinity, nilai: 0.25 }, // Mewakili syarat > 0.03
-    //   ],
-    // },
-    "212_I": {
+    "212_I1": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.0 },
+        { batas: 0.5, nilai: 0.1 },
+        { batas: 0.75, nilai: 0.2 },
+        { batas: 1.0, nilai: 0.4 },
+        { batas: Infinity, nilai: 0.5 },
+      ],
+    },
+    "212_I2": {
+      kondisiSkor: [
+        { batas: 60, nilai: 1.0 }, // Mewakili syarat <= 60
+        { batas: 90, nilai: 0.75 }, // Mewakili syarat <= 90
+        { batas: 120, nilai: 0.5 }, // Mewakili syarat <= 120
+        { batas: Infinity, nilai: 0.25 }, // Mewakili syarat > 120
+      ],
+    },
+    "212_I3": {
       kondisiSkor: [
         { batas: 60, nilai: 1.0 }, // Mewakili syarat <= 60
         { batas: 90, nilai: 0.75 }, // Mewakili syarat <= 90
