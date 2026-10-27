@@ -1288,7 +1288,7 @@ function hitungTotalPoin212Pkm() {
 function hitungTotalPoin212BPkm() {
   const total1B = ambilAngkaSaja("skor_212_B1") + ambilAngkaSaja("skor_212_B2");
   const elTotal1B = document.getElementById("skor_212_B_Total");
-  if (elTotal1B) elTotal1B.innerText = total1D.toFixed(2);
+  if (elTotal1B) elTotal1B.innerText = total1B.toFixed(2);
 }
 
 // ========================================================
