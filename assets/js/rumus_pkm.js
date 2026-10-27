@@ -97,10 +97,11 @@ const aturanPenilaian = {
     }, //212 C sudah dirumus
     "212_D": {
       kondisiSkor: [
-        { batas: 0.01, nilai: 2.0 }, // Mewakili syarat <= 0.01
-        { batas: 0.02, nilai: 1.5 }, // Mewakili syarat <= 0.02
-        { batas: 0.03, nilai: 1.0 }, // Mewakili syarat <= 0.03
-        { batas: Infinity, nilai: 0.5 }, // Mewakili syarat > 0.03
+        { batas: 0.1, nilai: 0.0 }, // Untuk PKBal < 0,10[cite: 10]
+        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= PKBal < 0,50[cite: 10]
+        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= PKBal < 0,75[cite: 10]
+        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= PKBal <= 0,99[cite: 10]
+        { batas: Infinity, nilai: 2.0 }, // Untuk PKBal = 1[cite: 10]
       ],
     },
     "212_E": {
@@ -611,10 +612,11 @@ const aturanPenilaian = {
     },
     "212_D": {
       kondisiSkor: [
-        { batas: 0.01, nilai: 2.0 }, // Mewakili syarat <= 0.01
-        { batas: 0.02, nilai: 1.5 }, // Mewakili syarat <= 0.02
-        { batas: 0.03, nilai: 1.0 }, // Mewakili syarat <= 0.03
-        { batas: Infinity, nilai: 0.5 }, // Mewakili syarat > 0.03
+        { batas: 0.1, nilai: 0.0 }, // Untuk PKBal < 0,10[cite: 10]
+        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= PKBal < 0,50[cite: 10]
+        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= PKBal < 0,75[cite: 10]
+        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= PKBal <= 0,99[cite: 10]
+        { batas: Infinity, nilai: 2.0 }, // Untuk PKBal = 1[cite: 10]
       ],
     },
     "212_E": {
