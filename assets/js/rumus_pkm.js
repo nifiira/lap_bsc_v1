@@ -799,10 +799,7 @@ const aturanPenilaian = {
     },
     "311_H": {
       kondisiSkor: [
-        { batas: 0.25, nilai: 1.5 }, // Untuk AKL < 0,25[cite: 20]
-        { batas: 0.4, nilai: 1.0 }, // Untuk 0,25 <= AKL < 0,40[cite: 20]
-        { batas: 0.65, nilai: 0.75 }, // Untuk 0,40 <= AKL < 0,65[cite: 20]
-        { batas: Infinity, nilai: 0.5 }, // Untuk AKL >= 0,65[cite: 20]
+        { batas: Infinity, nilai: 0.0 }, // Seluruh kategori bernilai 0 untuk Non Inap[cite: 20]
       ],
     },
     "311_I1": {
@@ -816,9 +813,9 @@ const aturanPenilaian = {
     "311_I2": {
       kondisiSkor: [
         { batas: 0.3, nilai: 0.1 }, // Untuk AKP <= 0,3
-        { batas: 0.5, nilai: 0.25 }, // Untuk 0,3 < AKP <= 0,5
-        { batas: 0.9, nilai: 0.5 }, // Untuk 0,5 < AKP <= 0,9
-        { batas: Infinity, nilai: 1.0 }, // Untuk AKP > 0,9
+        { batas: 0.5, nilai: 0.5 }, // Untuk 0,3 < AKP <= 0,5
+        { batas: 0.9, nilai: 1.0 }, // Untuk 0,5 < AKP <= 0,9
+        { batas: Infinity, nilai: 1.5 }, // Untuk AKP > 0,9
       ],
     },
   },
