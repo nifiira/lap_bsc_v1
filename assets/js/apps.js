@@ -1261,6 +1261,29 @@ function hitungTotalPoin111DPkm() {
   if (elTotal1D) elTotal1D.innerText = total1D.toFixed(2);
 }
 
+function hitungTotalPoin212Pkm() {
+  const total =
+    ambilAngkaSaja("subTotal_212_A") +
+    ambilAngkaSaja("skor_212_B_Total") +
+    ambilAngkaSaja("subTotal_212_C") +
+    ambilAngkaSaja("subTotal_212_D") +
+    ambilAngkaSaja("subTotal_212_E") +
+    ambilAngkaSaja("subTotal_212_F") +
+    ambilAngkaSaja("subTotal_212_G") +
+    ambilAngkaSaja("subTotal_212_H") +
+    ambilAngkaSaja("skor_212_I_Total") +
+    ambilAngkaSaja("subTotal_212_J") +
+    ambilAngkaSaja("subTotal_212_K") +
+    ambilAngkaSaja("subTotal_212_L") +
+    ambilAngkaSaja("subTotal_212_M") +
+    ambilAngkaSaja("subTotal_212_N") +
+    ambilAngkaSaja("subTotal_212_O") +
+    ambilAngkaSaja("subTotal_212_P") +
+    ambilAngkaSaja("subTotal_212_Q");
+  const el = document.getElementById("skor_212_Total");
+  if (el) el.innerText = total.toFixed(2);
+}
+
 function hitungTotalPoin212BPkm() {
   const total1B = ambilAngkaSaja("skor_212_B1") + ambilAngkaSaja("skor_212_B2");
   const elTotal1B = document.getElementById("skor_212_B_Total");
