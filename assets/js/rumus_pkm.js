@@ -398,14 +398,14 @@ const aturanPenilaian = {
     },
     "411_C": {
       kondisiSkor: [
-        { batas: 5.0, nilai: 0.0 }, // Untuk 0 < PP < 5[cite: 23]
-        { batas: 15.0, nilai: 0.5 }, // Untuk 5 < PP < 15[cite: 23]
-        { batas: 25.0, nilai: 1.0 }, // Untuk 15 < PP < 25[cite: 23]
-        { batas: 30.0, nilai: 1.5 }, // Untuk 25 < PP < 30[cite: 23]
-        { batas: 35.0, nilai: 2.0 }, // Untuk 30 < PP < 35[cite: 23]
-        { batas: 45.0, nilai: 1.5 }, // Untuk 35 < PP < 45[cite: 23]
-        { batas: 55.0, nilai: 1.0 }, // Untuk 45 < PP < 55[cite: 23]
-        { batas: 60.0, nilai: 0.5 }, // Untuk 55 < PP < 60[cite: 23]
+        { batas: 4.999, nilai: 0.0 }, // Untuk 0 < PP < 5[cite: 23]
+        { batas: 14.999, nilai: 0.5 }, // Untuk 5 < PP < 15[cite: 23]
+        { batas: 24.999, nilai: 1.0 }, // Untuk 15 < PP < 25[cite: 23]
+        { batas: 29.999, nilai: 1.5 }, // Untuk 25 < PP < 30[cite: 23]
+        { batas: 34.999, nilai: 2.0 }, // Untuk 30 < PP < 35[cite: 23]
+        { batas: 44.999, nilai: 1.5 }, // Untuk 35 < PP < 45[cite: 23]
+        { batas: 54.999, nilai: 1.0 }, // Untuk 45 < PP < 55[cite: 23]
+        { batas: 59.999, nilai: 0.5 }, // Untuk 55 < PP < 60[cite: 23]
         { batas: Infinity, nilai: 0.0 }, // Untuk PP > 60[cite: 23]
       ],
     },
