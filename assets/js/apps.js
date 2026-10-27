@@ -999,7 +999,7 @@ function cekDanHitungTotalKelompok(namaPoin) {
     }
   } else if (namaPoin.startsWith("312_")) {
     if (tipeKoleksi === "evaluasi_kinerja_pkm") {
-      if (typeof hitungTotalPoin312 === "function") hitungTotalPoin312();
+      if (typeof hitungTotalPoin312Pkm === "function") hitungTotalPoin312Pkm();
       if (typeof hitungTotalPoin312CPkm === "function")
         hitungTotalPoin312CPkm();
       if (typeof hitungTotalPoin312CPkm === "function") hitungTotalPoin31();
@@ -1357,6 +1357,15 @@ function hitungTotalPoin311IPkm() {
     ambilAngkaSaja("skor_311_I1") + ambilAngkaSaja("skor_311_I2");
   const elTotal311I = document.getElementById("skor_311_I_Total");
   if (elTotal311I) elTotal311I.innerText = total311I.toFixed(2);
+}
+
+function hitungTotalPoin312Pkm() {
+  const total =
+    ambilAngkaSaja("subTotal_312_A") +
+    ambilAngkaSaja("subTotal_312_B") +
+    ambilAngkaSaja("skor_312_C_Total");
+  const el = document.getElementById("skor_312_Total");
+  if (el) el.innerText = total.toFixed(2);
 }
 
 function hitungTotalPoin312CPkm() {
