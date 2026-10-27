@@ -73,11 +73,11 @@ const aturanPenilaian = {
     },
     "212_B1": {
       kondisiSkor: [
-        { batas: 0.9999, nilai: 0.0 }, // Untuk PKIB < 0,10[cite: 7]
-        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PKIB < 0,50[cite: 7]
-        { batas: 0.75, nilai: 0.6 }, // Untuk 0,50 <= PKIB < 0,75[cite: 7]
-        { batas: 1.0, nilai: 0.8 }, // Untuk 0,75 <= PKIB <= 0,99[cite: 7]
-        { batas: Infinity, nilai: 1.0 }, // Untuk PKIB = 1[cite: 7]
+        { batas: 0.9999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.4 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 0.6 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 0.8 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: Infinity, nilai: 1.0 }, // Untuk PKIH = 1
       ],
     },
     "212_B2": {
@@ -568,11 +568,11 @@ const aturanPenilaian = {
     },
     "212_B1": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 }, // Untuk PKIB < 0,10[cite: 7]
-        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PKIB < 0,50[cite: 7]
-        { batas: 0.75, nilai: 0.6 }, // Untuk 0,50 <= PKIB < 0,75[cite: 7]
-        { batas: 1.0, nilai: 0.8 }, // Untuk 0,75 <= PKIB <= 0,99[cite: 7]
-        { batas: Infinity, nilai: 1.0 }, // Untuk PKIB = 1[cite: 7]
+        { batas: 0.9999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.4 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 0.6 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 0.8 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: Infinity, nilai: 1.0 }, // Untuk PKIH = 1
       ],
     },
     "212_B2": {
