@@ -1286,9 +1286,19 @@ function hitungTotalPoin212Pkm() {
 }
 
 function hitungTotalPoin212BPkm() {
-  const total1B = ambilAngkaSaja("skor_212_B1") + ambilAngkaSaja("skor_212_B2");
-  const elTotal1B = document.getElementById("skor_212_B_Total");
-  if (elTotal1B) elTotal1B.innerText = total1B.toFixed(2);
+  const total212B =
+    ambilAngkaSaja("skor_212_B1") + ambilAngkaSaja("skor_212_B2");
+  const elTotal212B = document.getElementById("skor_212_B_Total");
+  if (elTotal212B) elTotal212B.innerText = total212B.toFixed(2);
+}
+
+function hitungTotalPoin212IPkm() {
+  const total212I =
+    ambilAngkaSaja("skor_212_I1") +
+    ambilAngkaSaja("skor_212_I2") +
+    ambilAngkaSaja("skor_212_I3");
+  const elTotal212I = document.getElementById("skor_212_I_Total");
+  if (elTotal212I) elTotal212I.innerText = total212I.toFixed(2);
 }
 
 // ========================================================
