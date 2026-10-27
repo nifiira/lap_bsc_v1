@@ -142,18 +142,20 @@ const aturanPenilaian = {
     },
     "212_I2": {
       kondisiSkor: [
-        { batas: 60, nilai: 1.0 }, // Mewakili syarat <= 60
-        { batas: 90, nilai: 0.75 }, // Mewakili syarat <= 90
-        { batas: 120, nilai: 0.5 }, // Mewakili syarat <= 120
-        { batas: Infinity, nilai: 0.25 }, // Mewakili syarat > 120
+        { batas: 0.1, nilai: 0.5 },
+        { batas: 0.5, nilai: 0.4 },
+        { batas: 0.75, nilai: 0.2 },
+        { batas: 1.0, nilai: 0.1 },
+        { batas: Infinity, nilai: 0.0 },
       ],
     },
     "212_I3": {
       kondisiSkor: [
-        { batas: 60, nilai: 1.0 }, // Mewakili syarat <= 60
-        { batas: 90, nilai: 0.75 }, // Mewakili syarat <= 90
-        { batas: 120, nilai: 0.5 }, // Mewakili syarat <= 120
-        { batas: Infinity, nilai: 0.25 }, // Mewakili syarat > 120
+        { batas: 0.1, nilai: 0.5 },
+        { batas: 0.5, nilai: 0.4 },
+        { batas: 0.75, nilai: 0.2 },
+        { batas: 1.0, nilai: 0.1 },
+        { batas: Infinity, nilai: 0.0 },
       ],
     },
     "212_J": {
@@ -666,18 +668,20 @@ const aturanPenilaian = {
     },
     "212_I2": {
       kondisiSkor: [
-        { batas: 60, nilai: 1.0 }, // Mewakili syarat <= 60
-        { batas: 90, nilai: 0.75 }, // Mewakili syarat <= 90
-        { batas: 120, nilai: 0.5 }, // Mewakili syarat <= 120
-        { batas: Infinity, nilai: 0.25 }, // Mewakili syarat > 120
+        { batas: 0.1, nilai: 0.5 },
+        { batas: 0.5, nilai: 0.4 },
+        { batas: 0.75, nilai: 0.2 },
+        { batas: 1.0, nilai: 0.1 },
+        { batas: Infinity, nilai: 0.0 },
       ],
     },
     "212_I3": {
       kondisiSkor: [
-        { batas: 60, nilai: 1.0 }, // Mewakili syarat <= 60
-        { batas: 90, nilai: 0.75 }, // Mewakili syarat <= 90
-        { batas: 120, nilai: 0.5 }, // Mewakili syarat <= 120
-        { batas: Infinity, nilai: 0.25 }, // Mewakili syarat > 120
+        { batas: 0.1, nilai: 0.5 },
+        { batas: 0.5, nilai: 0.4 },
+        { batas: 0.75, nilai: 0.2 },
+        { batas: 1.0, nilai: 0.1 },
+        { batas: Infinity, nilai: 0.0 },
       ],
     },
     "212_J": {
