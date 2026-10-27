@@ -948,6 +948,10 @@ function cekDanHitungTotalKelompok(namaPoin) {
   if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("311_I")) {
     if (typeof hitungTotalPoin311IPkm === "function") hitungTotalPoin311IPkm();
   }
+  // Panggil Skor Total 312_C
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("312_C")) {
+    if (typeof hitungTotalPoin312CPkm === "function") hitungTotalPoin312CPkm();
+  }
 
   // 2. Penanganan kelompok utama berdasarkan awalan
   if (namaPoin.startsWith("111_")) {
@@ -994,8 +998,15 @@ function cekDanHitungTotalKelompok(namaPoin) {
       hitungTotalPoin31();
     }
   } else if (namaPoin.startsWith("312_")) {
-    hitungTotalPoin312();
-    hitungTotalPoin31();
+    if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+      if (typeof hitungTotalPoin312 === "function") hitungTotalPoin312();
+      if (typeof hitungTotalPoin312CPkm === "function")
+        hitungTotalPoin312CPkm();
+      if (typeof hitungTotalPoin312CPkm === "function") hitungTotalPoin31();
+    } else {
+      hitungTotalPoin312();
+      hitungTotalPoin31();
+    }
   } else if (namaPoin.startsWith("313_")) {
     hitungTotalPoin313();
     hitungTotalPoin31();
