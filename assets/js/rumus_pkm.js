@@ -64,10 +64,10 @@ const aturanPenilaian = {
     // ===================== KELOMPOK 212 =====================
     "212_A": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 }, // Untuk PKIH < 0,10
-        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= PKIH < 0,50
-        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= PKIH < 0,75
-        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: 0.0999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.5 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 1.0 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 1.5 }, // Untuk 0,75 <= PKIH <= 0,99
         { batas: Infinity, nilai: 2.0 }, // Untuk PKIH = 1
       ],
     },
@@ -559,10 +559,10 @@ const aturanPenilaian = {
     // ===================== KELOMPOK 212 =====================
     "212_A": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 }, // Untuk PKIH < 0,10
-        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= PKIH < 0,50
-        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= PKIH < 0,75
-        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: 0.0999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.5 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 1.0 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 1.5 }, // Untuk 0,75 <= PKIH <= 0,99
         { batas: Infinity, nilai: 2.0 }, // Untuk PKIH = 1
       ],
     },
