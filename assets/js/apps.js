@@ -970,9 +970,10 @@ function cekDanHitungTotalKelompok(namaPoin) {
       if (typeof hitungTotalPoin212BPkm === "function")
         hitungTotalPoin212BPkm();
       hitungTotalPoin21();
+    } else {
+      hitungTotalPoin212();
+      hitungTotalPoin21();
     }
-    hitungTotalPoin212();
-    hitungTotalPoin21();
   } else if (namaPoin.startsWith("311_")) {
     hitungTotalPoin311();
     hitungTotalPoin31();
