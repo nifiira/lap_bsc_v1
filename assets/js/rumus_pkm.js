@@ -88,65 +88,65 @@ const aturanPenilaian = {
     },
     "212_C": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 }, // Untuk KBBL < 0,10[cite: 9]
-        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= KBBL < 0,50[cite: 9]
-        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= KBBL < 0,75[cite: 9]
-        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= KBBL <= 0,99[cite: 9]
-        { batas: Infinity, nilai: 2.0 }, // Untuk KBBL = 1[cite: 9]
+        { batas: 0.9999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.5 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 1.0 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 1.5 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: Infinity, nilai: 2.0 }, // Untuk PKIH = 1
       ],
-    }, //212 C sudah dirumus
+    },
     "212_D": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 }, // Untuk PKBal < 0,10[cite: 10]
-        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= PKBal < 0,50[cite: 10]
-        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= PKBal < 0,75[cite: 10]
-        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= PKBal <= 0,99[cite: 10]
-        { batas: Infinity, nilai: 2.0 }, // Untuk PKBal = 1[cite: 10]
+        { batas: 0.9999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.5 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 1.0 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 1.5 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: Infinity, nilai: 2.0 }, // Untuk PKIH = 1
       ],
     },
     "212_E": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 }, // Untuk < 0,10[cite: 11]
-        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= ... < 0,50[cite: 11]
-        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= ... < 0,75[cite: 11]
-        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= ... <= 0,99[cite: 11]
-        { batas: Infinity, nilai: 2.0 }, // Untuk = 1[cite: 11]
+        { batas: 0.9999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.5 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 1.0 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 1.5 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: Infinity, nilai: 2.0 }, // Untuk PKIH = 1
       ],
     },
     "212_F": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 },
-        { batas: 0.5, nilai: 0.5 },
-        { batas: 0.75, nilai: 1.0 },
-        { batas: 1.0, nilai: 1.5 },
-        { batas: Infinity, nilai: 2.0 },
+        { batas: 0.9999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.5 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 1.0 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 1.5 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: Infinity, nilai: 2.0 }, // Untuk PKIH = 1
       ],
     },
     "212_G": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 },
-        { batas: 0.5, nilai: 0.25 },
-        { batas: 0.75, nilai: 0.5 },
-        { batas: 1.0, nilai: 1.0 },
-        { batas: Infinity, nilai: 1.5 },
+        { batas: 0.9999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.5 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 1.0 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 1.5 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: Infinity, nilai: 2.0 }, // Untuk PKIH = 1
       ],
     },
     "212_I1": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 },
-        { batas: 0.5, nilai: 0.1 },
-        { batas: 0.75, nilai: 0.2 },
-        { batas: 1.0, nilai: 0.4 },
-        { batas: Infinity, nilai: 0.5 },
+        { batas: 0.9999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.1 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 0.2 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 0.4 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: Infinity, nilai: 0.5 }, // Untuk PKIH = 1
       ],
     },
     "212_I2": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.5 },
-        { batas: 0.5, nilai: 0.4 },
-        { batas: 0.75, nilai: 0.2 },
-        { batas: 1.0, nilai: 0.1 },
-        { batas: Infinity, nilai: 0.0 },
+        { batas: 0.9999, nilai: 0.0 }, // Untuk PKIH < 0,10
+        { batas: 0.4999, nilai: 0.1 }, // Untuk 0,10 <= PKIH < 0,50
+        { batas: 0.7499, nilai: 0.2 }, // Untuk 0,50 <= PKIH < 0,75
+        { batas: 0.9999, nilai: 0.4 }, // Untuk 0,75 <= PKIH <= 0,99
+        { batas: Infinity, nilai: 0.5 }, // Untuk PKIH = 1
       ],
     },
     "212_I3": {
