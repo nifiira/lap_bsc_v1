@@ -309,34 +309,34 @@ const aturanPenilaian = {
     // ===================== KELOMPOK 312 =====================
     "312_A": {
       kondisiSkor: [
-        { batas: 0.025, nilai: 1.0 }, // Mewakili <= 0.025
-        { batas: 0.03, nilai: 0.75 }, // Mewakili <= 0.03
-        { batas: 0.05, nilai: 0.5 }, // Mewakili <= 0.05
-        { batas: Infinity, nilai: 0.25 }, // Mewakili > 0.05
+        { batas: 0.3, nilai: 0.2 }, // Untuk PP/K <= 0,3[cite: 22]
+        { batas: 0.5, nilai: 0.5 }, // Untuk 0,3 < PP/K <= 0,5[cite: 22]
+        { batas: 0.9, nilai: 0.75 }, // Untuk 0,5 < PP/K <= 0,9[cite: 22]
+        { batas: Infinity, nilai: 1.5 }, // Untuk PP/K > 0,9[cite: 22]
       ],
     },
     "312_B": {
       kondisiSkor: [
-        { batas: 0.2499, nilai: 1.0 }, // Mewakili < 0.25
-        { batas: 0.4, nilai: 0.75 }, // Mewakili <= 0.4
-        { batas: 0.65, nilai: 0.5 }, // Mewakili <= 0.65
-        { batas: Infinity, nilai: 0.25 }, // Mewakili > 0.65
+        { batas: 0.3, nilai: 0.5 }, // Untuk KP < 0,3[cite: 23]
+        { batas: 0.5, nilai: 0.8 }, // Untuk 0,3 < KP < 0,5[cite: 23]
+        { batas: 0.7661, nilai: 0.1 }, // Untuk 0,5 < KP < 0,766[cite: 23]
+        { batas: Infinity, nilai: 1.5 }, // Untuk KP > 0,7661[cite: 23]
       ],
     },
     "312_C1": {
       kondisiSkor: [
-        { batas: 0.2, nilai: 1.0 }, // Mewakili <= 0.2
-        { batas: 0.5, nilai: 0.75 }, // Mewakili <= 0.5
-        { batas: 1.0, nilai: 0.5 }, // Mewakili <= 1.0
-        { batas: Infinity, nilai: 0.25 }, // Mewakili > 1.0
+        { batas: 0.3, nilai: 0.1 }, // Untuk KRF <= 0,3[cite: 24]
+        { batas: 0.5, nilai: 0.25 }, // Untuk 0,3 < KRF <= 0,5[cite: 24]
+        { batas: 0.9, nilai: 0.5 }, // Untuk 0,5 < KRF <= 0,9[cite: 24]
+        { batas: Infinity, nilai: 0.75 }, // Untuk KRF > 0,9[cite: 24]
       ],
     },
     "312_C2": {
       kondisiSkor: [
-        { batas: 0.0149, nilai: 0.5 }, // Mewakili < 0.015
-        { batas: 0.05, nilai: 0.4 }, // Mewakili <= 0.05
-        { batas: 0.1, nilai: 0.3 }, // Mewakili <= 0.1
-        { batas: Infinity, nilai: 0.2 }, // Mewakili > 0.1
+        { batas: 0.1, nilai: 0.75 }, // Untuk KOLASA <= 0,1[cite: 25]
+        { batas: 0.3, nilai: 0.5 }, // Untuk 0,1 < KOLASA <= 0,3[cite: 25]
+        { batas: 0.5, nilai: 0.25 }, // Untuk 0,3 < KOLASA <= 0,5[cite: 25]
+        { batas: Infinity, nilai: 0.0 }, // Untuk KOLASA > 0,5[cite: 25]
       ],
     },
 
@@ -785,6 +785,40 @@ const aturanPenilaian = {
         { batas: 0.5, nilai: 0.5 }, // Untuk 0,3 < AKP <= 0,5
         { batas: 0.9, nilai: 1.0 }, // Untuk 0,5 < AKP <= 0,9
         { batas: Infinity, nilai: 1.5 }, // Untuk AKP > 0,9
+      ],
+    },
+
+    // ===================== KELOMPOK 312 =====================
+    "312_A": {
+      kondisiSkor: [
+        { batas: 0.3, nilai: 0.2 }, // Untuk PP/K <= 0,3[cite: 22]
+        { batas: 0.5, nilai: 0.5 }, // Untuk 0,3 < PP/K <= 0,5[cite: 22]
+        { batas: 0.9, nilai: 0.75 }, // Untuk 0,5 < PP/K <= 0,9[cite: 22]
+        { batas: Infinity, nilai: 1.5 }, // Untuk PP/K > 0,9[cite: 22]
+      ],
+    },
+    "312_B": {
+      kondisiSkor: [
+        { batas: 0.3, nilai: 0.5 }, // Untuk KP < 0,3[cite: 23]
+        { batas: 0.5, nilai: 0.8 }, // Untuk 0,3 < KP < 0,5[cite: 23]
+        { batas: 0.7661, nilai: 0.1 }, // Untuk 0,5 < KP < 0,766[cite: 23]
+        { batas: Infinity, nilai: 1.5 }, // Untuk KP > 0,7661[cite: 23]
+      ],
+    },
+    "312_C1": {
+      kondisiSkor: [
+        { batas: 0.3, nilai: 0.1 }, // Untuk KRF <= 0,3[cite: 24]
+        { batas: 0.5, nilai: 0.25 }, // Untuk 0,3 < KRF <= 0,5[cite: 24]
+        { batas: 0.9, nilai: 0.5 }, // Untuk 0,5 < KRF <= 0,9[cite: 24]
+        { batas: Infinity, nilai: 0.75 }, // Untuk KRF > 0,9[cite: 24]
+      ],
+    },
+    "312_C2": {
+      kondisiSkor: [
+        { batas: 0.1, nilai: 0.75 }, // Untuk KOLASA <= 0,1[cite: 25]
+        { batas: 0.3, nilai: 0.5 }, // Untuk 0,1 < KOLASA <= 0,3[cite: 25]
+        { batas: 0.5, nilai: 0.25 }, // Untuk 0,3 < KOLASA <= 0,5[cite: 25]
+        { batas: Infinity, nilai: 0.0 }, // Untuk KOLASA > 0,5[cite: 25]
       ],
     },
   },
