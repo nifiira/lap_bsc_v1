@@ -224,11 +224,10 @@ const aturanPenilaian = {
     // ===================== KELOMPOK 311 =====================
     "311_A": {
       kondisiSkor: [
-        { batas: 0, nilai: 0.0 }, // Mewakili = 0
-        { batas: 8, nilai: 1.0 }, // Mewakili <= 8
-        { batas: 15, nilai: 0.8 }, // Mewakili <= 15
-        { batas: 30, nilai: 0.8 }, // Mewakili <= 30
-        { batas: Infinity, nilai: 0.4 }, // Mewakili > 30
+        { batas: 8.0, nilai: 2.0 }, // Untuk ERT <= 8[cite: 12]
+        { batas: 15.0, nilai: 1.0 }, // Untuk 8 < ERT <= 15[cite: 12]
+        { batas: 30.0, nilai: 0.5 }, // Untuk 15 < ERT <= 30[cite: 12]
+        { batas: Infinity, nilai: 0.25 }, // Untuk ERT > 30[cite: 12]
       ],
     },
     "311_B": {
@@ -792,6 +791,15 @@ const aturanPenilaian = {
         { batas: 0.75, nilai: 0.5 },
         { batas: 1.0, nilai: 0.75 },
         { batas: Infinity, nilai: 1.0 },
+      ],
+    },
+    // ===================== KELOMPOK 311 =====================
+    "311_A": {
+      kondisiSkor: [
+        { batas: 8.0, nilai: 3.0 }, // Untuk ERT <= 8[cite: 12]
+        { batas: 15.0, nilai: 2.0 }, // Untuk 8 < ERT <= 15[cite: 12]
+        { batas: 30.0, nilai: 1.0 }, // Untuk 15 < ERT <= 30[cite: 12]
+        { batas: Infinity, nilai: 0.5 }, // Untuk ERT > 30[cite: 12]
       ],
     },
   },
