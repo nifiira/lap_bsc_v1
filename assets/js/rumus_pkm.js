@@ -14,18 +14,18 @@ const aturanPenilaian = {
     },
     "111_C2": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 }, // Untuk PKB < 0,10
-        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PKB < 0,50
-        { batas: 1.0, nilai: 0.8 }, // Untuk 0,50 <= PKB <= 0,99
-        { batas: Infinity, nilai: 1.0 }, // Untuk PKB = 1
+        { batas: 0.999, nilai: 0.0 },
+        { batas: 0.499, nilai: 0.4 },
+        { batas: 0.999, nilai: 0.8 },
+        { batas: Infinity, nilai: 1.0 },
       ],
     },
     "111_C3": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 }, // Untuk PSA < 0,10
-        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PSA < 0,50
-        { batas: 1.0, nilai: 0.8 }, // Untuk 0,50 <= PSA <= 0,99
-        { batas: Infinity, nilai: 1.0 }, // Untuk PSA = 1
+        { batas: 0.999, nilai: 0.0 },
+        { batas: 0.499, nilai: 0.4 },
+        { batas: 0.999, nilai: 0.8 },
+        { batas: Infinity, nilai: 1.0 },
       ],
     },
 
@@ -506,29 +506,29 @@ const aturanPenilaian = {
   nonRawatInap: {
     "111_C1": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 },
-        { batas: 0.5, nilai: 0.4 },
-        { batas: 1.0, nilai: 0.8 },
+        { batas: 0.999, nilai: 0.0 },
+        { batas: 0.499, nilai: 0.4 },
+        { batas: 0.999, nilai: 0.8 },
         { batas: Infinity, nilai: 1.0 },
       ],
     },
     "111_C2": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 }, // Untuk PKB < 0,10
-        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PKB < 0,50
-        { batas: 1.0, nilai: 0.8 }, // Untuk 0,50 <= PKB <= 0,99
-        { batas: Infinity, nilai: 1.0 }, // Untuk PKB = 1
+        { batas: 0.999, nilai: 0.0 },
+        { batas: 0.499, nilai: 0.4 },
+        { batas: 0.999, nilai: 0.8 },
+        { batas: Infinity, nilai: 1.0 },
       ],
     },
     "111_C3": {
       kondisiSkor: [
-        { batas: 0.1, nilai: 0.0 }, // Untuk PSA < 0,10
-        { batas: 0.5, nilai: 0.4 }, // Untuk 0,10 <= PSA < 0,50
-        { batas: 1.0, nilai: 0.8 }, // Untuk 0,50 <= PSA <= 0,99
-        { batas: Infinity, nilai: 1.0 }, // Untuk PSA = 1
+        { batas: 0.999, nilai: 0.0 },
+        { batas: 0.499, nilai: 0.4 },
+        { batas: 0.999, nilai: 0.8 },
+        { batas: Infinity, nilai: 1.0 },
       ],
     },
-    //111_C Sudah sesuai Rumus
+
     // ===================== KELOMPOK 211 =====================
     "211_A": {
       kondisiSkor: [
