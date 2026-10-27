@@ -106,10 +106,11 @@ const aturanPenilaian = {
     },
     "212_E": {
       kondisiSkor: [
-        { batas: 0.4999, nilai: 0.5 }, // Mewakili syarat < 0.5
-        { batas: 0.6999, nilai: 1.0 }, // Mewakili syarat < 0.7
-        { batas: 0.7999, nilai: 1.5 }, // Mewakili syarat < 0.8
-        { batas: Infinity, nilai: 2.0 }, // Mewakili syarat >= 0.8
+        { batas: 0.1, nilai: 0.0 }, // Untuk < 0,10[cite: 11]
+        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= ... < 0,50[cite: 11]
+        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= ... < 0,75[cite: 11]
+        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= ... <= 0,99[cite: 11]
+        { batas: Infinity, nilai: 2.0 }, // Untuk = 1[cite: 11]
       ],
     },
     "212_F": {
@@ -621,10 +622,11 @@ const aturanPenilaian = {
     },
     "212_E": {
       kondisiSkor: [
-        { batas: 0.4999, nilai: 0.5 }, // Mewakili syarat < 0.5
-        { batas: 0.6999, nilai: 1.0 }, // Mewakili syarat < 0.7
-        { batas: 0.7999, nilai: 1.5 }, // Mewakili syarat < 0.8
-        { batas: Infinity, nilai: 2.0 }, // Mewakili syarat >= 0.8
+        { batas: 0.1, nilai: 0.0 }, // Untuk < 0,10[cite: 11]
+        { batas: 0.5, nilai: 0.5 }, // Untuk 0,10 <= ... < 0,50[cite: 11]
+        { batas: 0.75, nilai: 1.0 }, // Untuk 0,50 <= ... < 0,75[cite: 11]
+        { batas: 1.0, nilai: 1.5 }, // Untuk 0,75 <= ... <= 0,99[cite: 11]
+        { batas: Infinity, nilai: 2.0 }, // Untuk = 1[cite: 11]
       ],
     },
     "212_F": {
