@@ -437,67 +437,67 @@ const aturanPenilaian = {
     // ===================== KELOMPOK 412 =====================
     "412_A": {
       kondisiSkor: [
-        { batas: 0.3999, nilai: 0.0 }, // Mewakili < 0.4
-        { batas: 0.4999, nilai: 0.5 }, // Mewakili < 0.5
-        { batas: 0.5999, nilai: 1.0 }, // Mewakili < 0.6
-        { batas: 0.7999, nilai: 1.5 }, // Mewakili < 0.8
-        { batas: Infinity, nilai: 2.0 }, // Mewakili >= 0.8
+        { batas: 0.4, nilai: 0.0 }, // Untuk 0 <= RK < 0,4[cite: 26]
+        { batas: 0.5, nilai: 0.5 }, // Untuk 0,4 <= RK < 0,5[cite: 26]
+        { batas: 0.6, nilai: 1.0 }, // Untuk 0,5 <= RK < 0,6[cite: 26]
+        { batas: 0.8, nilai: 1.5 }, // Untuk 0,6 <= RK < 0,8[cite: 26]
+        { batas: Infinity, nilai: 2.0 }, // Untuk RK >= 0,8[cite: 26]
       ],
     },
     "412_B": {
       kondisiSkor: [
-        { batas: 0, nilai: 0.0 }, // Mewakili = 0
-        { batas: 1.2, nilai: 0.25 }, // Mewakili <= 1.2
-        { batas: 2.4, nilai: 0.5 }, // Mewakili <= 2.4
-        { batas: 3.6, nilai: 1.0 }, // Mewakili <= 3.6
-        { batas: 4.8, nilai: 1.5 }, // Mewakili <= 4.8
-        { batas: 6.0, nilai: 1.75 }, // Mewakili <= 6
-        { batas: Infinity, nilai: 2.0 }, // Mewakili > 6
+        { batas: 0.0, nilai: 0.0 }, // Untuk RL = 0[cite: 28]
+        { batas: 1.2, nilai: 0.25 }, // Untuk 0 < RL <= 1,2[cite: 28]
+        { batas: 2.4, nilai: 0.5 }, // Untuk 1,2 < RL <= 2,4[cite: 28]
+        { batas: 3.6, nilai: 1.0 }, // Untuk 2,4 < RL <= 3,6[cite: 28]
+        { batas: 4.8, nilai: 1.5 }, // Untuk 3,6 < RL <= 4,8[cite: 28]
+        { batas: 6.0, nilai: 1.75 }, // Untuk 4,8 < RL <= 6[cite: 27, 28]
+        { batas: Infinity, nilai: 2.0 }, // Untuk RL > 6[cite: 27]
       ],
     },
 
     // ===================== KELOMPOK 413 =====================
     "413_A": {
       kondisiSkor: [
-        { batas: 0.0099, nilai: 2.0 }, // Mewakili < 0.01
-        { batas: 0.01, nilai: 1.5 }, // Mewakili <= 0.01
-        { batas: 0.02, nilai: 1.0 }, // Mewakili <= 0.02
-        { batas: 0.03, nilai: 0.5 }, // Mewakili <= 0.03
-        { batas: Infinity, nilai: 0.0 }, // Mewakili > 0.05
+        { batas: 0.01, nilai: 2.0 }, // Untuk RKTA < 0,01[cite: 29]
+        { batas: 0.02, nilai: 1.5 }, // Untuk 0,02 < RKTA <= 0,01 (disesuaikan rentang)[cite: 29]
+        { batas: 0.03, nilai: 1.0 }, // Untuk 0,03 < RKTA <= 0,02[cite: 29]
+        { batas: 0.04, nilai: 0.5 }, // Untuk 0,04 < RKTA <= 0,03[cite: 29]
+        { batas: Infinity, nilai: 0.0 }, // Untuk RKTA > 0,05[cite: 29]
       ],
     },
     "413_B": {
       kondisiSkor: [
-        { batas: 0.2499, nilai: 2.0 }, // Mewakili < 0.25
-        { batas: 0.5, nilai: 1.5 }, // Mewakili <= 0.5
-        { batas: 0.75, nilai: 1.0 }, // Mewakili <= 0.75
-        { batas: 1.0, nilai: 0.5 }, // Mewakili <= 1.0
-        { batas: Infinity, nilai: 0.0 }, // Mewakili > 1.0
+        { batas: 0.25, nilai: 2.0 }, // Untuk RKTE < 0,25[cite: 30]
+        { batas: 0.5, nilai: 1.5 }, // Untuk 0,25 < RKTE <= 0,5[cite: 30]
+        { batas: 0.75, nilai: 1.0 }, // Untuk 0,5 < RKTE <= 0,75[cite: 30]
+        { batas: 1.0, nilai: 0.5 }, // Untuk 0,75 < RKTE <= 1[cite: 30]
+        { batas: Infinity, nilai: 0.0 }, // Untuk RKTE > 1[cite: 30]
       ],
     },
 
     // ===================== KELOMPOK 414 =====================
     "414_A": {
       kondisiSkor: [
-        { batas: 0.025, nilai: 0.0 }, // Diasumsikan sebagai <= 0.025 dari pola Anda (=0,025)
-        { batas: 0.05, nilai: 0.1 }, // Mewakili <= 0.05
-        { batas: 0.1, nilai: 0.25 }, // Mewakili <= 0.1
-        { batas: 0.15, nilai: 0.5 }, // Mewakili <= 0.15
-        { batas: 0.2, nilai: 0.75 }, // Mewakili <= 0.2
-        { batas: 0.25, nilai: 1.0 }, // Mewakili <= 0.25
-        { batas: 0.3, nilai: 1.25 }, // Mewakili <= 0.3
-        { batas: 0.35, nilai: 1.5 }, // Mewakili <= 0.35
-        { batas: 0.4, nilai: 1.75 }, // Mewakili <= 0.4
-        { batas: Infinity, nilai: 2.0 }, // Mewakili > 0.4
+        { batas: 0.025, nilai: 0.0 }, // Untuk 0 < PB <= 0,025[cite: 31]
+        { batas: 0.05, nilai: 0.1 }, // Untuk 0,025 < PB <= 0,05[cite: 31]
+        { batas: 0.1, nilai: 0.25 }, // Untuk 0,05 < PB <= 0,1[cite: 31]
+        { batas: 0.15, nilai: 0.5 }, // Untuk 0,1 < PB <= 0,15[cite: 31]
+        { batas: 0.2, nilai: 0.75 }, // Untuk 0,15 < PB <= 0,2[cite: 31]
+        { batas: 0.25, nilai: 1.0 }, // Untuk 0,2 < PB <= 0,25[cite: 31]
+        { batas: 0.3, nilai: 1.25 }, // Untuk 0,25 < PB <= 0,3[cite: 31]
+        { batas: 0.35, nilai: 1.5 }, // Untuk 0,3 < PB <= 0,35[cite: 31]
+        { batas: 0.4, nilai: 1.75 }, // Untuk 0,35 < PB <= 0,4[cite: 31]
+        { batas: Infinity, nilai: 2.0 }, // Untuk PB >= 0,4[cite: 31]
       ],
     },
     "414_B": {
       kondisiSkor: [
-        { batas: 0.4, nilai: 0.0 }, // Mewakili <= 0.4
-        { batas: 0.6, nilai: 0.5 }, // Mewakili <= 0.6
-        { batas: 0.8, nilai: 1.0 }, // Mewakili <= 0.8
-        { batas: 1.0, nilai: 1.5 }, // Mewakili <= 1.0
-        { batas: Infinity, nilai: 2.0 }, // Mewakili > 1.0
+        { batas: 0.4, nilai: 0.0 }, // Untuk PPNP <= 0,4
+        { batas: 0.6, nilai: 0.5 }, // Untuk 0,4 < PPNP <= 0,6
+        { batas: 0.8, nilai: 1.0 }, // Untuk 0,6 < PPNP <= 0,8
+        { batas: 1.0, nilai: 1.5 }, // Untuk 0,8 < PPNP <= 1
+        { batas: Infinity, nilai: 2.0 }, // Untuk PPNP > 1
       ],
     },
   },
