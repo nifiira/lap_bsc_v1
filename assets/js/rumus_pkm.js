@@ -292,9 +292,9 @@ const aturanPenilaian = {
     },
     "311_I1": {
       kondisiSkor: [
-        { batas: 0.5, nilai: 0.1 }, // Untuk PTBC < 0,5[cite: 21]
-        { batas: 0.7, nilai: 0.5 }, // Untuk 0,5 <= PTBC < 0,7[cite: 21]
-        { batas: 0.9, nilai: 0.75 }, // Untuk 0,7 <= PTBC <= 0,9[cite: 21]
+        { batas: 0.4999, nilai: 0.1 }, // Untuk PTBC < 0,5[cite: 21]
+        { batas: 0.6999, nilai: 0.5 }, // Untuk 0,5 <= PTBC < 0,7[cite: 21]
+        { batas: 0.8999, nilai: 0.75 }, // Untuk 0,7 <= PTBC <= 0,9[cite: 21]
         { batas: Infinity, nilai: 1.0 }, // Untuk 0,9 <= PTBC <= 1[cite: 21]
       ],
     },
@@ -776,9 +776,9 @@ const aturanPenilaian = {
     },
     "311_I1": {
       kondisiSkor: [
-        { batas: 0.5, nilai: 0.1 }, // Untuk PTBC < 0,5[cite: 21]
-        { batas: 0.7, nilai: 0.5 }, // Untuk 0,5 <= PTBC < 0,7[cite: 21]
-        { batas: 0.9, nilai: 0.75 }, // Untuk 0,7 <= PTBC <= 0,9[cite: 21]
+        { batas: 0.4999, nilai: 0.1 }, // Untuk PTBC < 0,5[cite: 21]
+        { batas: 0.6999, nilai: 0.5 }, // Untuk 0,5 <= PTBC < 0,7[cite: 21]
+        { batas: 0.8999, nilai: 0.75 }, // Untuk 0,7 <= PTBC <= 0,9[cite: 21]
         { batas: Infinity, nilai: 1.0 }, // Untuk 0,9 <= PTBC <= 1[cite: 21]
       ],
     },
