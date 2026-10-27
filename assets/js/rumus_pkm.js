@@ -463,7 +463,7 @@ const aturanPenilaian = {
         { batas: 0.0999, nilai: 2.0 }, // Untuk RKTA < 0,01[cite: 29]
         { batas: 0.1, nilai: 1.5 }, // Untuk 0,02 < RKTA <= 0,01 (disesuaikan rentang)[cite: 29]
         { batas: 0.2, nilai: 1.0 }, // Untuk 0,03 < RKTA <= 0,02[cite: 29]
-        { batas: 0.3, nilai: 0.5 }, // Untuk 0,04 < RKTA <= 0,03[cite: 29]
+        { batas: 0.4, nilai: 0.5 }, // Untuk 0,04 < RKTA <= 0,03[cite: 29]
         { batas: Infinity, nilai: 0.0 }, // Untuk RKTA > 0,05[cite: 29]
       ],
     },
@@ -911,7 +911,7 @@ const aturanPenilaian = {
         { batas: 0.0999, nilai: 2.0 }, // Untuk RKTA < 0,01[cite: 29]
         { batas: 0.1, nilai: 1.5 }, // Untuk 0,02 < RKTA <= 0,01 (disesuaikan rentang)[cite: 29]
         { batas: 0.2, nilai: 1.0 }, // Untuk 0,03 < RKTA <= 0,02[cite: 29]
-        { batas: 0.3, nilai: 0.5 }, // Untuk 0,04 < RKTA <= 0,03[cite: 29]
+        { batas: 0.4, nilai: 0.5 }, // Untuk 0,04 < RKTA <= 0,03[cite: 29]
         { batas: Infinity, nilai: 0.0 }, // Untuk RKTA > 0,05[cite: 29]
       ],
     },
