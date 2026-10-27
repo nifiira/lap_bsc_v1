@@ -389,10 +389,10 @@ const aturanPenilaian = {
     "411_B": {
       kondisiSkor: [
         { batas: 0.0, nilai: 0.0 }, // Untuk PAT = 0[cite: 22]
-        { batas: 5.0, nilai: 0.25 }, // Untuk 0 < PAT < 5[cite: 22]
-        { batas: 10.0, nilai: 0.5 }, // Untuk 5 < PAT < 10[cite: 22]
-        { batas: 15.0, nilai: 1.0 }, // Untuk 10 < PAT < 15[cite: 22]
-        { batas: 20.0, nilai: 1.5 }, // Untuk 15 < PAT < 20[cite: 22]
+        { batas: 0.05, nilai: 0.25 }, // Untuk 0 < PAT < 5[cite: 22]
+        { batas: 0.1, nilai: 0.5 }, // Untuk 5 < PAT < 10[cite: 22]
+        { batas: 0.15, nilai: 1.0 }, // Untuk 10 < PAT < 15[cite: 22]
+        { batas: 0.2, nilai: 1.5 }, // Untuk 15 < PAT < 20[cite: 22]
         { batas: Infinity, nilai: 2.0 }, // Untuk PAT > 20[cite: 22]
       ],
     },
@@ -838,10 +838,10 @@ const aturanPenilaian = {
     "411_B": {
       kondisiSkor: [
         { batas: 0.0, nilai: 0.0 }, // Untuk PAT = 0[cite: 22]
-        { batas: 5.0, nilai: 0.25 }, // Untuk 0 < PAT < 5[cite: 22]
-        { batas: 10.0, nilai: 0.5 }, // Untuk 5 < PAT < 10[cite: 22]
-        { batas: 15.0, nilai: 1.0 }, // Untuk 10 < PAT < 15[cite: 22]
-        { batas: 20.0, nilai: 1.5 }, // Untuk 15 < PAT < 20[cite: 22]
+        { batas: 0.05, nilai: 0.25 }, // Untuk 0 < PAT < 5[cite: 22]
+        { batas: 0.1, nilai: 0.5 }, // Untuk 5 < PAT < 10[cite: 22]
+        { batas: 0.15, nilai: 1.0 }, // Untuk 10 < PAT < 15[cite: 22]
+        { batas: 0.2, nilai: 1.5 }, // Untuk 15 < PAT < 20[cite: 22]
         { batas: Infinity, nilai: 2.0 }, // Untuk PAT > 20[cite: 22]
       ],
     },
