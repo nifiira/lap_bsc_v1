@@ -276,10 +276,10 @@ const aturanPenilaian = {
     },
     "311_G": {
       kondisiSkor: [
-        { batas: 0.8, nilai: 0.5 }, // Untuk KIP < 0,8[cite: 19]
-        { batas: 0.9, nilai: 1.0 }, // Untuk 0,8 <= KIP < 0,9[cite: 18]
-        { batas: 1.0, nilai: 1.5 }, // Untuk 0,9 <= KIP < 1[cite: 18]
-        { batas: Infinity, nilai: 2.0 }, // Untuk KIP <= 1[cite: 18]
+        { batas: 0.7999, nilai: 0.5 }, // Untuk KAPD < 0,8[cite: 17]
+        { batas: 0.8999, nilai: 1.0 }, // Untuk 0,8 <= KAPD < 0,9[cite: 17]
+        { batas: 0.9999, nilai: 1.5 }, // Untuk 0,9 <= KAPD < 1[cite: 17]
+        { batas: Infinity, nilai: 2.0 }, // Untuk KAPD <= 1[cite: 17]
       ],
     },
     "311_H": {
@@ -763,10 +763,10 @@ const aturanPenilaian = {
     },
     "311_G": {
       kondisiSkor: [
-        { batas: 0.8, nilai: 0.5 }, // Untuk KIP < 0,8[cite: 19]
-        { batas: 0.9, nilai: 1.0 }, // Untuk 0,8 <= KIP < 0,9[cite: 18]
-        { batas: 1.0, nilai: 2.0 }, // Untuk 0,9 <= KIP < 1[cite: 18]
-        { batas: Infinity, nilai: 3.0 }, // Untuk KIP <= 1[cite: 18]
+        { batas: 0.7999, nilai: 0.5 }, // Untuk KAPD < 0,8[cite: 17]
+        { batas: 0.8999, nilai: 1.0 }, // Untuk 0,8 <= KAPD < 0,9[cite: 17]
+        { batas: 0.9999, nilai: 2.0 }, // Untuk 0,9 <= KAPD < 1[cite: 17]
+        { batas: Infinity, nilai: 3.0 }, // Untuk KAPD <= 1[cite: 17]
       ],
     },
     "311_H": {
