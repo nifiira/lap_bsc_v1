@@ -259,98 +259,50 @@ const aturanPenilaian = {
     },
     "311_E": {
       kondisiSkor: [
-        { batas: 0.05, nilai: 1.0 }, // Mewakili <= 0.05
-        { batas: 0.1, nilai: 0.8 }, // Mewakili <= 0.1
-        { batas: 0.2, nilai: 0.6 }, // Mewakili <= 0.2
-        { batas: Infinity, nilai: 0.4 }, // Mewakili > 0.2
+        { batas: 0.3, nilai: 0.5 }, // Untuk KKT <= 0,3[cite: 16]
+        { batas: 0.5, nilai: 1.0 }, // Untuk 0,3 < KKT <= 0,5[cite: 16]
+        { batas: 0.84, nilai: 1.5 }, // Untuk 0,5 < KKT <= 0,84[cite: 16]
+        { batas: Infinity, nilai: 2.0 }, // Untuk KKT > 0,85[cite: 16]
       ],
     },
     "311_F": {
       kondisiSkor: [
-        { batas: 3, nilai: 1.0 }, // Mewakili <= 3
-        { batas: 4, nilai: 0.8 }, // Mewakili <= 4
-        { batas: 5, nilai: 0.6 }, // Mewakili <= 5
-        { batas: Infinity, nilai: 0.4 }, // Mewakili > 5
+        { batas: 0.8, nilai: 2.0 }, // Untuk KAPD < 0,8[cite: 17]
+        { batas: 0.9, nilai: 1.5 }, // Untuk 0,8 <= KAPD < 0,9[cite: 17]
+        { batas: 1.0, nilai: 1.0 }, // Untuk 0,9 <= KAPD < 1[cite: 17]
+        { batas: Infinity, nilai: 0.5 }, // Untuk KAPD <= 1[cite: 17]
       ],
     },
     "311_G": {
       kondisiSkor: [
-        { batas: 3, nilai: 1.0 }, // Mewakili <= 3
-        { batas: 4, nilai: 0.8 }, // Mewakili <= 4
-        { batas: 5, nilai: 0.6 }, // Mewakili <= 5
-        { batas: Infinity, nilai: 0.4 }, // Mewakili > 5
+        { batas: 0.8, nilai: 0.5 }, // Untuk KIP < 0,8[cite: 19]
+        { batas: 0.9, nilai: 1.0 }, // Untuk 0,8 <= KIP < 0,9[cite: 18]
+        { batas: 1.0, nilai: 1.5 }, // Untuk 0,9 <= KIP < 1[cite: 18]
+        { batas: Infinity, nilai: 2.0 }, // Untuk KIP <= 1[cite: 18]
       ],
     },
     "311_H": {
       kondisiSkor: [
-        { batas: 0.5, nilai: 1.0 }, // Mewakili <= 0.5
-        { batas: 0.75, nilai: 0.8 }, // Mewakili <= 0.75
-        { batas: 1.0, nilai: 0.6 }, // Mewakili <= 1.0
-        { batas: Infinity, nilai: 0.4 }, // Mewakili > 1.0
+        { batas: 0.25, nilai: 1.5 }, // Untuk AKL < 0,25[cite: 20]
+        { batas: 0.4, nilai: 1.0 }, // Untuk 0,25 <= AKL < 0,40[cite: 20]
+        { batas: 0.65, nilai: 0.75 }, // Untuk 0,40 <= AKL < 0,65[cite: 20]
+        { batas: Infinity, nilai: 0.5 }, // Untuk AKL >= 0,65[cite: 20]
       ],
     },
-    "311_I": {
+    "311_I1": {
       kondisiSkor: [
-        { batas: 0.25, nilai: 1.0 }, // Mewakili <= 0.25
-        { batas: 0.5, nilai: 0.8 }, // Mewakili <= 0.5
-        { batas: 0.75, nilai: 0.6 }, // Mewakili <= 0.75
-        { batas: Infinity, nilai: 0.4 }, // Mewakili > 0.75
+        { batas: 0.5, nilai: 0.1 }, // Untuk PTBC < 0,5[cite: 21]
+        { batas: 0.7, nilai: 0.5 }, // Untuk 0,5 <= PTBC < 0,7[cite: 21]
+        { batas: 0.9, nilai: 0.75 }, // Untuk 0,7 <= PTBC <= 0,9[cite: 21]
+        { batas: Infinity, nilai: 1.0 }, // Untuk 0,9 <= PTBC <= 1[cite: 21]
       ],
     },
-    "311_J": {
+    "311_I2": {
       kondisiSkor: [
-        { batas: 0.0499, nilai: 0.4 }, // Mewakili < 0.05
-        { batas: 0.0999, nilai: 0.6 }, // Mewakili < 0.1
-        { batas: 0.15, nilai: 0.8 }, // Mewakili <= 0.15
-        { batas: Infinity, nilai: 1.0 }, // Mewakili > 0.15
-      ],
-    },
-    "311_K": {
-      kondisiSkor: [
-        { batas: 0.6499, nilai: 0.4 }, // Mewakili < 0.65
-        { batas: 0.7499, nilai: 0.6 }, // Mewakili < 0.75
-        { batas: 0.8499, nilai: 0.8 }, // Mewakili < 0.85
-        { batas: Infinity, nilai: 1.0 }, // Mewakili >= 0.85
-      ],
-    },
-    "311_L": {
-      kondisiSkor: [
-        { batas: 0.7999, nilai: 0.4 }, // Mewakili < 0.8
-        { batas: 0.8999, nilai: 0.6 }, // Mewakili < 0.9
-        { batas: 0.9999, nilai: 0.8 }, // Mewakili < 1.0
-        { batas: Infinity, nilai: 1.0 }, // Mewakili >= 1.0
-      ],
-    },
-    "311_M": {
-      kondisiSkor: [
-        { batas: 0.7999, nilai: 0.4 }, // Mewakili < 0.8
-        { batas: 0.8999, nilai: 0.6 }, // Mewakili < 0.9
-        { batas: 0.9999, nilai: 0.8 }, // Mewakili < 1.0
-        { batas: Infinity, nilai: 1.0 }, // Mewakili >= 1.0
-      ],
-    },
-    "311_N": {
-      kondisiSkor: [
-        { batas: 0.7999, nilai: 0.4 }, // Mewakili < 0.8
-        { batas: 0.8999, nilai: 0.6 }, // Mewakili < 0.9
-        { batas: 0.9999, nilai: 0.8 }, // Mewakili < 1.0
-        { batas: Infinity, nilai: 1.0 }, // Mewakili >= 1.0
-      ],
-    },
-    "311_O": {
-      kondisiSkor: [
-        { batas: 0.5999, nilai: 0.4 }, // Mewakili < 0.6
-        { batas: 0.6999, nilai: 0.6 }, // Mewakili < 0.7
-        { batas: 0.7999, nilai: 0.8 }, // Mewakili < 0.8
-        { batas: Infinity, nilai: 1.0 }, // Mewakili >= 0.8
-      ],
-    },
-    "311_P": {
-      kondisiSkor: [
-        { batas: 0.5999, nilai: 0.4 }, // Mewakili < 0.6
-        { batas: 0.6999, nilai: 0.6 }, // Mewakili < 0.7
-        { batas: 0.7999, nilai: 0.8 }, // Mewakili < 0.8
-        { batas: Infinity, nilai: 1.0 }, // Mewakili >= 0.8
+        { batas: 0.3, nilai: 0.1 }, // Untuk AKP <= 0,3
+        { batas: 0.5, nilai: 0.25 }, // Untuk 0,3 < AKP <= 0,5
+        { batas: 0.9, nilai: 0.5 }, // Untuk 0,5 < AKP <= 0,9
+        { batas: Infinity, nilai: 1.0 }, // Untuk AKP > 0,9
       ],
     },
 
