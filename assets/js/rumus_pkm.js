@@ -242,11 +242,11 @@ const aturanPenilaian = {
     },
     "311_C": {
       kondisiSkor: [
-        { batas: 1.0, nilai: 2.0 }, // Untuk LOSB < 1[cite: 14]
-        { batas: 2.0, nilai: 1.5 }, // Untuk 1 <= LOSB < 2[cite: 14]
-        { batas: 3.0, nilai: 1.0 }, // Untuk 2 <= LOSB < 3[cite: 14]
-        { batas: 4.0, nilai: 0.7 }, // Untuk 3 <= LOSB < 4[cite: 14]
-        { batas: 5.0, nilai: 0.2 }, // Untuk 4 <= LOSB < 5[cite: 14]
+        { batas: 0.9999, nilai: 2.0 }, // Untuk LOSB < 1[cite: 14]
+        { batas: 1.9999, nilai: 1.5 }, // Untuk 1 <= LOSB < 2[cite: 14]
+        { batas: 2.9999, nilai: 1.0 }, // Untuk 2 <= LOSB < 3[cite: 14]
+        { batas: 3.9999, nilai: 0.7 }, // Untuk 3 <= LOSB < 4[cite: 14]
+        { batas: 4.9999, nilai: 0.2 }, // Untuk 4 <= LOSB < 5[cite: 14]
         { batas: Infinity, nilai: 0.0 }, // Untuk LOSB >= 5[cite: 14]
       ],
     },
