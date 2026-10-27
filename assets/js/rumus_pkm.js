@@ -765,5 +765,61 @@ const aturanPenilaian = {
         { batas: Infinity, nilai: 0.0 }, // Seluruh kategori bernilai 0 untuk Non Inap[cite: 13]
       ],
     },
+    "311_D": {
+      kondisiSkor: [
+        { batas: 3.0, nilai: 3.0 }, // Untuk WTL <= 3[cite: 15]
+        { batas: 4.0, nilai: 2.0 }, // Untuk 3 < WTL <= 4[cite: 15]
+        { batas: 5.0, nilai: 1.0 }, // Untuk 4 < WTL <= 5[cite: 15]
+        { batas: Infinity, nilai: 0.5 }, // Untuk WTL > 5[cite: 15]
+      ],
+    },
+    "311_E": {
+      kondisiSkor: [
+        { batas: 0.3, nilai: 0.5 }, // Untuk KKT <= 0,3[cite: 16]
+        { batas: 0.5, nilai: 1.0 }, // Untuk 0,3 < KKT <= 0,5[cite: 16]
+        { batas: 0.84, nilai: 2.0 }, // Untuk 0,5 < KKT <= 0,84[cite: 16]
+        { batas: Infinity, nilai: 3.0 }, // Untuk KKT > 0,85[cite: 16]
+      ],
+    },
+    "311_F": {
+      kondisiSkor: [
+        { batas: 0.8, nilai: 3.0 }, // Untuk KAPD < 0,8[cite: 17]
+        { batas: 0.9, nilai: 2.0 }, // Untuk 0,8 <= KAPD < 0,9[cite: 17]
+        { batas: 1.0, nilai: 1.0 }, // Untuk 0,9 <= KAPD < 1[cite: 17]
+        { batas: Infinity, nilai: 0.5 }, // Untuk KAPD <= 1[cite: 17]
+      ],
+    },
+    "311_G": {
+      kondisiSkor: [
+        { batas: 0.8, nilai: 0.5 }, // Untuk KIP < 0,8[cite: 19]
+        { batas: 0.9, nilai: 1.0 }, // Untuk 0,8 <= KIP < 0,9[cite: 18]
+        { batas: 1.0, nilai: 2.0 }, // Untuk 0,9 <= KIP < 1[cite: 18]
+        { batas: Infinity, nilai: 3.0 }, // Untuk KIP <= 1[cite: 18]
+      ],
+    },
+    "311_H": {
+      kondisiSkor: [
+        { batas: 0.25, nilai: 1.5 }, // Untuk AKL < 0,25[cite: 20]
+        { batas: 0.4, nilai: 1.0 }, // Untuk 0,25 <= AKL < 0,40[cite: 20]
+        { batas: 0.65, nilai: 0.75 }, // Untuk 0,40 <= AKL < 0,65[cite: 20]
+        { batas: Infinity, nilai: 0.5 }, // Untuk AKL >= 0,65[cite: 20]
+      ],
+    },
+    "311_I1": {
+      kondisiSkor: [
+        { batas: 0.5, nilai: 0.1 }, // Untuk PTBC < 0,5[cite: 21]
+        { batas: 0.7, nilai: 0.5 }, // Untuk 0,5 <= PTBC < 0,7[cite: 21]
+        { batas: 0.9, nilai: 0.75 }, // Untuk 0,7 <= PTBC <= 0,9[cite: 21]
+        { batas: Infinity, nilai: 1.0 }, // Untuk 0,9 <= PTBC <= 1[cite: 21]
+      ],
+    },
+    "311_I2": {
+      kondisiSkor: [
+        { batas: 0.3, nilai: 0.1 }, // Untuk AKP <= 0,3
+        { batas: 0.5, nilai: 0.25 }, // Untuk 0,3 < AKP <= 0,5
+        { batas: 0.9, nilai: 0.5 }, // Untuk 0,5 < AKP <= 0,9
+        { batas: Infinity, nilai: 1.0 }, // Untuk AKP > 0,9
+      ],
+    },
   },
 };
