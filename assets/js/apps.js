@@ -77,10 +77,6 @@ auth.onAuthStateChanged((user) => {
             aturTampilanBerdasarkanRole("admin");
             if (currentPath.includes("user-login.html")) {
               tarikDaftarUserAdmin();
-            } else if (currentPath.includes("dashboard.html")) {
-              if (typeof muatRingkasanDashboard === "function") {
-                muatRingkasanDashboard();
-              }
             } else if (typeof tarikSemuaDataAdmin === "function") {
               tarikSemuaDataAdmin();
             }
@@ -93,18 +89,11 @@ auth.onAuthStateChanged((user) => {
 
             if (currentPath.includes("penilaian-pkm.html")) {
               window.location.href = "penilaian-rsud.html";
-            } else if (currentPath.includes("dashboard.html")) {
-              // Memunculkan grand total & predikat langsung di dashboard
-              if (typeof muatRingkasanDashboard === "function") {
-                muatRingkasanDashboard();
-              }
-            } else if (!currentPath.includes("laporan.html")) {
-              // Memuat data form penilaian Triwulan 1 secara otomatis tanpa perlu pindah tab
-              if (typeof muatDataDariFirebase === "function") {
-                setTimeout(() => {
-                  muatDataDariFirebase();
-                }, 200);
-              }
+            } else if (
+              !currentPath.includes("laporan.html") &&
+              typeof muatDataDariFirebase === "function"
+            ) {
+              muatDataDariFirebase();
             }
           } else if (currentRole.startsWith("pkm_")) {
             tipeKoleksi = "evaluasi_kinerja_pkm";
@@ -116,18 +105,11 @@ auth.onAuthStateChanged((user) => {
 
             if (currentPath.includes("penilaian-rsud.html")) {
               window.location.href = "penilaian-pkm.html";
-            } else if (currentPath.includes("dashboard.html")) {
-              // Memunculkan grand total & predikat langsung di dashboard
-              if (typeof muatRingkasanDashboard === "function") {
-                muatRingkasanDashboard();
-              }
-            } else if (!currentPath.includes("laporan.html")) {
-              // Memuat data form penilaian Triwulan 1 secara otomatis tanpa perlu pindah tab
-              if (typeof muatDataDariFirebase === "function") {
-                setTimeout(() => {
-                  muatDataDariFirebase();
-                }, 200);
-              }
+            } else if (
+              !currentPath.includes("laporan.html") &&
+              typeof muatDataDariFirebase === "function"
+            ) {
+              muatDataDariFirebase();
             }
           } else {
             alert("Akses Ditolak: Profil instansi tidak valid.");
@@ -170,10 +152,7 @@ function aturTampilanBerdasarkanRole(role) {
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
   const wrapperOpdAdmin = document.getElementById("wrapperPilihOpdAdmin");
   const rekappredikat = document.getElementById("sectionAdminRekapPredikat");
-  const buttondashboardrsud = document.getElementById("buttondashboardrsud");
-  const buttondashboardpkm = document.getElementById("buttondashboardpkm");
 
-  // Reset awal (Sembunyikan semua)
   if (menuRsud) {
     menuRsud.style.display = "none";
     menuRsud.classList.remove("tampil-menu");
@@ -193,32 +172,13 @@ function aturTampilanBerdasarkanRole(role) {
   if (wrapperOpdAdmin) {
     wrapperOpdAdmin.style.display = "none";
   }
-  if (buttondashboardrsud) {
-    buttondashboardrsud.style.display = "none";
-  }
-  if (buttondashboardpkm) {
-    buttondashboardpkm.style.display = "none";
-  }
 
-  // Pengaturan Berdasarkan Role
   if (role === "admin") {
     if (menuRsud) {
       menuRsud.style.display = "block";
       menuRsud.classList.add("tampil-menu");
-    }
-    if (menuPkm) {
-      menuPkm.style.display = "block";
-      menuPkm.classList.add("tampil-menu");
-    }
-    if (menuUser) {
-      menuUser.style.display = "block";
-      menuUser.classList.add("tampil-menu");
-    }
-    if (menuLaporan) {
       menuLaporan.style.display = "block";
       menuLaporan.classList.add("tampil-menu");
-    }
-    if (menuDashboard) {
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
     }
@@ -228,11 +188,21 @@ function aturTampilanBerdasarkanRole(role) {
     if (rekappredikat) {
       rekappredikat.style.display = "block";
     }
-    if (buttondashboardpkm) {
-      buttondashboardpkm.style.display = "block";
+    if (menuPkm) {
+      menuPkm.style.display = "block";
+      menuPkm.classList.add("tampil-menu");
+      menuLaporan.style.display = "block";
+      menuLaporan.classList.add("tampil-menu");
+      menuDashboard.style.display = "block";
+      menuDashboard.classList.add("tampil-menu");
     }
-    if (buttondashboardrsud) {
-      buttondashboardrsud.style.display = "block";
+    if (menuUser) {
+      menuUser.style.display = "block";
+      menuUser.classList.add("tampil-menu");
+      menuLaporan.style.display = "block";
+      menuLaporan.classList.add("tampil-menu");
+      menuDashboard.style.display = "block";
+      menuDashboard.classList.add("tampil-menu");
     }
     if (sectionAdminRecap) {
       sectionAdminRecap.style.display = "block";
@@ -242,35 +212,19 @@ function aturTampilanBerdasarkanRole(role) {
     if (menuRsud) {
       menuRsud.style.display = "block";
       menuRsud.classList.add("tampil-menu");
-    }
-    if (menuLaporan) {
       menuLaporan.style.display = "block";
       menuLaporan.classList.add("tampil-menu");
-    }
-    if (menuDashboard) {
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
-    }
-    // Diberi pengecekan if agar tidak error jika elemen tidak ada di halaman tertentu
-    if (buttondashboardrsud) {
-      buttondashboardrsud.style.display = "block";
     }
   } else if (role === "pkm") {
     if (menuPkm) {
       menuPkm.style.display = "block";
       menuPkm.classList.add("tampil-menu");
-    }
-    if (menuLaporan) {
       menuLaporan.style.display = "block";
       menuLaporan.classList.add("tampil-menu");
-    }
-    if (menuDashboard) {
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
-    }
-    // Diberi pengecekan if agar tidak error jika elemen tidak ada di halaman tertentu
-    if (buttondashboardpkm) {
-      buttondashboardpkm.style.display = "block";
     }
   }
 }
@@ -448,6 +402,25 @@ function aksiLogin() {
       );
     });
 }
+
+// function aksiLogin() {
+//   const emailLengkap = document.getElementById("inputEmail").value.trim();
+//   const password = document.getElementById("inputPassword").value;
+
+//   if (!emailLengkap || !password) {
+//     alert("Harap isi Email dan Password dengan lengkap!");
+//     return;
+//   }
+
+//   auth
+//     .signInWithEmailAndPassword(emailLengkap, password)
+//     .then((userCredential) => {
+//       alert("Berhasil masuk sebagai " + emailLengkap);
+//     })
+//     .catch((error) => {
+//       alert("Login Gagal: " + error.message);
+//     });
+// }
 
 function togglePassword() {
   const input = document.getElementById("inputPassword");
@@ -1476,6 +1449,7 @@ function hitungGrandTotal() {
     });
 
     // Jika koleksi PKM, simpan juga dokumen Non-Rawat Inap dengan skorNonRI yang terekam
+    // Jika koleksi PKM, simpan juga dokumen Non-Rawat Inap berdasarkan skorNonRI yang tampil di layar
     if (tipeKoleksi === "evaluasi_kinerja_pkm") {
       const docIdRaw = formRef.id;
       if (docIdRaw.includes("_rawatinap")) {
@@ -1644,6 +1618,92 @@ async function exportToExcel(
     tampilkanNotif("Terjadi kesalahan: " + error.message, "danger", 6000);
   }
 }
+// async function exportToExcel(
+//   namaKoleksi = null,
+//   docId = null,
+//   namaInstansi = null,
+//   triwulan = null,
+// ) {
+//   try {
+//     alert("Sedang mengambil template dan menyuntikkan data... Mohon tunggu.");
+//     let dataAdmin = null;
+
+//     if (namaKoleksi && docId) {
+//       const doc = await db.collection(namaKoleksi).doc(docId).get();
+//       if (doc.exists) {
+//         dataAdmin = doc.data();
+//       } else {
+//         throw new Error("Data instansi tidak ditemukan di database.");
+//       }
+//     }
+
+//     const response = await fetch("assets/template/template_excel.xlsx");
+//     if (!response.ok) {
+//       throw new Error(
+//         "Gagal memuat template. Pastikan file berada di 'assets/template/template_excel.xlsx'",
+//       );
+//     }
+
+//     const arrayBuffer = await response.arrayBuffer();
+//     const workbook = new ExcelJS.Workbook();
+//     await workbook.xlsx.load(arrayBuffer);
+//     const worksheet = workbook.worksheets[0];
+
+//     worksheet.eachRow((row, rowNumber) => {
+//       row.eachCell((cell, colNumber) => {
+//         if (typeof cell.value === "string" && cell.value.startsWith("$")) {
+//           const idTarget = cell.value.substring(1);
+//           let nilaiAkhir = 0;
+
+//           if (dataAdmin) {
+//             let nilaiDariDatabase = dataAdmin[idTarget];
+
+//             if (nilaiDariDatabase !== undefined) {
+//               nilaiAkhir = isNaN(parseFloat(nilaiDariDatabase))
+//                 ? nilaiDariDatabase
+//                 : parseFloat(nilaiDariDatabase);
+//             } else {
+//               if (idTarget.startsWith("subTotal_")) {
+//                 const skorAsli = idTarget.replace("subTotal_", "skor_");
+//                 nilaiAkhir = parseFloat(dataAdmin[skorAsli]) || 0;
+//               } else {
+//                 nilaiAkhir = 0;
+//               }
+//             }
+//           } else {
+//             nilaiAkhir = ambilAngkaSaja(idTarget);
+//           }
+//           cell.value = nilaiAkhir;
+//         }
+//       });
+//     });
+
+//     const buffer = await workbook.xlsx.writeBuffer();
+//     const blob = new Blob([buffer], {
+//       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+//     });
+
+//     const url = window.URL.createObjectURL(blob);
+//     const a = document.createElement("a");
+//     a.href = url;
+
+//     if (dataAdmin && namaInstansi && triwulan) {
+//       const namaFileBersih = namaInstansi.replace(/\s+/g, "_");
+//       a.download = `Laporan_${namaFileBersih}_${triwulan}.xlsx`;
+//     } else {
+//       a.download = "Laporan_Kinerja_Otomatis.xlsx";
+//     }
+
+//     document.body.appendChild(a);
+//     a.click();
+
+//     window.URL.revokeObjectURL(url);
+//     document.body.removeChild(a);
+//   } catch (error) {
+//     console.error("Gagal export:", error);
+//     alert("Terjadi kesalahan: \n" + error.message);
+//   }
+// }
 
 function resetData() {
   const konfirmasi = confirm(
