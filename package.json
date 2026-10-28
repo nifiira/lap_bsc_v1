@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/nifiira/lap_bsc_v1/issues"
   },
-  "homepage": "https://github.com/nifiira/lap_bsc_v1#readme"
+  "homepage": "https://github.com/nifiira/lap_bsc_v1#readme",
+  "devDependencies": {
+    "javascript-obfuscator": "^5.9.0"
+  }
 }
