@@ -152,6 +152,8 @@ function aturTampilanBerdasarkanRole(role) {
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
   const wrapperOpdAdmin = document.getElementById("wrapperPilihOpdAdmin");
   const rekappredikat = document.getElementById("sectionAdminRekapPredikat");
+  const buttondashboardrsud = document.getElementById("buttondashboardrsud");
+  const buttondashboardpkm = document.getElementById("buttondashboardpkm");
 
   if (menuRsud) {
     menuRsud.style.display = "none";
