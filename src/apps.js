@@ -50,6 +50,7 @@ auth.onAuthStateChanged((user) => {
           const userData = doc.data();
           currentRole = userData.opd; // Misal: "rsud_bangil", "pkm_purworejo", atau "admin"
           currentNamaInstansi = userData.namaInstansi || "Administrator";
+          // PERBAIKAN: Jika di database masih "Administrator", paksa generate dari format role
 
           // Tampilkan Nama Instansi Resmi ke SEMUA elemen dengan class="namaUser"
           document.querySelectorAll(".namaUser").forEach((el) => {
@@ -96,9 +97,10 @@ auth.onAuthStateChanged((user) => {
             }
           } else if (currentRole.startsWith("pkm_")) {
             tipeKoleksi = "evaluasi_kinerja_pkm";
+            // Khusus PKM, formRef merujuk ke dokumen rawat inap secara default untuk pemuatan awal
             formRef = db
               .collection(tipeKoleksi)
-              .doc(`${user.uid}_${tribulanAktif}`);
+              .doc(`${user.uid}_${tribulanAktif}_rawatinap`);
             aturTampilanBerdasarkanRole("pkm");
 
             if (currentPath.includes("penilaian-rsud.html")) {
@@ -149,7 +151,8 @@ function aturTampilanBerdasarkanRole(role) {
   const menuLaporan = document.getElementById("menuLaporan");
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
   const wrapperOpdAdmin = document.getElementById("wrapperPilihOpdAdmin");
-  // Sembunyikan semua secara default terlebih dahulu
+  const rekappredikat = document.getElementById("sectionAdminRekapPredikat");
+
   if (menuRsud) {
     menuRsud.style.display = "none";
     menuRsud.classList.remove("tampil-menu");
@@ -167,11 +170,10 @@ function aturTampilanBerdasarkanRole(role) {
     sectionAdminRecap.classList.remove("tampil-menu");
   }
   if (wrapperOpdAdmin) {
-    wrapperOpdAdmin.style.display = "none"; // Default tersembunyi
+    wrapperOpdAdmin.style.display = "none";
   }
 
   if (role === "admin") {
-    // Jika Admin: Tampilkan kedua menu penilaian dan tabel rekap admin
     if (menuRsud) {
       menuRsud.style.display = "block";
       menuRsud.classList.add("tampil-menu");
@@ -182,6 +184,9 @@ function aturTampilanBerdasarkanRole(role) {
     }
     if (wrapperOpdAdmin) {
       wrapperOpdAdmin.style.display = "block";
+    }
+    if (rekappredikat) {
+      rekappredikat.style.display = "block";
     }
     if (menuPkm) {
       menuPkm.style.display = "block";
@@ -204,7 +209,6 @@ function aturTampilanBerdasarkanRole(role) {
       sectionAdminRecap.classList.add("tampil-menu");
     }
   } else if (role === "rsud") {
-    // Jika RSUD: Hanya tampilkan menu penilaian RSUD
     if (menuRsud) {
       menuRsud.style.display = "block";
       menuRsud.classList.add("tampil-menu");
@@ -214,7 +218,6 @@ function aturTampilanBerdasarkanRole(role) {
       menuDashboard.classList.add("tampil-menu");
     }
   } else if (role === "pkm") {
-    // Jika Puskesmas: Hanya tampilkan menu penilaian Puskesmas
     if (menuPkm) {
       menuPkm.style.display = "block";
       menuPkm.classList.add("tampil-menu");
@@ -231,11 +234,10 @@ async function gantiOpdAdmin() {
   const selectTribulan = document.getElementById("pilihTribulan");
   if (!selectOpd || !selectTribulan) return;
 
-  const opdTerpilih = selectOpd.value; // Contoh: "rsud_bangil" atau "pkm_..."
-  const triwulanTerpilih = selectTribulan.value; // Contoh: "TW1-2026"
+  const opdTerpilih = selectOpd.value;
+  const triwulanTerpilih = selectTribulan.value;
 
   if (!opdTerpilih) {
-    // Kosongkan form jika belum memilih instansi
     document
       .querySelectorAll('input[type="number"], select')
       .forEach((input) => {
@@ -249,7 +251,6 @@ async function gantiOpdAdmin() {
     return;
   }
 
-  // Tentukan jenis koleksi database berdasarkan pilihan OPD
   if (opdTerpilih.startsWith("rsud_")) {
     tipeKoleksi = "evaluasi_kinerja_rsud";
   } else if (opdTerpilih.startsWith("pkm_")) {
@@ -257,7 +258,6 @@ async function gantiOpdAdmin() {
   }
 
   try {
-    // 1. Cari data user di koleksi 'users' berdasarkan field 'opd' untuk mendapatkan UID-nya
     const userSnapshot = await db
       .collection("users")
       .where("opd", "==", opdTerpilih)
@@ -271,12 +271,16 @@ async function gantiOpdAdmin() {
     const userData = userSnapshot.docs[0].data();
     const targetUid = userData.uid;
 
-    // 2. Arahkan formRef ke dokumen yang benar menggunakan pola UID + Triwulan
-    formRef = db
-      .collection(tipeKoleksi)
-      .doc(`${targetUid}_${triwulanTerpilih}`);
+    if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+      formRef = db
+        .collection(tipeKoleksi)
+        .doc(`${targetUid}_${triwulanTerpilih}_rawatinap`);
+    } else {
+      formRef = db
+        .collection(tipeKoleksi)
+        .doc(`${targetUid}_${triwulanTerpilih}`);
+    }
 
-    // 3. Reset tampilan form sebelum memuat data baru
     document
       .querySelectorAll('input[type="number"], select')
       .forEach((input) => {
@@ -287,8 +291,9 @@ async function gantiOpdAdmin() {
       .querySelectorAll('[id^="skor_"], [id^="subTotal_"]')
       .forEach((el) => (el.innerText = "0.00"));
 
-    // 4. Muat nilai dari Firebase ke form
+    // Gunakan fungsi yang benar tanpa kata 'Async' di belakangnya
     muatDataDariFirebase();
+    // muatRingkasanDashboard();
   } catch (error) {
     console.error("Gagal memuat data instansi untuk admin:", error);
     alert("Terjadi kesalahan saat mengambil data: " + error.message);
@@ -300,9 +305,15 @@ function gantiTribulan() {
   if (!selectTribulan || !currentUser || !tipeKoleksi) return;
 
   tribulanAktif = selectTribulan.value;
-  formRef = db
-    .collection(tipeKoleksi)
-    .doc(`${currentUser.uid}_${tribulanAktif}`);
+  if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+    formRef = db
+      .collection(tipeKoleksi)
+      .doc(`${currentUser.uid}_${tribulanAktif}_rawatinap`);
+  } else {
+    formRef = db
+      .collection(tipeKoleksi)
+      .doc(`${currentUser.uid}_${tribulanAktif}`);
+  }
 
   document.querySelectorAll('input[type="number"], select').forEach((input) => {
     if (input.id !== "pilihTribulan") input.value = "";
@@ -314,25 +325,102 @@ function gantiTribulan() {
   muatDataDariFirebase();
 }
 
+let alertTimeout = null;
+
 function aksiLogin() {
-  const emailLengkap = document.getElementById("inputEmail").value.trim(); // Input form kini berupa email lengkap
+  const emailLengkap = document.getElementById("inputEmail").value.trim();
   const password = document.getElementById("inputPassword").value;
 
+  let container = document.getElementById("alertLoginContainer");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "alertLoginContainer";
+    container.style.position = "fixed";
+    container.style.top = "20px";
+    container.style.right = "20px";
+    container.style.zIndex = "9999";
+    container.style.maxWidth = "400px";
+    document.body.appendChild(container);
+  }
+
+  if (alertTimeout) clearTimeout(alertTimeout);
+
+  function tampilkanAlert(htmlContent, durasi = 4000) {
+    container.innerHTML = htmlContent;
+
+    alertTimeout = setTimeout(() => {
+      const alertEl = container.querySelector(".alert");
+      if (alertEl) {
+        alertEl.classList.remove("show");
+        setTimeout(() => {
+          container.innerHTML = "";
+        }, 150);
+      }
+    }, durasi);
+  }
+
   if (!emailLengkap || !password) {
-    alert("Harap isi Email dan Password dengan lengkap!");
+    tampilkanAlert(
+      `
+      <div class="alert alert-warning alert-dismissible fade show shadow-lg mb-0" role="alert">
+        <i class="fa fa-exclamation-circle me-2"></i>Harap isi Email dan Password dengan lengkap!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    `,
+      4000,
+    );
     return;
   }
 
-  // Langsung autentikasi dengan email lengkap tanpa tambahan @gmail.com manual
   auth
     .signInWithEmailAndPassword(emailLengkap, password)
     .then((userCredential) => {
-      alert("Berhasil masuk sebagai " + emailLengkap);
+      tampilkanAlert(
+        `
+        <div class="alert alert-success fade show shadow-lg mb-0" role="alert">
+          <i class="fa fa-check-circle me-2"></i>Berhasil masuk sebagai ${emailLengkap}
+          
+        </div>
+      `,
+        3000,
+      );
+
+      // BERIKAN JEDA 2 DETIK SEBELUM BERPINDAH KE DASHBOARD
+      setTimeout(() => {
+        window.location.href = "dashboard.html"; // Sesuaikan jika pengalihan halaman diatur di auth state change
+      }, 2000);
     })
     .catch((error) => {
-      alert("Login Gagal: " + error.message);
+      tampilkanAlert(
+        `
+        <div class="alert alert-danger alert-dismissible fade show shadow-lg mb-0" role="alert">
+          <i class="fa fa-exclamation-circle me-2"></i>Login Gagal: ${error.message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `,
+        5000,
+      );
     });
 }
+
+// function aksiLogin() {
+//   const emailLengkap = document.getElementById("inputEmail").value.trim();
+//   const password = document.getElementById("inputPassword").value;
+
+//   if (!emailLengkap || !password) {
+//     alert("Harap isi Email dan Password dengan lengkap!");
+//     return;
+//   }
+
+//   auth
+//     .signInWithEmailAndPassword(emailLengkap, password)
+//     .then((userCredential) => {
+//       alert("Berhasil masuk sebagai " + emailLengkap);
+//     })
+//     .catch((error) => {
+//       alert("Login Gagal: " + error.message);
+//     });
+// }
 
 function togglePassword() {
   const input = document.getElementById("inputPassword");
@@ -352,7 +440,15 @@ function togglePassword() {
 function logoutUser() {
   const konfirmasi = confirm("Apakah Anda yakin ingin keluar?");
   if (konfirmasi) {
-    auth.signOut();
+    auth
+      .signOut()
+      .then(() => {
+        window.location.href = "index.html";
+      })
+      .catch((error) => {
+        console.error("Gagal keluar:", error);
+        window.location.href = "index.html"; // Paksa pindah meski error
+      });
   }
 }
 
@@ -360,7 +456,7 @@ function logoutUser() {
 // 3. FUNGSI PENYIMPANAN CLOUD FIRESTORE
 // ========================================================
 function simpanKeFirebase(namaPoin, nilaiRealisasi, nilaiTarget, skorAkhir) {
-  if (!currentUser || !formRef || isSedangMemuat) return; // Dicegah jika sedang memuat data
+  if (!currentUser || !formRef || isSedangMemuat) return;
 
   let dataObjek = {};
   dataObjek[`real_${namaPoin}`] = nilaiRealisasi;
@@ -376,7 +472,7 @@ function simpanKeFirebase(namaPoin, nilaiRealisasi, nilaiTarget, skorAkhir) {
 
 function muatDataDariFirebase() {
   if (!formRef) return;
-  isSedangMemuat = true; // Kunci aktif
+  isSedangMemuat = true;
 
   formRef
     .get()
@@ -425,7 +521,6 @@ function muatDataDariFirebase() {
         if (typeof hitungGrandTotal === "function") hitungGrandTotal();
       }
 
-      // Lepas kunci setelah selesai memuat
       setTimeout(() => {
         isSedangMemuat = false;
       }, 500);
@@ -437,7 +532,85 @@ function muatDataDariFirebase() {
 }
 
 // ========================================================
-// 4. FUNGSI KALKULASI & PENJUMLAHAN
+// TARIK DATA KHUSUS UNTUK DASHBOARD ADMIN
+// ========================================================
+async function muatRekapPredikatAdmin() {
+  const tabelRef = document.getElementById("tabelRekapPredikatAdmin");
+  if (!tabelRef) return;
+
+  tabelRef.innerHTML = `<tr><td colspan="5" class="text-center">Mengambil data rekap...</td></tr>`;
+
+  try {
+    let htmlTabel = "";
+    let nomor = 1;
+
+    let targetKoleksi = ["evaluasi_kinerja_rsud", "evaluasi_kinerja_pkm"];
+
+    for (let colName of targetKoleksi) {
+      const snapshot = await db.collection(colName).get();
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const idParts = doc.id.split("_");
+        const triwulan = idParts[1] || "-";
+
+        let tambahanLabel = "";
+        if (colName === "evaluasi_kinerja_pkm") {
+          if (doc.id.includes("nonrawatinap"))
+            tambahanLabel = " (Non-Rawat Inap)";
+          else if (doc.id.includes("rawatinap"))
+            tambahanLabel = " (Rawat Inap)";
+        }
+
+        const namaInstansi = (data.nama_instansi || "Instansi") + tambahanLabel;
+
+        let totalVal = parseFloat(data.grand_total) || 0;
+        if (totalVal === 0) {
+          const t1 = parseFloat(data.skor_11_Total) || 0;
+          const t2 = parseFloat(data.skor_21_Total) || 0;
+          const t3 = parseFloat(data.skor_31_Total) || 0;
+          const t4 = parseFloat(data.skor_41_Total) || 0;
+          totalVal = t1 + t2 + t3 + t4;
+        }
+
+        const totalStr = totalVal.toFixed(2);
+        const predikat =
+          data.predikat && data.predikat !== "-"
+            ? data.predikat
+            : tentukanPredikat(totalVal);
+
+        // Badge warna predikat agar menarik
+        let badgeClass = "bg-secondary";
+        if (predikat.startsWith("AA")) badgeClass = "bg-success";
+        else if (predikat.startsWith("A")) badgeClass = "bg-primary";
+        else if (predikat.startsWith("BB")) badgeClass = "bg-info text-dark";
+        else if (predikat.startsWith("B")) badgeClass = "bg-warning text-dark";
+        else if (predikat.startsWith("C")) badgeClass = "bg-danger";
+
+        htmlTabel += `
+          <tr>
+            <td>${nomor++}</td>
+            <td><strong>${namaInstansi}</strong></td>
+            <td>${triwulan}</td>
+            <td><strong>${totalStr}</strong></td>
+            <td><span class="badge ${badgeClass}">${predikat}</span></td>
+          </tr>
+        `;
+      });
+    }
+
+    if (htmlTabel === "") {
+      tabelRef.innerHTML = `<tr><td colspan="5" class="text-center">Belum ada data rekapitulasi ditemukan.</td></tr>`;
+    } else {
+      tabelRef.innerHTML = htmlTabel;
+    }
+  } catch (error) {
+    console.error("Gagal memuat rekap admin:", error);
+    tabelRef.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Gagal memuat data: ${error.message}</td></tr>`;
+  }
+}
+
+// ========================================================
+// 4. FUNGSI KALKULASI & PENJUMLAHAN (Mendukung RI & NRI PKM)
 // ========================================================
 function ambilAngkaSaja(idElement) {
   const el = document.getElementById(idElement);
@@ -451,6 +624,13 @@ function ambilAngkaSaja(idElement) {
 }
 
 function hitungSkorOtomatis(namaPoin) {
+  // === JIKA SEDANG DI PUSKESMAS, LEMPAR KE FUNGSI KHUSUS PKM ===
+  if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+    hitungSkorPkm(namaPoin);
+    return;
+  }
+
+  // === LOGIKA ASLI RSUD (DIJAMIN TIDAK BERUBAH / AMAN) ===
   const elSkor = document.getElementById(`skor_${namaPoin}`);
   const elSubTotal = document.getElementById(`subTotal_${namaPoin}`);
 
@@ -462,7 +642,6 @@ function hitungSkorOtomatis(namaPoin) {
       parseFloat(elSelect.value.toString().replace(",", ".")) || 0;
     elSkor.innerText = skorPilihan.toFixed(2);
     if (elSubTotal) elSubTotal.innerText = skorPilihan.toFixed(2);
-
     cekDanHitungTotalKelompok(namaPoin);
     simpanKeFirebase(namaPoin, skorPilihan, null, skorPilihan);
     return;
@@ -481,7 +660,6 @@ function hitungSkorOtomatis(namaPoin) {
 
   const elTarget = document.getElementById(`target_${namaPoin}`);
   const realisasi = parseFloat(elReal.value.replace(",", ".")) || 0;
-
   let rasio = 0;
 
   if (elTarget) {
@@ -500,6 +678,12 @@ function hitungSkorOtomatis(namaPoin) {
 
   if (namaPoin === "212_K" || namaPoin === "212K") {
     rasio = rasio * 1000;
+  }
+  if (namaPoin === "111_J6" || namaPoin === "111J6") {
+    rasio = rasio / 60;
+  }
+  if (namaPoin === "212_I" || namaPoin === "212I") {
+    rasio = rasio * 60;
   }
 
   let skorFinal = null;
@@ -529,26 +713,300 @@ function hitungSkorOtomatis(namaPoin) {
   simpanKeFirebase(namaPoin, realisasi, nilaiTarget, skorFinal);
 }
 
+function hitungSkorPkm(namaPoin) {
+  const elSkor = document.getElementById(`skor_${namaPoin}`);
+  const elSubTotal = document.getElementById(`subTotal_${namaPoin}`);
+  if (!elSkor) return;
+
+  let skorRI = 0;
+  let skorNonRI = 0;
+  let nilaiRealisasi = 0;
+  let nilaiTarget = null;
+
+  // Tentukan nama instansi
+  let namaInstansiSimpan = currentNamaInstansi;
+  if (
+    !namaInstansiSimpan ||
+    namaInstansiSimpan === "Administrator" ||
+    namaInstansiSimpan === "admin"
+  ) {
+    if (currentRole.startsWith("pkm_")) {
+      namaInstansiSimpan = formatNamaInstansi(currentRole);
+    }
+  }
+  if (currentRole === "admin") {
+    const selectOpd = document.getElementById("pilihOpdAdmin");
+    if (
+      selectOpd &&
+      selectOpd.options[selectOpd.selectedIndex] &&
+      selectOpd.value !== ""
+    ) {
+      namaInstansiSimpan = selectOpd.options[selectOpd.selectedIndex].text;
+    }
+  }
+
+  // Cek apakah elemen menggunakan Select Option
+  const elSelect = document.getElementById(`select_${namaPoin}`);
+  if (elSelect) {
+    const skorPilihan =
+      parseFloat(elSelect.value.toString().replace(",", ".")) || 0;
+    skorRI = skorPilihan;
+    skorNonRI = skorPilihan;
+
+    elSkor.innerText = skorRI.toFixed(2);
+    if (elSubTotal) elSubTotal.innerText = skorRI.toFixed(2);
+
+    tampilkanKotakNonRI(elSkor, namaPoin, skorNonRI);
+    cekDanHitungTotalKelompok(namaPoin);
+    // === CUKUP TAMBAHKAN BARIS INI (SAMA SEPERTI RSUD) ===
+    simpanKeFirebase(namaPoin, skorPilihan, null, skorPilihan);
+    return;
+  }
+
+  // Jika menggunakan Input Realisasi & Target biasa
+  const elReal = document.getElementById(`real_${namaPoin}`);
+  if (!elReal) return;
+
+  if (elReal.value.trim() === "") {
+    elSkor.innerText = "Salah";
+    if (elSubTotal) elSubTotal.innerText = "Salah";
+    hapusKotakNonRI(namaPoin);
+    cekDanHitungTotalKelompok(namaPoin);
+    return;
+  }
+
+  const elTarget = document.getElementById(`target_${namaPoin}`);
+  nilaiRealisasi = parseFloat(elReal.value.replace(",", ".")) || 0;
+  let rasio = 0;
+
+  if (elTarget) {
+    nilaiTarget = parseFloat(elTarget.value.replace(",", ".")) || 0;
+    if (nilaiTarget === 0) {
+      elSkor.innerText = "0.00";
+      if (elSubTotal) elSubTotal.innerText = "0.00";
+      tampilkanKotakNonRI(elSkor, namaPoin, 0);
+      cekDanHitungTotalKelompok(namaPoin);
+      return;
+    }
+    rasio = nilaiRealisasi / nilaiTarget;
+  } else {
+    rasio = nilaiRealisasi;
+  }
+
+  // Hitung Skor Rawat Inap
+  if (
+    typeof aturanPenilaian !== "undefined" &&
+    aturanPenilaian.rawatInap &&
+    aturanPenilaian.rawatInap[namaPoin]
+  ) {
+    const aturanRI = aturanPenilaian.rawatInap[namaPoin].kondisiSkor;
+    for (let item of aturanRI) {
+      if (rasio <= item.batas) {
+        skorRI = item.nilai;
+        break;
+      }
+    }
+  }
+
+  // Hitung Skor Non-Rawat Inap
+  if (
+    typeof aturanPenilaian !== "undefined" &&
+    aturanPenilaian.nonRawatInap &&
+    aturanPenilaian.nonRawatInap[namaPoin]
+  ) {
+    const aturanNonRI = aturanPenilaian.nonRawatInap[namaPoin].kondisiSkor;
+    for (let item of aturanNonRI) {
+      if (rasio <= item.batas) {
+        skorNonRI = item.nilai;
+        break;
+      }
+    }
+  }
+
+  // Tampilkan skor Rawat Inap di kotak utama
+  elSkor.innerText = skorRI.toFixed(2);
+  if (elSubTotal) elSubTotal.innerText = skorRI.toFixed(2);
+
+  // TAMPILKAN KOTAK NON-RAWAT INAP DI SAMPINGNYA SECARA OTOMATIS
+  tampilkanKotakNonRI(elSkor, namaPoin, skorNonRI);
+
+  cekDanHitungTotalKelompok(namaPoin);
+}
+
+// Fungsi Bantu untuk Menampilkan / Memperbarui Kotak Non-RI di Layar
+function tampilkanKotakNonRI(elSkor, namaPoin, skorNonRI) {
+  let elSkorNonRI = document.getElementById(`skorNonRI_${namaPoin}`);
+  if (!elSkorNonRI && elSkor.parentElement) {
+    elSkorNonRI = document.createElement("span");
+    elSkorNonRI.id = `skorNonRI_${namaPoin}`;
+    elSkorNonRI.className = elSkor.className; // Meniru gaya kotak skor asli
+    elSkorNonRI.style.marginLeft = "8px";
+    elSkorNonRI.style.backgroundColor = "#e2e8f0"; // Warna latar sedikit berbeda agar bisa dibedakan
+    elSkorNonRI.title = "Skor Non-Rawat Inap";
+    elSkor.parentElement.appendChild(elSkorNonRI);
+  }
+  if (elSkorNonRI) {
+    elSkorNonRI.innerText = skorNonRI.toFixed(2);
+  }
+}
+
+function hapusKotakNonRI(namaPoin) {
+  const elSkorNonRI = document.getElementById(`skorNonRI_${namaPoin}`);
+  if (elSkorNonRI) elSkorNonRI.remove();
+}
+
+// Fungsi Bantu Kalkulasi Paralel Khusus PKM (Input Sekali, 2 Hasil)
+function hitungDanSimpanPkmParalel(namaPoin, realisasi, nilaiTarget, rasio) {
+  // 1. Hitung untuk Rawat Inap
+  let skorRI = 0;
+  if (aturanPenilaian.rawatInap && aturanPenilaian.rawatInap[namaPoin]) {
+    const aturanRI = aturanPenilaian.rawatInap[namaPoin].kondisiSkor;
+    for (let item of aturanRI) {
+      if (rasio <= item.batas) {
+        skorRI = item.nilai;
+        break;
+      }
+    }
+  }
+
+  // 2. Hitung untuk Non-Rawat Inap
+  let skorNonRI = 0;
+  if (aturanPenilaian.nonRawatInap && aturanPenilaian.nonRawatInap[namaPoin]) {
+    const aturanNonRI = aturanPenilaian.nonRawatInap[namaPoin].kondisiSkor;
+    for (let item of aturanNonRI) {
+      if (rasio <= item.batas) {
+        skorNonRI = item.nilai;
+        break;
+      }
+    }
+  }
+
+  // Tampilkan skor Rawat Inap secara default di layar form utama
+  const elSkor = document.getElementById(`skor_${namaPoin}`);
+  const elSubTotal = document.getElementById(`subTotal_${namaPoin}`);
+  if (elSkor) elSkor.innerText = skorRI.toFixed(2);
+  if (elSubTotal) elSubTotal.innerText = skorRI.toFixed(2);
+
+  cekDanHitungTotalKelompok(namaPoin);
+
+  // Simpan ke 2 dokumen Firestore secara otomatis di background
+  if (currentUser) {
+    let dataBase = {
+      nama_instansi: currentNamaInstansi || "Puskesmas",
+      updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    dataBase[`real_${namaPoin}`] = realisasi;
+    if (nilaiTarget !== null) dataBase[`target_${namaPoin}`] = nilaiTarget;
+
+    const docRefRI = db
+      .collection("evaluasi_kinerja_pkm")
+      .doc(`${currentUser.uid}_${tribulanAktif}_rawatinap`);
+    const docRefNonRI = db
+      .collection("evaluasi_kinerja_pkm")
+      .doc(`${currentUser.uid}_${tribulanAktif}_nonrawatinap`);
+
+    docRefRI
+      .set({ ...dataBase, [`skor_${namaPoin}`]: skorRI }, { merge: true })
+      .catch((err) => console.error(err));
+    docRefNonRI
+      .set({ ...dataBase, [`skor_${namaPoin}`]: skorNonRI }, { merge: true })
+      .catch((err) => console.error(err));
+  }
+}
+
 function cekDanHitungTotalKelompok(namaPoin) {
+  // 1. Penanganan sub-poin spesifik
   if (namaPoin.includes("111_H")) hitungTotalPoinH();
   else if (namaPoin.includes("111_J")) hitungTotalPoinJ();
   else if (namaPoin.includes("314_A")) hitungTotalPoin314A();
 
+  // Sub-poin khusus PKM hanya dipanggil jika tipe koleksinya PKM
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("111_A")) {
+    if (typeof hitungTotalPoin111APkm === "function") hitungTotalPoin111APkm();
+  }
+  // Panggil Skor Total 111_B
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("111_B")) {
+    if (typeof hitungTotalPoin111BPkm === "function") hitungTotalPoin111BPkm();
+  }
+  // Panggil Skor Total 111_C
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("111_C")) {
+    if (typeof hitungTotalPoin111CPkm === "function") hitungTotalPoin111CPkm();
+  }
+  // Panggil Skor Total 111_D
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("111_D")) {
+    if (typeof hitungTotalPoin111DPkm === "function") hitungTotalPoin111DPkm();
+  }
+  // Panggil Skor Total 212_B
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("212_B")) {
+    if (typeof hitungTotalPoin212BPkm === "function") hitungTotalPoin212BPkm();
+  }
+  // Panggil Skor Total 212_I
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("212_I")) {
+    if (typeof hitungTotalPoin212IPkm === "function") hitungTotalPoin212IPkm();
+  }
+  // Panggil Skor Total 311_I
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("311_I")) {
+    if (typeof hitungTotalPoin311IPkm === "function") hitungTotalPoin311IPkm();
+  }
+  // Panggil Skor Total 312_C
+  if (tipeKoleksi === "evaluasi_kinerja_pkm" && namaPoin.includes("312_C")) {
+    if (typeof hitungTotalPoin312CPkm === "function") hitungTotalPoin312CPkm();
+  }
+
+  // 2. Penanganan kelompok utama berdasarkan awalan
   if (namaPoin.startsWith("111_")) {
-    hitungTotalPoin111();
-    hitungTotalPoin11();
+    if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+      // Jalankan rumus khusus total 111 milik PKM
+      if (typeof hitungTotalPoin111Pkm === "function") hitungTotalPoin111Pkm();
+      if (typeof hitungTotalPoin111APkm === "function")
+        hitungTotalPoin111APkm();
+      if (typeof hitungTotalPoin111BPkm === "function")
+        hitungTotalPoin111BPkm();
+      if (typeof hitungTotalPoin111CPkm === "function")
+        hitungTotalPoin111CPkm();
+      if (typeof hitungTotalPoin111DPkm === "function")
+        hitungTotalPoin111DPkm();
+      hitungTotalPoin11(); // Akumulasi ke total level 11
+    } else {
+      // Jalankan murni rumus RSUD tanpa terganggu PKM
+      hitungTotalPoin111();
+      hitungTotalPoin11();
+    }
   } else if (namaPoin.startsWith("211_")) {
     hitungTotalPoin211();
     hitungTotalPoin21();
   } else if (namaPoin.startsWith("212_")) {
-    hitungTotalPoin212();
-    hitungTotalPoin21();
+    if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+      // Jalankan Rumus Khusus Total 212 PKM
+      if (typeof hitungTotalPoin212Pkm === "function") hitungTotalPoin212Pkm();
+      if (typeof hitungTotalPoin212BPkm === "function")
+        hitungTotalPoin212BPkm();
+      if (typeof hitungTotalPoin212IPkm === "function") hitungTotalPoin21();
+    } else {
+      hitungTotalPoin212();
+      hitungTotalPoin21();
+    }
   } else if (namaPoin.startsWith("311_")) {
-    hitungTotalPoin311();
-    hitungTotalPoin31();
+    if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+      // Jalankan Rumus Khusus Total 311 PKM
+      if (typeof hitungTotalPoin311Pkm === "function") hitungTotalPoin311Pkm();
+      if (typeof hitungTotalPoin311IPkm === "function")
+        hitungTotalPoin311IPkm();
+      if (typeof hitungTotalPoin311IPkm === "function") hitungTotalPoin31();
+    } else {
+      hitungTotalPoin311();
+      hitungTotalPoin31();
+    }
   } else if (namaPoin.startsWith("312_")) {
-    hitungTotalPoin312();
-    hitungTotalPoin31();
+    if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+      if (typeof hitungTotalPoin312Pkm === "function") hitungTotalPoin312Pkm();
+      if (typeof hitungTotalPoin312CPkm === "function")
+        hitungTotalPoin312CPkm();
+      if (typeof hitungTotalPoin312CPkm === "function") hitungTotalPoin31();
+    } else {
+      hitungTotalPoin312();
+      hitungTotalPoin31();
+    }
   } else if (namaPoin.startsWith("313_")) {
     hitungTotalPoin313();
     hitungTotalPoin31();
@@ -577,35 +1035,9 @@ function cekDanHitungTotalKelompok(namaPoin) {
 // ========================================================
 // 5. TOTAL LEVEL 3 & 6. PENJUMLAHAN AKUMULASI UTAMA
 // ========================================================
-function hitungTotalPoinH() {
-  const totalH =
-    ambilAngkaSaja("skor_111_H1") +
-    ambilAngkaSaja("skor_111_H2") +
-    ambilAngkaSaja("skor_111_H3");
-  const elTotalH = document.getElementById("skor_111_H_Total");
-  if (elTotalH) elTotalH.innerText = totalH.toFixed(2);
-}
-function hitungTotalPoinJ() {
-  const totalJ =
-    ambilAngkaSaja("skor_111_J1") +
-    ambilAngkaSaja("skor_111_J2") +
-    ambilAngkaSaja("skor_111_J3") +
-    ambilAngkaSaja("skor_111_J4") +
-    ambilAngkaSaja("skor_111_J5") +
-    ambilAngkaSaja("skor_111_J6") +
-    ambilAngkaSaja("skor_111_J7");
-  const elTotalJ = document.getElementById("skor_111_J_Total");
-  if (elTotalJ) elTotalJ.innerText = totalJ.toFixed(2);
-}
-function hitungTotalPoin314A() {
-  const totalA =
-    ambilAngkaSaja("skor_314_A1") +
-    ambilAngkaSaja("skor_314_A2") +
-    ambilAngkaSaja("skor_314_A3") +
-    ambilAngkaSaja("skor_314_A4");
-  const elTotalA = document.getElementById("skor_314_A_Total");
-  if (elTotalA) elTotalA.innerText = totalA.toFixed(2);
-}
+// ========================================================
+// RUMUS PENJUMLAHAN RSUD
+// ========================================================
 function hitungTotalPoin111() {
   const total =
     ambilAngkaSaja("subTotal_111_A") +
@@ -622,6 +1054,29 @@ function hitungTotalPoin111() {
   const el = document.getElementById("skor_111_Total");
   if (el) el.innerText = total.toFixed(2);
 }
+
+function hitungTotalPoinH() {
+  const totalH =
+    ambilAngkaSaja("skor_111_H1") +
+    ambilAngkaSaja("skor_111_H2") +
+    ambilAngkaSaja("skor_111_H3");
+  const elTotalH = document.getElementById("skor_111_H_Total");
+  if (elTotalH) elTotalH.innerText = totalH.toFixed(2);
+}
+
+function hitungTotalPoinJ() {
+  const totalJ =
+    ambilAngkaSaja("skor_111_J1") +
+    ambilAngkaSaja("skor_111_J2") +
+    ambilAngkaSaja("skor_111_J3") +
+    ambilAngkaSaja("skor_111_J4") +
+    ambilAngkaSaja("skor_111_J5") +
+    ambilAngkaSaja("skor_111_J6") +
+    ambilAngkaSaja("skor_111_J7");
+  const elTotalJ = document.getElementById("skor_111_J_Total");
+  if (elTotalJ) elTotalJ.innerText = totalJ.toFixed(2);
+}
+
 function hitungTotalPoin211() {
   const total =
     ambilAngkaSaja("subTotal_211_A") +
@@ -652,6 +1107,7 @@ function hitungTotalPoin212() {
   const el = document.getElementById("skor_212_Total");
   if (el) el.innerText = total.toFixed(2);
 }
+
 function hitungTotalPoin311() {
   const total =
     ambilAngkaSaja("subTotal_311_A") +
@@ -697,11 +1153,23 @@ function hitungTotalPoin313() {
   const el = document.getElementById("skor_313_Total");
   if (el) el.innerText = total.toFixed(2);
 }
+
 function hitungTotalPoin314() {
   const skor314Total = ambilAngkaSaja("skor_314_A_Total");
   const el = document.getElementById("skor_314_Total");
   if (el) el.innerText = skor314Total.toFixed(2);
 }
+
+function hitungTotalPoin314A() {
+  const totalA =
+    ambilAngkaSaja("skor_314_A1") +
+    ambilAngkaSaja("skor_314_A2") +
+    ambilAngkaSaja("skor_314_A3") +
+    ambilAngkaSaja("skor_314_A4");
+  const elTotalA = document.getElementById("skor_314_A_Total");
+  if (elTotalA) elTotalA.innerText = totalA.toFixed(2);
+}
+
 function hitungTotalPoin315() {
   const skor315Total = ambilAngkaSaja("subTotal_315_A");
   const el = document.getElementById("skor_315_Total");
@@ -767,6 +1235,147 @@ function hitungTotalPoin41() {
 }
 
 // ========================================================
+// RUMUS PENJUMLAHAN PUSKESMAS
+// ========================================================
+// ========================================================
+// POINT 1
+// ========================================================
+function hitungTotalPoin111Pkm() {
+  const total =
+    ambilAngkaSaja("skor_111_A_Total") +
+    ambilAngkaSaja("skor_111_B_Total") +
+    ambilAngkaSaja("skor_111_C_Total") +
+    ambilAngkaSaja("skor_111_D_Total") +
+    ambilAngkaSaja("subTotal_111_E") +
+    ambilAngkaSaja("subTotal_111_F") +
+    ambilAngkaSaja("subTotal_111_G");
+  const el = document.getElementById("skor_111_Total");
+  if (el) el.innerText = total.toFixed(2);
+}
+
+function hitungTotalPoin111APkm() {
+  const total1A =
+    ambilAngkaSaja("skor_111_A1") +
+    ambilAngkaSaja("skor_111_A2") +
+    ambilAngkaSaja("skor_111_A3") +
+    ambilAngkaSaja("skor_111_A4") +
+    ambilAngkaSaja("skor_111_A5") +
+    ambilAngkaSaja("skor_111_A6");
+  const elTotal1A = document.getElementById("skor_111_A_Total");
+  if (elTotal1A) elTotal1A.innerText = total1A.toFixed(2);
+}
+
+function hitungTotalPoin111BPkm() {
+  const total1B =
+    ambilAngkaSaja("skor_111_B1") +
+    ambilAngkaSaja("skor_111_B2") +
+    ambilAngkaSaja("skor_111_B3");
+  const elTotal1B = document.getElementById("skor_111_B_Total");
+  if (elTotal1B) elTotal1B.innerText = total1B.toFixed(2);
+}
+
+function hitungTotalPoin111CPkm() {
+  const total1C =
+    ambilAngkaSaja("skor_111_C1") +
+    ambilAngkaSaja("skor_111_C2") +
+    ambilAngkaSaja("skor_111_C3");
+  const elTotal1C = document.getElementById("skor_111_C_Total");
+  if (elTotal1C) elTotal1C.innerText = total1C.toFixed(2);
+}
+
+function hitungTotalPoin111DPkm() {
+  const total1D =
+    ambilAngkaSaja("skor_111_D1") +
+    ambilAngkaSaja("skor_111_D2") +
+    ambilAngkaSaja("skor_111_D3");
+  const elTotal1D = document.getElementById("skor_111_D_Total");
+  if (elTotal1D) elTotal1D.innerText = total1D.toFixed(2);
+}
+
+// ========================================================
+// POINT 2
+// ========================================================
+function hitungTotalPoin212Pkm() {
+  const total =
+    ambilAngkaSaja("subTotal_212_A") +
+    ambilAngkaSaja("skor_212_B_Total") +
+    ambilAngkaSaja("subTotal_212_C") +
+    ambilAngkaSaja("subTotal_212_D") +
+    ambilAngkaSaja("subTotal_212_E") +
+    ambilAngkaSaja("subTotal_212_F") +
+    ambilAngkaSaja("subTotal_212_G") +
+    ambilAngkaSaja("subTotal_212_H") +
+    ambilAngkaSaja("skor_212_I_Total") +
+    ambilAngkaSaja("subTotal_212_J") +
+    ambilAngkaSaja("subTotal_212_K") +
+    ambilAngkaSaja("subTotal_212_L") +
+    ambilAngkaSaja("subTotal_212_M") +
+    ambilAngkaSaja("subTotal_212_N") +
+    ambilAngkaSaja("subTotal_212_O") +
+    ambilAngkaSaja("subTotal_212_P") +
+    ambilAngkaSaja("subTotal_212_Q");
+  const el = document.getElementById("skor_212_Total");
+  if (el) el.innerText = total.toFixed(2);
+}
+
+function hitungTotalPoin212BPkm() {
+  const total212B =
+    ambilAngkaSaja("skor_212_B1") + ambilAngkaSaja("skor_212_B2");
+  const elTotal212B = document.getElementById("skor_212_B_Total");
+  if (elTotal212B) elTotal212B.innerText = total212B.toFixed(2);
+}
+
+function hitungTotalPoin212IPkm() {
+  const total212I =
+    ambilAngkaSaja("skor_212_I1") +
+    ambilAngkaSaja("skor_212_I2") +
+    ambilAngkaSaja("skor_212_I3");
+  const elTotal212I = document.getElementById("skor_212_I_Total");
+  if (elTotal212I) elTotal212I.innerText = total212I.toFixed(2);
+}
+
+// ========================================================
+// POINT 3
+// ========================================================
+function hitungTotalPoin311Pkm() {
+  const total =
+    ambilAngkaSaja("subTotal_311_A") +
+    ambilAngkaSaja("subTotal_311_B") +
+    ambilAngkaSaja("subTotal_311_C") +
+    ambilAngkaSaja("subTotal_311_D") +
+    ambilAngkaSaja("subTotal_311_E") +
+    ambilAngkaSaja("subTotal_311_F") +
+    ambilAngkaSaja("subTotal_311_G") +
+    ambilAngkaSaja("subTotal_311_H") +
+    ambilAngkaSaja("skor_311_I_Total");
+  const el = document.getElementById("skor_311_Total");
+  if (el) el.innerText = total.toFixed(2);
+}
+
+function hitungTotalPoin311IPkm() {
+  const total311I =
+    ambilAngkaSaja("skor_311_I1") + ambilAngkaSaja("skor_311_I2");
+  const elTotal311I = document.getElementById("skor_311_I_Total");
+  if (elTotal311I) elTotal311I.innerText = total311I.toFixed(2);
+}
+
+function hitungTotalPoin312Pkm() {
+  const total =
+    ambilAngkaSaja("subTotal_312_A") +
+    ambilAngkaSaja("subTotal_312_B") +
+    ambilAngkaSaja("skor_312_C_Total");
+  const el = document.getElementById("skor_312_Total");
+  if (el) el.innerText = total.toFixed(2);
+}
+
+function hitungTotalPoin312CPkm() {
+  const total312C =
+    ambilAngkaSaja("skor_312_C1") + ambilAngkaSaja("skor_312_C2");
+  const elTotal312C = document.getElementById("skor_312_C_Total");
+  if (elTotal312C) elTotal312C.innerText = total312C.toFixed(2);
+}
+
+// ========================================================
 // 7. FUNGSI GRAND TOTAL & "SAPU JAGAT" DATABASE
 // ========================================================
 function hitungGrandTotal() {
@@ -787,11 +1396,22 @@ function hitungGrandTotal() {
     predikatHasil = tentukanPredikat(grandTotal);
     elPredikat.innerText = predikatHasil;
   }
+  // 🛑 PENTING: JANGAN SIMPAN KE FIREBASE JIKA SEDANG DALAM PROSES MEMUAT DATA!
+  if (isSedangMemuat) return;
 
-  // === FITUR SAPU JAGAT: REKAM SELURUH NILAI DI LAYAR KE FIREBASE ===
+  // === FITUR SAPU JAGAT: REKAM SELURUH NILAI KE FIREBASE ===
   if (currentUser && formRef) {
-    // Tentukan nama instansi: jika admin, ambil dari teks dropdown pilihan OPD
     let namaInstansiSimpan = currentNamaInstansi;
+
+    // Cegah agar "Administrator" tidak ikut tersimpan sebagai nama instansi operasional
+    if (!namaInstansiSimpan || namaInstansiSimpan === "Administrator") {
+      if (currentRole.startsWith("pkm_")) {
+        namaInstansiSimpan = formatNamaInstansi(currentRole);
+      } else if (currentRole.startsWith("rsud_")) {
+        namaInstansiSimpan = formatNamaInstansi(currentRole);
+      }
+    }
+
     if (currentRole === "admin") {
       const selectOpd = document.getElementById("pilihOpdAdmin");
       if (
@@ -809,7 +1429,6 @@ function hitungGrandTotal() {
       predikat: predikatHasil,
     };
 
-    // Ambil SEMUA elemen berawalan skor_, subTotal_, real_, dan target_
     const semuaElemen = document.querySelectorAll(
       '[id^="skor_"], [id^="subTotal_"], [id^="real_"], [id^="target_"]',
     );
@@ -824,9 +1443,34 @@ function hitungGrandTotal() {
       dataLengkap[el.id] = nilai;
     });
 
+    // Simpan data Rawat Inap ke dokumen aktif
     formRef.set(dataLengkap, { merge: true }).catch((err) => {
       console.error("Gagal menyimpan rekap laporan ke Firestore:", err);
     });
+
+    // Jika koleksi PKM, simpan juga dokumen Non-Rawat Inap dengan skorNonRI yang terekam
+    // Jika koleksi PKM, simpan juga dokumen Non-Rawat Inap berdasarkan skorNonRI yang tampil di layar
+    if (tipeKoleksi === "evaluasi_kinerja_pkm") {
+      const docIdRaw = formRef.id;
+      if (docIdRaw.includes("_rawatinap")) {
+        const docIdNonRI = docIdRaw.replace("_rawatinap", "_nonrawatinap");
+
+        let dataNonRI = { ...dataLengkap };
+        const elemenNonRI = document.querySelectorAll('[id^="skorNonRI_"]');
+
+        elemenNonRI.forEach((el) => {
+          const namaPoin = el.id.replace("skorNonRI_", "");
+          const valNonRI = parseFloat(el.innerText.replace(",", ".")) || 0;
+          dataNonRI[`skor_${namaPoin}`] = valNonRI;
+          dataNonRI[`subTotal_${namaPoin}`] = valNonRI;
+        });
+
+        db.collection("evaluasi_kinerja_pkm")
+          .doc(docIdNonRI)
+          .set(dataNonRI, { merge: true })
+          .catch((err) => console.error("Gagal menyimpan Non-RI:", err));
+      }
+    }
   }
 }
 
@@ -847,8 +1491,52 @@ async function exportToExcel(
   namaInstansi = null,
   triwulan = null,
 ) {
+  function tampilkanNotif(pesan, jenis = "info", durasi = 0) {
+    let container = document.getElementById("alertExportContainer");
+    if (!container) {
+      container = document.createElement("div");
+      container.id = "alertExportContainer";
+      container.style.position = "fixed";
+      container.style.top = "20px";
+      container.style.right = "20px";
+      container.style.zIndex = "9999";
+      container.style.maxWidth = "400px";
+      document.body.appendChild(container);
+    }
+
+    let alertClass = "alert-info";
+    let iconClass = "fa-spinner fa-spin";
+    if (jenis === "success") {
+      alertClass = "alert-success";
+      iconClass = "fa-check-circle";
+    } else if (jenis === "danger") {
+      alertClass = "alert-danger";
+      iconClass = "fa-exclamation-circle";
+    }
+
+    container.innerHTML = `
+      <div class="alert ${alertClass} alert-dismissible fade show shadow-lg mb-0" role="alert">
+        <i class="fa ${iconClass} me-2"></i>${pesan}
+        ${jenis !== "info" ? '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' : ""}
+      </div>
+    `;
+
+    if (durasi > 0) {
+      setTimeout(() => {
+        container.innerHTML = "";
+      }, durasi);
+    }
+  }
+
   try {
-    alert("Sedang mengambil template dan menyuntikkan data... Mohon tunggu.");
+    tampilkanNotif(
+      "Sedang mengambil template dan menyuntikkan data... Mohon tunggu.",
+      "info",
+    );
+
+    // TAMBAHKAN JEDA BUATAN (misal 800 milidetik) agar animasi loading sempat terlihat
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
     let dataAdmin = null;
 
     if (namaKoleksi && docId) {
@@ -886,19 +1574,14 @@ async function exportToExcel(
                 ? nilaiDariDatabase
                 : parseFloat(nilaiDariDatabase);
             } else {
-              // KECERDASAN TERJEMAHAN: Jika Excel minta subTotal_ tapi di DB cuma ada skor_
               if (idTarget.startsWith("subTotal_")) {
                 const skorAsli = idTarget.replace("subTotal_", "skor_");
                 nilaiAkhir = parseFloat(dataAdmin[skorAsli]) || 0;
               } else {
-                console.warn(
-                  `[DEBUG] Variabel "${idTarget}" tidak ditemukan di database Firebase!`,
-                );
                 nilaiAkhir = 0;
               }
             }
           } else {
-            // User: Baca layar
             nilaiAkhir = ambilAngkaSaja(idTarget);
           }
           cell.value = nilaiAkhir;
@@ -927,11 +1610,100 @@ async function exportToExcel(
 
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+
+    // Notifikasi sukses tampil dengan stabil
+    tampilkanNotif("Laporan Excel berhasil diunduh!", "success", 4000);
   } catch (error) {
     console.error("Gagal export:", error);
-    alert("Terjadi kesalahan: \n" + error.message);
+    tampilkanNotif("Terjadi kesalahan: " + error.message, "danger", 6000);
   }
 }
+// async function exportToExcel(
+//   namaKoleksi = null,
+//   docId = null,
+//   namaInstansi = null,
+//   triwulan = null,
+// ) {
+//   try {
+//     alert("Sedang mengambil template dan menyuntikkan data... Mohon tunggu.");
+//     let dataAdmin = null;
+
+//     if (namaKoleksi && docId) {
+//       const doc = await db.collection(namaKoleksi).doc(docId).get();
+//       if (doc.exists) {
+//         dataAdmin = doc.data();
+//       } else {
+//         throw new Error("Data instansi tidak ditemukan di database.");
+//       }
+//     }
+
+//     const response = await fetch("assets/template/template_excel.xlsx");
+//     if (!response.ok) {
+//       throw new Error(
+//         "Gagal memuat template. Pastikan file berada di 'assets/template/template_excel.xlsx'",
+//       );
+//     }
+
+//     const arrayBuffer = await response.arrayBuffer();
+//     const workbook = new ExcelJS.Workbook();
+//     await workbook.xlsx.load(arrayBuffer);
+//     const worksheet = workbook.worksheets[0];
+
+//     worksheet.eachRow((row, rowNumber) => {
+//       row.eachCell((cell, colNumber) => {
+//         if (typeof cell.value === "string" && cell.value.startsWith("$")) {
+//           const idTarget = cell.value.substring(1);
+//           let nilaiAkhir = 0;
+
+//           if (dataAdmin) {
+//             let nilaiDariDatabase = dataAdmin[idTarget];
+
+//             if (nilaiDariDatabase !== undefined) {
+//               nilaiAkhir = isNaN(parseFloat(nilaiDariDatabase))
+//                 ? nilaiDariDatabase
+//                 : parseFloat(nilaiDariDatabase);
+//             } else {
+//               if (idTarget.startsWith("subTotal_")) {
+//                 const skorAsli = idTarget.replace("subTotal_", "skor_");
+//                 nilaiAkhir = parseFloat(dataAdmin[skorAsli]) || 0;
+//               } else {
+//                 nilaiAkhir = 0;
+//               }
+//             }
+//           } else {
+//             nilaiAkhir = ambilAngkaSaja(idTarget);
+//           }
+//           cell.value = nilaiAkhir;
+//         }
+//       });
+//     });
+
+//     const buffer = await workbook.xlsx.writeBuffer();
+//     const blob = new Blob([buffer], {
+//       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+//     });
+
+//     const url = window.URL.createObjectURL(blob);
+//     const a = document.createElement("a");
+//     a.href = url;
+
+//     if (dataAdmin && namaInstansi && triwulan) {
+//       const namaFileBersih = namaInstansi.replace(/\s+/g, "_");
+//       a.download = `Laporan_${namaFileBersih}_${triwulan}.xlsx`;
+//     } else {
+//       a.download = "Laporan_Kinerja_Otomatis.xlsx";
+//     }
+
+//     document.body.appendChild(a);
+//     a.click();
+
+//     window.URL.revokeObjectURL(url);
+//     document.body.removeChild(a);
+//   } catch (error) {
+//     console.error("Gagal export:", error);
+//     alert("Terjadi kesalahan: \n" + error.message);
+//   }
+// }
 
 function resetData() {
   const konfirmasi = confirm(
@@ -972,7 +1744,7 @@ function formatNamaInstansi(username) {
 }
 
 // ========================================================
-// 9. FUNGSI KHUSUS DASHBOARD ADMIN
+// 9. FUNGSI KHUSUS DASHBOARD ADMIN (Mendukung Pemisahan RI & NRI)
 // ========================================================
 async function tarikSemuaDataAdmin() {
   const tabelRef = document.getElementById("tabelRekapAdmin");
@@ -994,7 +1766,6 @@ async function tarikSemuaDataAdmin() {
       snapshot.forEach((doc) => {
         const data = doc.data();
 
-        // Jika bukan admin, lakukan penyaringan kepemilikan data
         if (currentRole && currentRole !== "admin") {
           const milikUid =
             currentUser && doc.id.startsWith(currentUser.uid + "_");
@@ -1007,7 +1778,20 @@ async function tarikSemuaDataAdmin() {
 
         const idParts = doc.id.split("_");
         const triwulan = idParts[1] || "Tidak Diketahui";
-        const nama = data.nama_instansi || "Instansi (Belum Input)";
+
+        // Deteksi kategori layanan khusus PKM
+        // Deteksi kategori layanan khusus PKM (Cek nonrawatinap terlebih dahulu)
+        let tambahanLabel = "";
+        if (col.name === "evaluasi_kinerja_pkm") {
+          if (doc.id.includes("nonrawatinap")) {
+            tambahanLabel = " (Non-Rawat Inap)";
+          } else if (doc.id.includes("rawatinap")) {
+            tambahanLabel = " (Rawat Inap)";
+          }
+        }
+
+        const nama =
+          (data.nama_instansi || "Instansi (Belum Input)") + tambahanLabel;
 
         let totalVal = parseFloat(data.grand_total) || 0;
         if (totalVal === 0) {
@@ -1032,7 +1816,6 @@ async function tarikSemuaDataAdmin() {
               <td><strong>${total}</strong></td>
               <td>${predikat}</td>
               <td>
-              
                 <button class="btn btn-sm btn-success me-1" onclick="exportToExcel('${col.name}', '${doc.id}', '${nama}', '${triwulan}')" title="Cetak ke Excel Sesuai Template">
                   <i class="fa fa-solid fa-print"></i>
                 </button>
@@ -1152,16 +1935,13 @@ async function exportExcelAdmin() {
 
 // Pagination Start
 function pindahHalaman(numPage) {
-  // Sembunyikan semua section halaman
   const sections = document.querySelectorAll(".page-section");
   sections.forEach((sec) => {
     sec.style.display = "none";
   });
 
-  // Tampilkan halaman yang dipilih
   document.getElementById("section-page-" + numPage).style.display = "block";
 
-  // Perbarui status aktif pada tombol navigasi
   for (let i = 1; i <= 4; i++) {
     const btn = document.getElementById("btn-page-" + i);
     if (btn) {
@@ -1175,7 +1955,6 @@ function pindahHalaman(numPage) {
     }
   }
 
-  // Gulir layar kembali ke atas saat pindah halaman
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -1183,15 +1962,12 @@ function pindahHalaman(numPage) {
 // 10. FITUR AUTO LOGOUT KARENA TIDAK AKTIF (IDLE TIMEOUT)
 // ========================================================
 let idleTimer;
-const waktuBatasIdle = 15 * 60 * 1000; // 15 menit (dalam milidetik). Ubah sesuai kebutuhan.
+const waktuBatasIdle = 15 * 60 * 1000;
 
 function resetIdleTimer() {
-  // Hanya jalankan jika pengguna sedang login
   if (!currentUser) return;
-
   clearTimeout(idleTimer);
 
-  // Set ulang timer mundur
   idleTimer = setTimeout(() => {
     alert(
       "Sesi Anda telah berakhir karena tidak ada aktivitas selama 15 menit. Anda akan otomatis keluar.",
@@ -1202,7 +1978,6 @@ function resetIdleTimer() {
   }, waktuBatasIdle);
 }
 
-// Pantau berbagai aktivitas pengguna di browser
 window.onload = resetIdleTimer;
 window.onmousemove = resetIdleTimer;
 window.onkeypress = resetIdleTimer;
@@ -1211,7 +1986,7 @@ window.onscroll = resetIdleTimer;
 window.ontouchstart = resetIdleTimer;
 
 // ========================================================
-// 1. MENAMPILKAN SEMUA DATA USER DARI FIRESTORE
+// MANAJEMEN USER ADMIN
 // ========================================================
 function tarikDaftarUserAdmin() {
   const tabelRef = document.getElementById("tabelDaftarUser");
@@ -1262,16 +2037,12 @@ function tarikDaftarUserAdmin() {
     });
 }
 
-// ========================================================
-// 2. REGISTRASI USER BARU OLEH ADMIN
-// ========================================================
 function prosesRegistrasiOPD() {
   const emailInput = document.getElementById("regEmail").value.trim();
   const passwordInput = document.getElementById("regPassword").value;
   const selectOpd = document.getElementById("regOPD");
 
-  const opdTerpilih = selectOpd.value; // Contoh: "rsud_bangil"
-  // Mengambil teks dari option yang dipilih (Contoh: "RSUD Bangil")
+  const opdTerpilih = selectOpd.value;
   const namaInstansiTerpilih = selectOpd.options[selectOpd.selectedIndex]
     ? selectOpd.options[selectOpd.selectedIndex].text
     : "";
@@ -1281,7 +2052,6 @@ function prosesRegistrasiOPD() {
     return;
   }
 
-  // Gunakan Instance Sekunder Firebase Auth agar sesi login Admin aktif tidak terputus
   let secondaryApp;
   try {
     secondaryApp =
@@ -1298,12 +2068,11 @@ function prosesRegistrasiOPD() {
     .then((userCredential) => {
       const newUser = userCredential.user;
 
-      // Simpan pemetaan profil ke koleksi 'users' di Firestore
       return db.collection("users").doc(newUser.uid).set({
         uid: newUser.uid,
         email: emailInput,
         opd: opdTerpilih,
-        namaInstansi: namaInstansiTerpilih, // Otomatis menyimpan nama dari option
+        namaInstansi: namaInstansiTerpilih,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
     })
@@ -1312,13 +2081,11 @@ function prosesRegistrasiOPD() {
         `Berhasil! Akun ${emailInput} telah didaftarkan untuk ${namaInstansiTerpilih}`,
       );
 
-      // Reset Form & Tutup Modal
       document.getElementById("formRegistrasiUser").reset();
       const modalEl = document.getElementById("modalTambahUser");
       const modalInstance = bootstrap.Modal.getInstance(modalEl);
       if (modalInstance) modalInstance.hide();
 
-      // Refresh Tabel User
       if (typeof tarikDaftarUserAdmin === "function") {
         tarikDaftarUserAdmin();
       }
@@ -1328,9 +2095,6 @@ function prosesRegistrasiOPD() {
     });
 }
 
-// ========================================================
-// 3. RESET PASSWORD & HAPUS PROFIL USER
-// ========================================================
 function adminKirimResetPassword(emailUser) {
   if (!emailUser || emailUser === "-") {
     alert("Email pengguna tidak valid.");
@@ -1374,9 +2138,6 @@ function hapusUserFirestore(uidUser, emailUser) {
   }
 }
 
-// ========================================================
-// HAPUS DATA PENILAIAN
-// ========================================================
 async function hapusDataAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
   const konfirmasi = confirm(
     `⚠️ PERHATIAN!\n\nApakah Anda yakin ingin MENGHAPUS permanen laporan kinerja untuk:\n- Instansi: ${namaInstansi}\n- Periode: ${triwulan}?`,
@@ -1384,16 +2145,112 @@ async function hapusDataAdmin(namaKoleksi, docId, namaInstansi, triwulan) {
 
   if (konfirmasi) {
     try {
-      // Hapus dokumen spesifik dari koleksi Firestore
       await db.collection(namaKoleksi).doc(docId).delete();
-
       alert("Data laporan berhasil dihapus dari sistem.");
-
-      // Muat ulang tabel rekap agar baris yang terhapus langsung hilang dari layar
       tarikSemuaDataAdmin();
     } catch (error) {
       console.error("Gagal menghapus data laporan:", error);
       alert("Terjadi kesalahan saat menghapus data: " + error.message);
+    }
+  }
+}
+
+// ========================================================
+// FUNCTION MENGATUR DASHBOARD
+// ========================================================
+async function muatRingkasanDashboard() {
+  const elGrandTotal = document.getElementById("grandTotal");
+  const elPredikat = document.getElementById("predikatGrandTotal");
+  if (!elGrandTotal || !elPredikat) return;
+
+  // === JIKA YANG LOGIN ADALAH ADMIN ===
+  if (currentRole === "admin") {
+    const selectOpd = document.getElementById("pilihOpdAdmin");
+    const selectTribulan = document.getElementById("pilihTribulan");
+    if (!selectOpd || !selectTribulan) return;
+
+    const opdTerpilih = selectOpd.value;
+    const triwulanTerpilih = selectTribulan.value;
+
+    if (!opdTerpilih) {
+      elGrandTotal.innerText = "0.00";
+      elPredikat.innerText = "-";
+      return;
+    }
+
+    let namaKoleksi = opdTerpilih.startsWith("rsud_")
+      ? "evaluasi_kinerja_rsud"
+      : "evaluasi_kinerja_pkm";
+
+    try {
+      const userSnapshot = await db
+        .collection("users")
+        .where("opd", "==", opdTerpilih)
+        .get();
+      if (userSnapshot.empty) {
+        elGrandTotal.innerText = "0.00";
+        elPredikat.innerText = "-";
+        return;
+      }
+
+      const targetUid = userSnapshot.docs[0].data().uid;
+      let docId = `${targetUid}_${triwulanTerpilih}`;
+      if (namaKoleksi === "evaluasi_kinerja_pkm") {
+        docId += "_rawatinap";
+      }
+
+      const docSnap = await db.collection(namaKoleksi).doc(docId).get();
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        let totalVal = parseFloat(data.grand_total) || 0;
+        if (totalVal === 0) {
+          const t1 = parseFloat(data.skor_11_Total) || 0;
+          const t2 = parseFloat(data.skor_21_Total) || 0;
+          const t3 = parseFloat(data.skor_31_Total) || 0;
+          const t4 = parseFloat(data.skor_41_Total) || 0;
+          totalVal = t1 + t2 + t3 + t4;
+        }
+        const predikatHasil =
+          data.predikat && data.predikat !== "-"
+            ? data.predikat
+            : tentukanPredikat(totalVal);
+        elGrandTotal.innerText = totalVal.toFixed(2);
+        elPredikat.innerText = predikatHasil;
+      } else {
+        elGrandTotal.innerText = "0.00";
+        elPredikat.innerText = "- (Belum Ada Data)";
+      }
+    } catch (error) {
+      console.error("Gagal memuat ringkasan admin:", error);
+    }
+  } else {
+    // === JIKA YANG LOGIN ADALAH USER (RSUD / PKM) ===
+    if (!currentUser || !formRef) return;
+
+    try {
+      const docSnap = await formRef.get();
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        let totalVal = parseFloat(data.grand_total) || 0;
+        if (totalVal === 0) {
+          const t1 = parseFloat(data.skor_11_Total) || 0;
+          const t2 = parseFloat(data.skor_21_Total) || 0;
+          const t3 = parseFloat(data.skor_31_Total) || 0;
+          const t4 = parseFloat(data.skor_41_Total) || 0;
+          totalVal = t1 + t2 + t3 + t4;
+        }
+        const predikatHasil =
+          data.predikat && data.predikat !== "-"
+            ? data.predikat
+            : tentukanPredikat(totalVal);
+        elGrandTotal.innerText = totalVal.toFixed(2);
+        elPredikat.innerText = predikatHasil;
+      } else {
+        elGrandTotal.innerText = "0.00";
+        elPredikat.innerText = "- (Belum Ada Data)";
+      }
+    } catch (error) {
+      console.error("Gagal memuat ringkasan user:", error);
     }
   }
 }
