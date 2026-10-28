@@ -152,11 +152,6 @@ function aturTampilanBerdasarkanRole(role) {
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
   const wrapperOpdAdmin = document.getElementById("wrapperPilihOpdAdmin");
   const rekappredikat = document.getElementById("sectionAdminRekapPredikat");
-<<<<<<< HEAD
-=======
-  const buttondashboardrsud = document.getElementById("buttondashboardrsud");
-  const buttondashboardpkm = document.getElementById("buttondashboardpkm");
->>>>>>> f588aa67242400b77ab51ea4e7015b6cc493d367
 
   if (menuRsud) {
     menuRsud.style.display = "none";
@@ -176,15 +171,6 @@ function aturTampilanBerdasarkanRole(role) {
   }
   if (wrapperOpdAdmin) {
     wrapperOpdAdmin.style.display = "none";
-<<<<<<< HEAD
-=======
-  }
-  if (buttondashboardrsud) {
-    buttondashboardrsud.style.display = "none";
-  }
-  if (buttondashboardpkm) {
-    buttondashboardpkm.style.display = "none";
->>>>>>> f588aa67242400b77ab51ea4e7015b6cc493d367
   }
 
   if (role === "admin") {
