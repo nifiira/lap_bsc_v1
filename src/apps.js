@@ -174,6 +174,12 @@ function aturTampilanBerdasarkanRole(role) {
   if (wrapperOpdAdmin) {
     wrapperOpdAdmin.style.display = "none";
   }
+  if (buttondashboardrsud) {
+    buttondashboardrsud.style.display = "none";
+  }
+  if (buttondashboardpkm) {
+    buttondashboardpkm.style.display = "none";
+  }
 
   if (role === "admin") {
     if (menuRsud) {
