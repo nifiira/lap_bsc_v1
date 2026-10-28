@@ -1634,6 +1634,7 @@ async function exportToExcel(
     tampilkanNotif("Terjadi kesalahan: " + error.message, "danger", 6000);
   }
 }
+
 // async function exportToExcel(
 //   namaKoleksi = null,
 //   docId = null,
@@ -1721,26 +1722,26 @@ async function exportToExcel(
 //   }
 // }
 
-function resetData() {
-  const konfirmasi = confirm(
-    "⚠️ PERHATIAN!\n\nApakah Anda yakin ingin MENGHAPUS SEMUA DATA di form ini?",
-  );
-  if (konfirmasi) {
-    if (formRef) {
-      formRef
-        .delete()
-        .then(() => {
-          alert("Semua data berhasil dihapus dari sistem.");
-          location.reload();
-        })
-        .catch((error) => {
-          alert("Gagal menghapus data: " + error.message);
-        });
-    } else {
-      location.reload();
-    }
-  }
-}
+// function resetData() {
+//   const konfirmasi = confirm(
+//     "⚠️ PERHATIAN!\n\nApakah Anda yakin ingin MENGHAPUS SEMUA DATA di form ini?",
+//   );
+//   if (konfirmasi) {
+//     if (formRef) {
+//       formRef
+//         .delete()
+//         .then(() => {
+//           alert("Semua data berhasil dihapus dari sistem.");
+//           location.reload();
+//         })
+//         .catch((error) => {
+//           alert("Gagal menghapus data: " + error.message);
+//         });
+//     } else {
+//       location.reload();
+//     }
+//   }
+// }
 
 function formatNamaInstansi(username) {
   let tipe = "";
@@ -1855,101 +1856,6 @@ async function tarikSemuaDataAdmin() {
   }
 }
 
-async function exportExcelAdmin() {
-  try {
-    alert(
-      "Sistem sedang mengumpulkan seluruh data instansi dan menyusunnya ke dalam Excel. Mohon tunggu beberapa saat...",
-    );
-
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Rekapitulasi Kinerja");
-
-    let semuaData = [];
-    let daftarPoinUnik = new Set();
-
-    const snapRsud = await db.collection("evaluasi_kinerja_rsud").get();
-    snapRsud.forEach((doc) => {
-      let data = doc.data();
-      data.idDokumen = doc.id;
-      semuaData.push(data);
-      Object.keys(data).forEach((k) => {
-        if (k.startsWith("skor_") || k.startsWith("subTotal_"))
-          daftarPoinUnik.add(k);
-      });
-    });
-
-    const snapPkm = await db.collection("evaluasi_kinerja_pkm").get();
-    snapPkm.forEach((doc) => {
-      let data = doc.data();
-      data.idDokumen = doc.id;
-      semuaData.push(data);
-      Object.keys(data).forEach((k) => {
-        if (k.startsWith("skor_") || k.startsWith("subTotal_"))
-          daftarPoinUnik.add(k);
-      });
-    });
-
-    if (semuaData.length === 0) {
-      alert("Belum ada data dari instansi manapun untuk dicetak.");
-      return;
-    }
-
-    const kolomDasar = [
-      { header: "Nama Instansi", key: "nama", width: 30 },
-      { header: "Periode/TW", key: "tw", width: 15 },
-      { header: "Grand Total", key: "gt", width: 15 },
-      { header: "Predikat", key: "predikat", width: 20 },
-    ];
-
-    const poinUrut = Array.from(daftarPoinUnik).sort();
-    poinUrut.forEach((poin) => {
-      kolomDasar.push({ header: poin, key: poin, width: 15 });
-    });
-    worksheet.columns = kolomDasar;
-
-    worksheet.getRow(1).font = { bold: true, color: { argb: "FFFFFFFF" } };
-    worksheet.getRow(1).fill = {
-      type: "pattern",
-      pattern: "solid",
-      fgColor: { argb: "FF1E3A8A" },
-    };
-
-    semuaData.forEach((d) => {
-      const tw = d.idDokumen ? d.idDokumen.split("_")[1] : "-";
-      let barisData = {
-        nama: d.nama_instansi || "Instansi",
-        tw: tw,
-        gt: d.grand_total || "0",
-        predikat: d.predikat || "-",
-      };
-
-      poinUrut.forEach((poin) => {
-        barisData[poin] = d[poin] !== undefined ? d[poin] : "0";
-      });
-
-      worksheet.addRow(barisData);
-    });
-
-    const buffer = await workbook.xlsx.writeBuffer();
-    const blob = new Blob([buffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Rekapitulasi_Lengkap_Dinkes.xlsx";
-    document.body.appendChild(a);
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-  } catch (error) {
-    console.error("Gagal export admin Excel:", error);
-    alert("Terjadi kesalahan saat membuat file Excel: " + error.message);
-  }
-}
-
-// Pagination Start
 function pindahHalaman(numPage) {
   const sections = document.querySelectorAll(".page-section");
   sections.forEach((sec) => {
