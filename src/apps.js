@@ -230,6 +230,7 @@ function aturTampilanBerdasarkanRole(role) {
       menuLaporan.classList.add("tampil-menu");
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
+      buttondashboardrsud.style.display = "block";
     }
   } else if (role === "pkm") {
     if (menuPkm) {
@@ -239,6 +240,7 @@ function aturTampilanBerdasarkanRole(role) {
       menuLaporan.classList.add("tampil-menu");
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
+      buttondashboardpkm.style.display = "block";
     }
   }
 }
