@@ -190,6 +190,12 @@ function aturTampilanBerdasarkanRole(role) {
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
     }
+    if (buttondashboardrsud) {
+      buttondashboardrsud.style.display = "block";
+    }
+    if (buttondashboardpkm) {
+      buttondashboardpkm.style.display = "block";
+    }
     if (wrapperOpdAdmin) {
       wrapperOpdAdmin.style.display = "block";
     }
