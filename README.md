@@ -18,7 +18,7 @@ KETENTUAN PENGGUNAAN DAN DISTRIBUSI
    - Anda TIDAK DIPERBOLEHKAN menghapus tautan kredit, atribusi, atau 
      backlink penulis asli templat (HTML Codex) pada antarmuka aplikasi, 
      kecuali jika Anda telah membeli Credit Removal License langsung dari 
-     situs resmi HTML Codex (https://htmlcodex.com/credit-removal)[cite: 2].
+     situs resmi HTML Codex (https://htmlcodex.com/credit-removal).
 
 2. HAK PENGGUNAAN APLIKASI (PERMISSIONS)
    - Pengguna / Instansi diizinkan menggunakan aplikasi BSC ini untuk 
@@ -31,7 +31,7 @@ KETENTUAN PENGGUNAAN DAN DISTRIBUSI
      menjadikan aplikasi BSC ini sebagai produk komersial siap jual tanpa 
      izin tertulis dari pengembang.
    - Dilarang mengunggah ulang kode sumber template dasar atau aplikasi ini 
-     ke situs penyedia templat pihak ketiga tanpa izin[cite: 2].
+     ke situs penyedia templat pihak ketiga tanpa izin.
 
 4. PENAFIAN (DISCLAIMER)
    - Perangkat lunak/aplikasi ini disediakan "apa adanya", tanpa jaminan 
