@@ -1633,6 +1633,140 @@ function tentukanPredikat(skor) {
 // ========================================================
 // 8. FUNGSI EXPORT (EXCEL) 2-IN-1 & RESET
 // ========================================================
+// async function exportToExcel(
+//   namaKoleksi = null,
+//   docId = null,
+//   namaInstansi = null,
+//   triwulan = null,
+// ) {
+//   function tampilkanNotif(pesan, jenis = "info", durasi = 0) {
+//     let container = document.getElementById("alertExportContainer");
+//     if (!container) {
+//       container = document.createElement("div");
+//       container.id = "alertExportContainer";
+//       container.style.position = "fixed";
+//       container.style.top = "20px";
+//       container.style.right = "20px";
+//       container.style.zIndex = "9999";
+//       container.style.maxWidth = "400px";
+//       document.body.appendChild(container);
+//     }
+
+//     let alertClass = "alert-info";
+//     let iconClass = "fa-spinner fa-spin";
+//     if (jenis === "success") {
+//       alertClass = "alert-success";
+//       iconClass = "fa-check-circle";
+//     } else if (jenis === "danger") {
+//       alertClass = "alert-danger";
+//       iconClass = "fa-exclamation-circle";
+//     }
+
+//     container.innerHTML = `
+//       <div class="alert ${alertClass} alert-dismissible fade show shadow-lg mb-0" role="alert">
+//         <i class="fa ${iconClass} me-2"></i>${pesan}
+//         ${jenis !== "info" ? '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' : ""}
+//       </div>
+//     `;
+
+//     if (durasi > 0) {
+//       setTimeout(() => {
+//         container.innerHTML = "";
+//       }, durasi);
+//     }
+//   }
+
+//   try {
+//     tampilkanNotif(
+//       "Sedang mengambil template dan menyuntikkan data... Mohon tunggu.",
+//       "info",
+//     );
+
+//     // TAMBAHKAN JEDA BUATAN (misal 800 milidetik) agar animasi loading sempat terlihat
+//     await new Promise((resolve) => setTimeout(resolve, 800));
+
+//     let dataAdmin = null;
+
+//     if (namaKoleksi && docId) {
+//       const doc = await db.collection(namaKoleksi).doc(docId).get();
+//       if (doc.exists) {
+//         dataAdmin = doc.data();
+//       } else {
+//         throw new Error("Data instansi tidak ditemukan di database.");
+//       }
+//     }
+
+//     const response = await fetch("assets/template/template_excel.xlsx");
+//     if (!response.ok) {
+//       throw new Error(
+//         "Gagal memuat template. Pastikan file berada di 'assets/template/template_excel.xlsx'",
+//       );
+//     }
+
+//     const arrayBuffer = await response.arrayBuffer();
+//     const workbook = new ExcelJS.Workbook();
+//     await workbook.xlsx.load(arrayBuffer);
+//     const worksheet = workbook.worksheets[0];
+
+//     worksheet.eachRow((row, rowNumber) => {
+//       row.eachCell((cell, colNumber) => {
+//         if (typeof cell.value === "string" && cell.value.startsWith("$")) {
+//           const idTarget = cell.value.substring(1);
+//           let nilaiAkhir = 0;
+
+//           if (dataAdmin) {
+//             let nilaiDariDatabase = dataAdmin[idTarget];
+
+//             if (nilaiDariDatabase !== undefined) {
+//               nilaiAkhir = isNaN(parseFloat(nilaiDariDatabase))
+//                 ? nilaiDariDatabase
+//                 : parseFloat(nilaiDariDatabase);
+//             } else {
+//               if (idTarget.startsWith("subTotal_")) {
+//                 const skorAsli = idTarget.replace("subTotal_", "skor_");
+//                 nilaiAkhir = parseFloat(dataAdmin[skorAsli]) || 0;
+//               } else {
+//                 nilaiAkhir = 0;
+//               }
+//             }
+//           } else {
+//             nilaiAkhir = ambilAngkaSaja(idTarget);
+//           }
+//           cell.value = nilaiAkhir;
+//         }
+//       });
+//     });
+
+//     const buffer = await workbook.xlsx.writeBuffer();
+//     const blob = new Blob([buffer], {
+//       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+//     });
+
+//     const url = window.URL.createObjectURL(blob);
+//     const a = document.createElement("a");
+//     a.href = url;
+
+//     if (dataAdmin && namaInstansi && triwulan) {
+//       const namaFileBersih = namaInstansi.replace(/\s+/g, "_");
+//       a.download = `Laporan_${namaFileBersih}_${triwulan}.xlsx`;
+//     } else {
+//       a.download = "Laporan_Kinerja_Otomatis.xlsx";
+//     }
+
+//     document.body.appendChild(a);
+//     a.click();
+
+//     window.URL.revokeObjectURL(url);
+//     document.body.removeChild(a);
+
+//     // Notifikasi sukses tampil dengan stabil
+//     tampilkanNotif("Laporan Excel berhasil diunduh!", "success", 4000);
+//   } catch (error) {
+//     console.error("Gagal export:", error);
+//     tampilkanNotif("Terjadi kesalahan: " + error.message, "danger", 6000);
+//   }
+// }
+
 async function exportToExcel(
   namaKoleksi = null,
   docId = null,
@@ -1696,10 +1830,24 @@ async function exportToExcel(
       }
     }
 
-    const response = await fetch("assets/template/template_excel.xlsx");
+    // Tentukan file template berdasarkan kriteria PKM atau RSUD
+    let templateFile = "template_excel.xlsx"; // Default untuk RSUD
+    const cekKoleksi = namaKoleksi ? namaKoleksi.toLowerCase() : "";
+    const cekInstansi = namaInstansi ? namaInstansi.toLowerCase() : "";
+
+    if (
+      cekKoleksi.includes("pkm") ||
+      cekKoleksi.includes("puskesmas") ||
+      cekInstansi.includes("pkm") ||
+      cekInstansi.includes("puskesmas")
+    ) {
+      templateFile = "template_excel_pkm.xlsx";
+    }
+
+    const response = await fetch(`assets/template/${templateFile}`);
     if (!response.ok) {
       throw new Error(
-        "Gagal memuat template. Pastikan file berada di 'assets/template/template_excel.xlsx'",
+        `Gagal memuat template. Pastikan file berada di 'assets/template/${templateFile}'`,
       );
     }
 
