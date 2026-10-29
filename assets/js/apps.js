@@ -77,6 +77,10 @@ auth.onAuthStateChanged((user) => {
             aturTampilanBerdasarkanRole("admin");
             if (currentPath.includes("user-login.html")) {
               tarikDaftarUserAdmin();
+            } else if (currentPath.includes("dashboard.html")) {
+              if (typeof muatRingkasanDashboard === "function") {
+                muatRingkasanDashboard();
+              }
             } else if (typeof tarikSemuaDataAdmin === "function") {
               tarikSemuaDataAdmin();
             }
@@ -89,11 +93,18 @@ auth.onAuthStateChanged((user) => {
 
             if (currentPath.includes("penilaian-pkm.html")) {
               window.location.href = "penilaian-rsud.html";
-            } else if (
-              !currentPath.includes("laporan.html") &&
-              typeof muatDataDariFirebase === "function"
-            ) {
-              muatDataDariFirebase();
+            } else if (currentPath.includes("dashboard.html")) {
+              // Memunculkan grand total & predikat langsung di dashboard
+              if (typeof muatRingkasanDashboard === "function") {
+                muatRingkasanDashboard();
+              }
+            } else if (!currentPath.includes("laporan.html")) {
+              // Memuat data form penilaian Triwulan 1 secara otomatis tanpa perlu pindah tab
+              if (typeof muatDataDariFirebase === "function") {
+                setTimeout(() => {
+                  muatDataDariFirebase();
+                }, 200);
+              }
             }
           } else if (currentRole.startsWith("pkm_")) {
             tipeKoleksi = "evaluasi_kinerja_pkm";
@@ -105,11 +116,18 @@ auth.onAuthStateChanged((user) => {
 
             if (currentPath.includes("penilaian-rsud.html")) {
               window.location.href = "penilaian-pkm.html";
-            } else if (
-              !currentPath.includes("laporan.html") &&
-              typeof muatDataDariFirebase === "function"
-            ) {
-              muatDataDariFirebase();
+            } else if (currentPath.includes("dashboard.html")) {
+              // Memunculkan grand total & predikat langsung di dashboard
+              if (typeof muatRingkasanDashboard === "function") {
+                muatRingkasanDashboard();
+              }
+            } else if (!currentPath.includes("laporan.html")) {
+              // Memuat data form penilaian Triwulan 1 secara otomatis tanpa perlu pindah tab
+              if (typeof muatDataDariFirebase === "function") {
+                setTimeout(() => {
+                  muatDataDariFirebase();
+                }, 200);
+              }
             }
           } else {
             alert("Akses Ditolak: Profil instansi tidak valid.");
@@ -152,7 +170,10 @@ function aturTampilanBerdasarkanRole(role) {
   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
   const wrapperOpdAdmin = document.getElementById("wrapperPilihOpdAdmin");
   const rekappredikat = document.getElementById("sectionAdminRekapPredikat");
+  const buttondashboardrsud = document.getElementById("buttondashboardrsud");
+  const buttondashboardpkm = document.getElementById("buttondashboardpkm");
 
+  // Reset awal (Sembunyikan semua)
   if (menuRsud) {
     menuRsud.style.display = "none";
     menuRsud.classList.remove("tampil-menu");
@@ -172,13 +193,32 @@ function aturTampilanBerdasarkanRole(role) {
   if (wrapperOpdAdmin) {
     wrapperOpdAdmin.style.display = "none";
   }
+  if (buttondashboardrsud) {
+    buttondashboardrsud.style.display = "none";
+  }
+  if (buttondashboardpkm) {
+    buttondashboardpkm.style.display = "none";
+  }
 
+  // Pengaturan Berdasarkan Role
   if (role === "admin") {
     if (menuRsud) {
       menuRsud.style.display = "block";
       menuRsud.classList.add("tampil-menu");
+    }
+    if (menuPkm) {
+      menuPkm.style.display = "block";
+      menuPkm.classList.add("tampil-menu");
+    }
+    if (menuUser) {
+      menuUser.style.display = "block";
+      menuUser.classList.add("tampil-menu");
+    }
+    if (menuLaporan) {
       menuLaporan.style.display = "block";
       menuLaporan.classList.add("tampil-menu");
+    }
+    if (menuDashboard) {
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
     }
@@ -188,21 +228,11 @@ function aturTampilanBerdasarkanRole(role) {
     if (rekappredikat) {
       rekappredikat.style.display = "block";
     }
-    if (menuPkm) {
-      menuPkm.style.display = "block";
-      menuPkm.classList.add("tampil-menu");
-      menuLaporan.style.display = "block";
-      menuLaporan.classList.add("tampil-menu");
-      menuDashboard.style.display = "block";
-      menuDashboard.classList.add("tampil-menu");
+    if (buttondashboardpkm) {
+      buttondashboardpkm.style.display = "block";
     }
-    if (menuUser) {
-      menuUser.style.display = "block";
-      menuUser.classList.add("tampil-menu");
-      menuLaporan.style.display = "block";
-      menuLaporan.classList.add("tampil-menu");
-      menuDashboard.style.display = "block";
-      menuDashboard.classList.add("tampil-menu");
+    if (buttondashboardrsud) {
+      buttondashboardrsud.style.display = "block";
     }
     if (sectionAdminRecap) {
       sectionAdminRecap.style.display = "block";
@@ -212,22 +242,140 @@ function aturTampilanBerdasarkanRole(role) {
     if (menuRsud) {
       menuRsud.style.display = "block";
       menuRsud.classList.add("tampil-menu");
+    }
+    if (menuLaporan) {
       menuLaporan.style.display = "block";
       menuLaporan.classList.add("tampil-menu");
+    }
+    if (menuDashboard) {
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
+    }
+    // Diberi pengecekan if agar tidak error jika elemen tidak ada di halaman tertentu
+    if (buttondashboardrsud) {
+      buttondashboardrsud.style.display = "block";
     }
   } else if (role === "pkm") {
     if (menuPkm) {
       menuPkm.style.display = "block";
       menuPkm.classList.add("tampil-menu");
+    }
+    if (menuLaporan) {
       menuLaporan.style.display = "block";
       menuLaporan.classList.add("tampil-menu");
+    }
+    if (menuDashboard) {
       menuDashboard.style.display = "block";
       menuDashboard.classList.add("tampil-menu");
     }
+    // Diberi pengecekan if agar tidak error jika elemen tidak ada di halaman tertentu
+    if (buttondashboardpkm) {
+      buttondashboardpkm.style.display = "block";
+    }
   }
 }
+
+// function aturTampilanBerdasarkanRole(role) {
+//   const menuRsud = document.getElementById("menuPenilaianRsud");
+//   const menuPkm = document.getElementById("menuPenilaianPkm");
+//   const menuUser = document.getElementById("menuUserLogin");
+//   const menuDashboard = document.getElementById("menuDashboard");
+//   const menuLaporan = document.getElementById("menuLaporan");
+//   const sectionAdminRecap = document.getElementById("sectionAdminRecap");
+//   const wrapperOpdAdmin = document.getElementById("wrapperPilihOpdAdmin");
+//   const rekappredikat = document.getElementById("sectionAdminRekapPredikat");
+//   const buttondashboardrsud = document.getElementById("buttondashboardrsud");
+//   const buttondashboardpkm = document.getElementById("buttondashboardpkm");
+
+//   if (menuRsud) {
+//     menuRsud.style.display = "none";
+//     menuRsud.classList.remove("tampil-menu");
+//   }
+//   if (menuPkm) {
+//     menuPkm.style.display = "none";
+//     menuPkm.classList.remove("tampil-menu");
+//   }
+//   if (menuUser) {
+//     menuUser.style.display = "none";
+//     menuUser.classList.remove("tampil-menu");
+//   }
+//   if (sectionAdminRecap) {
+//     sectionAdminRecap.style.display = "none";
+//     sectionAdminRecap.classList.remove("tampil-menu");
+//   }
+//   if (wrapperOpdAdmin) {
+//     wrapperOpdAdmin.style.display = "none";
+//   }
+//   if (buttondashboardrsud) {
+//     buttondashboardrsud.style.display = "none";
+//   }
+//   if (buttondashboardpkm) {
+//     buttondashboardpkm.style.display = "none";
+//   }
+
+//   if (role === "admin") {
+//     if (menuRsud) {
+//       menuRsud.style.display = "block";
+//       menuRsud.classList.add("tampil-menu");
+//       menuLaporan.style.display = "block";
+//       menuLaporan.classList.add("tampil-menu");
+//       menuDashboard.style.display = "block";
+//       menuDashboard.classList.add("tampil-menu");
+//     }
+//     if (wrapperOpdAdmin) {
+//       wrapperOpdAdmin.style.display = "block";
+//     }
+//     if (rekappredikat) {
+//       rekappredikat.style.display = "block";
+//     }
+//     if (buttondashboardpkm) {
+//       buttondashboardpkm.style.display = "block";
+//     }
+//     if (buttondashboardrsud) {
+//       buttondashboardrsud.style.display = "block";
+//     }
+//     if (menuPkm) {
+//       menuPkm.style.display = "block";
+//       menuPkm.classList.add("tampil-menu");
+//       menuLaporan.style.display = "block";
+//       menuLaporan.classList.add("tampil-menu");
+//       menuDashboard.style.display = "block";
+//       menuDashboard.classList.add("tampil-menu");
+//     }
+//     if (menuUser) {
+//       menuUser.style.display = "block";
+//       menuUser.classList.add("tampil-menu");
+//       menuLaporan.style.display = "block";
+//       menuLaporan.classList.add("tampil-menu");
+//       menuDashboard.style.display = "block";
+//       menuDashboard.classList.add("tampil-menu");
+//     }
+//     if (sectionAdminRecap) {
+//       sectionAdminRecap.style.display = "block";
+//       sectionAdminRecap.classList.add("tampil-menu");
+//     }
+//   } else if (role === "rsud") {
+//     if (menuRsud) {
+//       menuRsud.style.display = "block";
+//       menuRsud.classList.add("tampil-menu");
+//       menuLaporan.style.display = "block";
+//       menuLaporan.classList.add("tampil-menu");
+//       menuDashboard.style.display = "block";
+//       menuDashboard.classList.add("tampil-menu");
+//       buttondashboardrsud.style.display = "block";
+//     }
+//   } else if (role === "pkm") {
+//     if (menuPkm) {
+//       menuPkm.style.display = "block";
+//       menuPkm.classList.add("tampil-menu");
+//       menuLaporan.style.display = "block";
+//       menuLaporan.classList.add("tampil-menu");
+//       menuDashboard.style.display = "block";
+//       menuDashboard.classList.add("tampil-menu");
+//       buttondashboardpkm.style.display = "block";
+//     }
+//   }
+// }
 
 async function gantiOpdAdmin() {
   const selectOpd = document.getElementById("pilihOpdAdmin");
