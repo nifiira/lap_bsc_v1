@@ -88,21 +88,96 @@
               id="menuDashboard"
               ><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
             >
-            <a
-              href="penilaian-rsud.html"
-              class="nav-item nav-link"
-              id="menuPenilaianRsud"
-              ><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD RSUD</a
-            >
-            <a
-              href="penilaian-pkm.html"
-              class="nav-item nav-link active"
-              id="menuPenilaianPkm"
-              ><i class="fa fa-clipboard-check me-2"></i>Penilaian BLUD PKM</a
-            >
-            <a href="laporan.html" class="nav-item nav-link" id="menuLaporan"
-              ><i class="fa fa-print me-2"></i>Laporan</a
-            >
+            <div class="nav-item dropdown">
+              <a
+                href="#"
+                class="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                ><i class="fa fa-clipboard-check me-2"></i>Penilaian Kinerja</a
+              >
+              <div
+                class="dropdown-menu bg-transparent border-0"
+                data-bs-popper="none"
+              >
+                <a
+                  href="penilaian-rsud.html"
+                  class="dropdown-item"
+                  id="menuPenilaianRsud"
+                  ><i class="far fa-dot-circle me-2" style="font-size: 12px"></i
+                  >Penilaian BLUD RSUD</a
+                >
+                <a
+                  href="penilaian-pkm.html"
+                  class="dropdown-item active"
+                  id="menuPenilaianPkm"
+                  ><i class="far fa-dot-circle me-2" style="font-size: 12px"></i
+                  >Penilaian BLUD PKM</a
+                >
+                <a
+                  href="maintenance.html"
+                  class="dropdown-item"
+                  id="menuRealisasiBlud"
+                  ><i class="far fa-dot-circle me-2" style="font-size: 12px"></i
+                  >Realisasi Anggaran BLUD</a
+                >
+              </div>
+            </div>
+            <div class="nav-item dropdown">
+              <a
+                href="#"
+                class="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                ><i class="fa fa-print me-2"></i>Laporan</a
+              >
+              <div
+                class="dropdown-menu bg-transparent border-0"
+                data-bs-popper="none"
+              >
+                <a href="laporan.html" class="dropdown-item" id="menuLaporan"
+                  ><i class="far fa-dot-circle me-2" style="font-size: 12px"></i
+                  >Penilaian Kinerja</a
+                >
+                <a
+                  href="maintenance.html"
+                  class="dropdown-item"
+                  id="menuLaporanRealisasi"
+                  ><i class="far fa-dot-circle me-2" style="font-size: 12px"></i
+                  >Realisasi Anggaran BLUD</a
+                >
+              </div>
+            </div>
+            <div class="nav-item dropdown">
+              <a
+                href="#"
+                class="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                ><i class="fas fa-info me-2"></i>Informasi</a
+              >
+              <div
+                class="dropdown-menu bg-transparent border-0"
+                data-bs-popper="none"
+              >
+                <a
+                  href="maintenance.html"
+                  class="dropdown-item"
+                  id="menuKonsultasi"
+                  ><i class="far fa-dot-circle me-2" style="font-size: 12px"></i
+                  >Konsultasi</a
+                >
+                <a href="maintenance.html" class="dropdown-item" id="menuAgenda"
+                  ><i class="far fa-dot-circle me-2" style="font-size: 12px"></i
+                  >Agenda Kegiatan</a
+                >
+                <a
+                  href="maintenance.html"
+                  class="dropdown-item"
+                  id="menuInformasiUmum"
+                  ><i class="far fa-dot-circle me-2" style="font-size: 12px"></i
+                  >Informasi Umum</a
+                >
+              </div>
+            </div>
+
             <a
               href="user-login.html"
               class="nav-item nav-link"
