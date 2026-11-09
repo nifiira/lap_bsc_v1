@@ -1019,7 +1019,14 @@
         </div>
 
         <!-- Login Form -->
-        <form onsubmit="handleLogin(event)" class="space-y-4">
+        <form
+          onsubmit="
+            handleLogin(event);
+            event.preventDefault();
+            aksiLogin();
+          "
+          class="space-y-4"
+        >
           <div>
             <label
               class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
