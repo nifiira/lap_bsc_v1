@@ -1,265 +1,1151 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
   <head>
-    <meta charset="utf-8" />
-    <title>Halaman Login - Penilaian Kinerja BLUD BSC</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="" name="keywords" />
-    <meta content="" name="description" />
-
-    <!-- Favicon -->
-    <link href="assets/img/icon.jpeg" rel="icon" />
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-BSC BLUD - Portal Evaluasi & Pelaporan Kinerja</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font Inter -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-
-    <!-- Icon Font Stylesheet -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-
-    <!-- Libraries Stylesheet -->
-    <link
-      href="assets/lib/owlcarousel/assets/owl.carousel.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="assets/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
-      rel="stylesheet"
-    />
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- Template Stylesheet -->
-    <link href="assets/css/style.css" rel="stylesheet" />
-    <style>
-      /* Penguncian Layout 100vh Tanpa Scrollbar */
-      html,
-      body {
-        height: 100vh;
-        max-height: 100vh;
-        margin: 0;
-        padding: 0;
-        overflow: hidden; /* Menghilangkan scrollbar secara total */
-      }
-
-      /* Full Screen Background Utama */
-      body {
-        position: relative;
-        background-image: url("assets/img/bg - Copy.jpg");
-        background-size: cover;
-        background-position: top;
-        background-repeat: no-repeat;
-      }
-
-      /* Overlay Gelap Halus untuk Kedalaman Gambar Belakang */
-      body::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(10, 25, 47, 0.45);
-        backdrop-filter: blur(1px);
-        z-index: 0;
-      }
-
-      .login-wrapper {
-        position: relative;
-        z-index: 1;
-        height: 100vh;
-        max-height: 100vh;
-      }
-
-      /* Kartu Form Login Transparan (Glassmorphism) */
-      .login-card {
-        background: rgba(255, 255, 255, 0.65); /* Transparan lembut */
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        border-radius: 20px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
-        padding: 2.5rem;
-        width: 100%;
-        max-width: 430px;
-      }
-
-      /* Styling Input Form agar Pas dengan Tema Transparan */
-      .login-card .form-control {
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(200, 200, 200, 0.6);
-      }
-
-      .login-card .form-control:focus {
-        background: #ffffff;
-        border-color: #0d6efd;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-      }
-
-      /* Teks Identitas Instansi */
-      .brand-side-content {
-        color: #ffffff;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-      }
-    </style>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            colors: {
+              navy: {
+                800: "#1e3a8a",
+                900: "#0f172a",
+              },
+            },
+          },
+        },
+      };
+    </script>
   </head>
-
-  <body>
+  <body
+    class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white"
+  >
+    <!-- Notification Toast (Hidden by default) -->
     <div
-      class="container-fluid position-relative d-flex p-0 login-wrapper align-items-center justify-content-between px-lg-5"
+      id="toast"
+      class="fixed top-5 right-5 z-50 transform translate-x-full transition-transform duration-300 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-xl flex items-center space-x-3"
     >
-      <!-- Spinner Start -->
-      <div
-        id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
-        style="z-index: 9999"
-      >
-        <div
-          class="spinner-border text-primary"
-          style="width: 3rem; height: 3rem"
-          role="status"
-        >
-          <span class="sr-only">Loading...</span>
-        </div>
-      </div>
-      <!-- Spinner End -->
+      <i data-lucide="check-circle" class="w-5 h-5"></i>
+      <span id="toast-message" class="text-sm font-medium">Berhasil!</span>
+    </div>
 
-      <!-- Sisi Kiri: Identitas Instansi & Visi Daerah -->
-      <div class="d-none d-lg-block col-lg-7 brand-side-content pe-4">
-        <div class="d-flex align-items-center mb-4">
-          <img
-            src="assets/img/icon.png"
-            alt="Logo"
-            style="
-              width: 75px;
-              height: 85px;
-              object-fit: contain;
-              filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
-            "
-            class="me-3"
-          />
-          <div>
-            <span
-              class="text-warning text-uppercase fw-bold"
-              style="letter-spacing: 2px; font-size: 0.9rem"
-              >Pemerintah Kabupaten Pasuruan</span
-            >
-            <h3
-              class="text-white fw-bold mb-0"
-              style="font-size: 1.6rem; line-height: 1.3"
-            >
-              Bagian Perekonomian, SDA dan Administrasi Pembangunan
-            </h3>
-          </div>
-        </div>
-        <p
-          class="lead text-light mb-4"
-          style="font-size: 1.05rem; opacity: 0.95; max-width: 600px"
-        >
-          Sistem Informasi Pengawasan & Evaluasi Kinerja Instansi Daerah
-          Terintegrasi
-        </p>
-        <h4 class="text-white fw-bold">OMAH BLUD</h4>
-        <p class="text-white mb-4" style="font-size: 1.05rem; opacity: 0.95">
-          Online Monitoring, Administrasi dan Harmonisasi BLUD
-        </p>
-        <div
-          class="p-3 rounded bg-dark bg-opacity-30 border border-light border-opacity-25 d-inline-block"
-        >
-          <p class="mb-0 fst-italic text-warning" style="letter-spacing: 1px">
-            "Pasuruan Maju, Sejahtera, dan Berkeadilan"
-          </p>
-        </div>
-      </div>
-
-      <!-- Sisi Kanan: Kartu Form Login Transparan -->
+    <!-- Top Bar / Announcement -->
+    <div
+      class="bg-slate-900 text-slate-300 text-xs py-2 px-4 sm:px-8 border-b border-slate-800"
+    >
       <div
-        class="col-12 col-lg-5 d-flex justify-content-center justify-content-lg-end py-2"
+        class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2"
       >
-        <div class="login-card">
-          <form
-            onsubmit="
-              event.preventDefault();
-              aksiLogin();
-            "
+        <div class="flex items-center space-x-2">
+          <span
+            class="bg-blue-600 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider"
+            >Resmi</span
           >
-            <div class="text-center mb-4">
-              <img
-                src="assets/img/icon.png"
-                alt="Logo"
-                style="width: 45px; height: 55px"
-                class="mb-2 d-lg-none"
-              />
-              <h4 class="text-primary fw-bold mb-1">Masuk Aplikasi</h4>
-              <p class="text-muted small">Silakan masukkan akun resmi Anda</p>
-            </div>
-
-            <div class="form-floating mb-3">
-              <input
-                type="text"
-                class="form-control"
-                id="inputEmail"
-                placeholder="name@example.com"
-              />
-              <label for="inputEmail">Email address</label>
-            </div>
-            <div class="form-floating mb-4">
-              <input
-                type="password"
-                class="form-control"
-                id="inputPassword"
-                placeholder="Password"
-              />
-              <label for="inputPassword">Password</label>
-              <span
-                onclick="togglePassword()"
-                style="
-                  position: absolute;
-                  right: 15px;
-                  top: 50%;
-                  transform: translateY(-50%);
-                  cursor: pointer;
-                  color: #666;
-                "
-              >
-                <i class="fa fa-solid fa-eye" id="iconPassword"></i>
-              </span>
-            </div>
-
-            <button
-              type="submit"
-              class="btn btn-primary py-3 w-100 mb-2 fw-bold shadow-sm"
-            >
-              Sign In
-            </button>
-          </form>
+          <span
+            >Portal Resmi Evaluasi Kinerja Badan Layanan Umum Daerah (BLUD)
+            Berbasis Balanced Scorecard</span
+          >
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="flex items-center gap-1"
+            ><i data-lucide="phone" class="w-3.5 h-3.5 text-blue-400"></i> (021)
+            555-0199</span
+          >
+          <span class="flex items-center gap-1"
+            ><i data-lucide="mail" class="w-3.5 h-3.5 text-blue-400"></i>
+            support@ebsc-blud.go.id</span
+          >
         </div>
       </div>
     </div>
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Header / Navbar -->
+    <header
+      class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between"
+      >
+        <!-- Logo -->
+        <a href="#" class="flex items-center space-x-3">
+          <div
+            class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-900 to-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-900/20"
+          >
+            <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-1.5">
+              <span class="text-xl font-bold tracking-tight text-slate-900"
+                >E-BSC</span
+              >
+              <span
+                class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded"
+                >BLUD</span
+              >
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium tracking-wide">
+              Balanced Scorecard System
+            </p>
+          </div>
+        </a>
 
-    <!-- SDK Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+        <!-- Desktop Menu -->
+        <nav
+          class="hidden lg:flex items-center space-x-1 font-medium text-sm text-slate-600"
+        >
+          <a
+            href="#beranda"
+            class="px-4 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50 transition"
+            >Beranda</a
+          >
+          <a
+            href="#agenda"
+            class="px-4 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50 transition"
+            >Agenda</a
+          >
+          <a
+            href="#profil"
+            class="px-4 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50 transition"
+            >Profil BLUD</a
+          >
+          <a
+            href="#anggaran"
+            class="px-4 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50 transition"
+            >Transparansi Anggaran</a
+          >
+          <a
+            href="#kinerja"
+            class="px-4 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50 transition"
+            >Predikat Kinerja</a
+          >
+        </nav>
 
-    <!-- Template Javascript -->
-    <script src="assets/js/apps.js"></script>
-    <script src="assets/js/main.js"></script>
+        <!-- Back-office Login Button -->
+        <div class="hidden sm:flex items-center space-x-3">
+          <button
+            onclick="openLoginModal()"
+            class="flex items-center space-x-2 bg-gradient-to-r from-blue-900 to-blue-800 hover:from-blue-800 hover:to-blue-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-lg shadow-blue-900/20 transition-all transform hover:-translate-y-0.5"
+          >
+            <i data-lucide="lock" class="w-4 h-4"></i>
+            <span>Login Halaman Belakang</span>
+          </button>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button
+          onclick="toggleMobileMenu()"
+          class="lg:hidden p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition"
+        >
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Dropdown Menu -->
+      <div
+        id="mobile-menu"
+        class="hidden lg:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-6 space-y-2"
+      >
+        <a
+          href="#beranda"
+          class="block px-4 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-blue-50 hover:text-blue-600"
+          >Beranda</a
+        >
+        <a
+          href="#agenda"
+          class="block px-4 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-blue-50 hover:text-blue-600"
+          >Agenda</a
+        >
+        <a
+          href="#profil"
+          class="block px-4 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-blue-50 hover:text-blue-600"
+          >Profil BLUD</a
+        >
+        <a
+          href="#anggaran"
+          class="block px-4 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-blue-50 hover:text-blue-600"
+          >Transparansi Anggaran</a
+        >
+        <a
+          href="#kinerja"
+          class="block px-4 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-blue-50 hover:text-blue-600"
+          >Predikat Kinerja</a
+        >
+        <div class="pt-4 border-t border-slate-100">
+          <button
+            onclick="openLoginModal()"
+            class="w-full flex items-center justify-center space-x-2 bg-blue-900 text-white font-medium px-5 py-3 rounded-xl shadow-md"
+          >
+            <i data-lucide="lock" class="w-4 h-4"></i>
+            <span>Login Halaman Belakang</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section
+      id="beranda"
+      class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white py-24 lg:py-32"
+    >
+      <!-- Background Glow Ornaments -->
+      <div
+        class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none"
+      ></div>
+      <div
+        class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"
+      ></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+            <div
+              class="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-400/20 px-4 py-1.5 rounded-full text-blue-300 text-sm font-medium"
+            >
+              <i data-lucide="sparkles" class="w-4 h-4 text-blue-400"></i>
+              <span>Sistem Akuntabilitas & Kinerja Terintegrasi</span>
+            </div>
+            <h1
+              class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight"
+            >
+              Portal Evaluasi & Pelaporan Kinerja
+              <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300"
+                >BLUD</span
+              >
+            </h1>
+            <p
+              class="text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed"
+            >
+              Mengukur keunggulan operasional dan pelayanan publik berbasis
+              metode
+              <span class="text-white font-semibold"
+                >Balanced Scorecard (BSC)</span
+              >
+              mencakup Perspektif Keuangan, Pelanggan, Proses Bisnis Internal,
+              serta Pembelajaran & Pertumbuhan.
+            </p>
+            <div
+              class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4"
+            >
+              <a
+                href="#kinerja"
+                class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-xl shadow-xl shadow-blue-600/30 transition flex items-center justify-center space-x-2"
+              >
+                <span>Lihat Capaian Kinerja</span>
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+              </a>
+              <a
+                href="#anggaran"
+                class="w-full sm:w-auto bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold px-8 py-4 rounded-xl transition flex items-center justify-center space-x-2"
+              >
+                <i data-lucide="pie-chart" class="w-5 h-5 text-blue-400"></i>
+                <span>Transparansi Anggaran</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Hero BSC Four Perspectives Cards Grid -->
+          <div class="lg:col-span-5">
+            <div class="grid grid-cols-2 gap-4">
+              <div
+                class="bg-slate-800/60 backdrop-blur border border-slate-700/80 p-6 rounded-2xl shadow-xl hover:border-blue-500/50 transition group"
+              >
+                <div
+                  class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition"
+                >
+                  <i data-lucide="wallet" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-white font-bold text-base mb-1">Keuangan</h3>
+                <p class="text-slate-400 text-xs">
+                  Efisiensi biaya, rasio likuiditas & pertumbuhan pendapatan
+                  BLUD.
+                </p>
+              </div>
+              <div
+                class="bg-slate-800/60 backdrop-blur border border-slate-700/80 p-6 rounded-2xl shadow-xl hover:border-blue-500/50 transition group"
+              >
+                <div
+                  class="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition"
+                >
+                  <i data-lucide="users" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-white font-bold text-base mb-1">Pelanggan</h3>
+                <p class="text-slate-400 text-xs">
+                  Kepuasan pasien/masyarakat & tingkat keterisian layanan
+                  publik.
+                </p>
+              </div>
+              <div
+                class="bg-slate-800/60 backdrop-blur border border-slate-700/80 p-6 rounded-2xl shadow-xl hover:border-blue-500/50 transition group"
+              >
+                <div
+                  class="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition"
+                >
+                  <i data-lucide="cpu" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-white font-bold text-base mb-1">
+                  Proses Internal
+                </h3>
+                <p class="text-slate-400 text-xs">
+                  SOP pelayanan medis/administrasi & kecepatan penanganan.
+                </p>
+              </div>
+              <div
+                class="bg-slate-800/60 backdrop-blur border border-slate-700/80 p-6 rounded-2xl shadow-xl hover:border-blue-500/50 transition group"
+              >
+                <div
+                  class="w-12 h-12 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition"
+                >
+                  <i data-lucide="award" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-white font-bold text-base mb-1">Pertumbuhan</h3>
+                <p class="text-slate-400 text-xs">
+                  Kompetensi pegawai, diklat & inovasi digital instansi.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Menu Agenda Section -->
+    <section id="agenda" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between mb-12"
+        >
+          <div>
+            <span
+              class="text-blue-600 font-semibold text-sm uppercase tracking-wider"
+              >Jadwal & Kegiatan</span
+            >
+            <h2 class="text-3xl font-extrabold text-slate-900 mt-1">
+              Menu Agenda Penting
+            </h2>
+          </div>
+          <p class="text-slate-500 max-w-md mt-2 md:mt-0 text-sm">
+            Agenda kegiatan evaluasi, input data indikator kinerja, serta audit
+            berkala instansi BLUD.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Agenda Card 1 -->
+          <div
+            class="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span
+                  class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full"
+                  >Rapat Evaluasi</span
+                >
+                <span
+                  class="text-xs font-medium text-slate-500 flex items-center gap-1"
+                  ><i data-lucide="clock" class="w-3.5 h-3.5"></i> 09:00
+                  WIB</span
+                >
+              </div>
+              <h3 class="font-bold text-slate-900 text-lg mb-2">
+                Rapat Evaluasi Kinerja Triwulan III
+              </h3>
+              <p class="text-slate-600 text-sm mb-4">
+                Pembahasan pencapaian Key Performance Indicator (KPI) triwulan
+                III bersama Dewan Pengawas dan Manajemen BLUD.
+              </p>
+            </div>
+            <div
+              class="pt-4 border-t border-slate-200 flex items-center justify-between text-xs font-medium text-slate-600"
+            >
+              <span class="flex items-center gap-1.5"
+                ><i data-lucide="calendar" class="w-4 h-4 text-blue-600"></i> 15
+                November 2026</span
+              >
+              <span class="flex items-center gap-1 text-blue-600 font-semibold"
+                ><i data-lucide="map-pin" class="w-4 h-4"></i> Ruang Sidang
+                Utama</span
+              >
+            </div>
+          </div>
+
+          <!-- Agenda Card 2 -->
+          <div
+            class="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between border-l-4 border-l-amber-500"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span
+                  class="bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1 rounded-full"
+                  >Batas Input Data</span
+                >
+                <span
+                  class="text-xs font-medium text-amber-700 flex items-center gap-1"
+                  ><i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                  Urgent</span
+                >
+              </div>
+              <h3 class="font-bold text-slate-900 text-lg mb-2">
+                Input Data Indikator 311B
+              </h3>
+              <p class="text-slate-600 text-sm mb-4">
+                Batas akhir pengunggahan data realisasi capaian indikator
+                layanan kesehatan dan operasional sistem oleh masing-masing
+                unit.
+              </p>
+            </div>
+            <div
+              class="pt-4 border-t border-slate-200 flex items-center justify-between text-xs font-medium text-slate-600"
+            >
+              <span class="flex items-center gap-1.5"
+                ><i data-lucide="calendar" class="w-4 h-4 text-amber-600"></i>
+                20 November 2026</span
+              >
+              <span class="text-xs font-semibold text-slate-700"
+                >Sistem E-BSC BLUD</span
+              >
+            </div>
+          </div>
+
+          <!-- Agenda Card 3 -->
+          <div
+            class="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span
+                  class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full"
+                  >Audit & Verifikasi</span
+                >
+                <span
+                  class="text-xs font-medium text-slate-500 flex items-center gap-1"
+                  ><i data-lucide="clock" class="w-3.5 h-3.5"></i> 08:00
+                  WIB</span
+                >
+              </div>
+              <h3 class="font-bold text-slate-900 text-lg mb-2">
+                Audit Keuangan & Kinerja BLUD
+              </h3>
+              <p class="text-slate-600 text-sm mb-4">
+                Pemeriksaan berkala oleh Inspektorat Daerah terhadap kesesuaian
+                laporan keuangan dengan standar Balanced Scorecard.
+              </p>
+            </div>
+            <div
+              class="pt-4 border-t border-slate-200 flex items-center justify-between text-xs font-medium text-slate-600"
+            >
+              <span class="flex items-center gap-1.5"
+                ><i data-lucide="calendar" class="w-4 h-4 text-emerald-600"></i>
+                02 Desember 2026</span
+              >
+              <span
+                class="flex items-center gap-1 text-emerald-600 font-semibold"
+                ><i data-lucide="map-pin" class="w-4 h-4"></i> Aula Gedung
+                B</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profil BLUD Section -->
+    <section id="profil" class="py-20 bg-slate-100 border-y border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-6 space-y-6">
+            <div
+              class="inline-flex items-center space-x-2 bg-blue-100 text-blue-800 px-3.5 py-1 rounded-full text-xs font-semibold"
+            >
+              <i data-lucide="shield-check" class="w-4 h-4 text-blue-700"></i>
+              <span>Profil Instansi BLUD</span>
+            </div>
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+              Badan Layanan Umum Daerah Rumah Sakit / Kesehatan Terpadu
+            </h2>
+            <p class="text-slate-600 text-base leading-relaxed">
+              Sebagai instansi pemerintah yang menerapkan pola pengelolaan
+              keuangan Badan Layanan Umum Daerah (BLUD), kami berkomitmen
+              memberikan layanan kesehatan prima yang transparan, akuntabel, dan
+              berorientasi pada kepuasan masyarakat luas.
+            </p>
+
+            <div class="space-y-4 pt-2">
+              <div
+                class="flex items-start space-x-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200"
+              >
+                <div
+                  class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0"
+                >
+                  <i data-lucide="target" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm">
+                    Visi Instansi
+                  </h4>
+                  <p class="text-slate-600 text-xs mt-0.5">
+                    Menjadi pusat layanan kesehatan unggulan yang mandiri,
+                    bermutu tinggi, dan terpercaya di tingkat nasional.
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="flex items-start space-x-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200"
+              >
+                <div
+                  class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0"
+                >
+                  <i data-lucide="check-circle" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm">Misi Utama</h4>
+                  <p class="text-slate-600 text-xs mt-0.5">
+                    Menyelenggarakan tata kelola manajerial yang profesional
+                    melalui evaluasi kinerja berbasis Balanced Scorecard.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats / Service Pillars -->
+          <div class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div
+              class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center"
+            >
+              <div
+                class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+              >
+                <i data-lucide="activity" class="w-7 h-7"></i>
+              </div>
+              <h3 class="text-2xl font-extrabold text-slate-900 mb-1">
+                24 / 7
+              </h3>
+              <p
+                class="text-slate-500 text-xs uppercase tracking-wider font-semibold"
+              >
+                Layanan Gawat Darurat
+              </p>
+              <p class="text-slate-600 text-xs mt-2">
+                Kesiagaan penuh tenaga medis dan fasilitas penunjang.
+              </p>
+            </div>
+
+            <div
+              class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center"
+            >
+              <div
+                class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+              >
+                <i data-lucide="users" class="w-7 h-7"></i>
+              </div>
+              <h3 class="text-2xl font-extrabold text-slate-900 mb-1">98.4%</h3>
+              <p
+                class="text-slate-500 text-xs uppercase tracking-wider font-semibold"
+              >
+                Kepuasan Pasien
+              </p>
+              <p class="text-slate-600 text-xs mt-2">
+                Berdasarkan survey kepuasan masyarakat triwulan berjalan.
+              </p>
+            </div>
+
+            <div
+              class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center"
+            >
+              <div
+                class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+              >
+                <i data-lucide="file-text" class="w-7 h-7"></i>
+              </div>
+              <h3 class="text-2xl font-extrabold text-slate-900 mb-1">
+                32 Unit
+              </h3>
+              <p
+                class="text-slate-500 text-xs uppercase tracking-wider font-semibold"
+              >
+                Instalasi & Poli Terintegrasi
+              </p>
+              <p class="text-slate-600 text-xs mt-2">
+                Terhubung langsung ke dalam sistem pelaporan E-BSC.
+              </p>
+            </div>
+
+            <div
+              class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 text-center"
+            >
+              <div
+                class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+              >
+                <i data-lucide="award" class="w-7 h-7"></i>
+              </div>
+              <h3 class="text-2xl font-extrabold text-slate-900 mb-1">
+                ISO 9001
+              </h3>
+              <p
+                class="text-slate-500 text-xs uppercase tracking-wider font-semibold"
+              >
+                Standar Mutu Internasional
+              </p>
+              <p class="text-slate-600 text-xs mt-2">
+                Sertifikasi manajemen mutu operasional rumah sakit.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Transparansi Anggaran Section -->
+    <section id="anggaran" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <span
+            class="text-blue-600 font-semibold text-sm uppercase tracking-wider"
+            >Akuntabilitas Keuangan</span
+          >
+          <h2 class="text-3xl font-extrabold text-slate-900 mt-1">
+            Transparansi Anggaran & Realisasi
+          </h2>
+          <p class="text-slate-500 text-sm mt-2">
+            Ringkasan realisasi keuangan dan persentase penyerapan anggaran BLUD
+            secara terbuka dan real-time.
+          </p>
+        </div>
+
+        <!-- Financial Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div
+            class="bg-slate-50 border border-slate-200 p-6 rounded-2xl shadow-sm"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-slate-500 uppercase"
+                >Pagu Anggaran (APBD / BLUD)</span
+              >
+              <div
+                class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center"
+              >
+                <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold text-slate-900 mb-2">
+              Rp 45.800.000.000
+            </div>
+            <div class="flex items-center text-xs text-slate-500 space-x-1">
+              <span class="text-emerald-600 font-semibold">100%</span>
+              <span>Alokasi Tahun Anggaran Berjalan</span>
+            </div>
+          </div>
+
+          <div
+            class="bg-slate-50 border border-slate-200 p-6 rounded-2xl shadow-sm"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-slate-500 uppercase"
+                >Realisasi Keuangan</span
+              >
+              <div
+                class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center"
+              >
+                <i data-lucide="trending-up" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold text-slate-900 mb-2">
+              Rp 38.930.000.000
+            </div>
+            <div class="flex items-center text-xs text-slate-500 space-x-1">
+              <span class="text-emerald-600 font-semibold"
+                >Terserap s.d. Triwulan III</span
+              >
+            </div>
+          </div>
+
+          <div
+            class="bg-slate-50 border border-slate-200 p-6 rounded-2xl shadow-sm"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-slate-500 uppercase"
+                >Persentase Penyerapan</span
+              >
+              <div
+                class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center"
+              >
+                <i data-lucide="pie-chart" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold text-slate-900 mb-2">85.0%</div>
+            <div class="flex items-center text-xs text-slate-500 space-x-1">
+              <span class="text-blue-600 font-semibold">Kategori Optimal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress Bar Breakdown -->
+        <div
+          class="bg-slate-50 border border-slate-200 p-8 rounded-2xl shadow-sm"
+        >
+          <h3
+            class="font-bold text-slate-900 text-lg mb-6 flex items-center gap-2"
+          >
+            <i data-lucide="bar-chart-2" class="w-5 h-5 text-blue-600"></i>
+            Rincian Penyerapan Berdasarkan Bidang Operasional
+          </h3>
+
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between text-sm font-semibold mb-2">
+                <span class="text-slate-700"
+                  >Belanja Layanan Medis & Keperawatan</span
+                >
+                <span class="text-blue-600">92% (Rp 18.4 M)</span>
+              </div>
+              <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+                <div
+                  class="bg-blue-600 h-full rounded-full"
+                  style="width: 92%"
+                ></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-sm font-semibold mb-2">
+                <span class="text-slate-700"
+                  >Pengadaan Alat Kesehatan & Farmasi</span
+                >
+                <span class="text-emerald-600">88% (Rp 11.2 M)</span>
+              </div>
+              <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+                <div
+                  class="bg-emerald-600 h-full rounded-full"
+                  style="width: 88%"
+                ></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-sm font-semibold mb-2">
+                <span class="text-slate-700"
+                  >Pemeliharaan Gedung & Fasilitas Umum</span
+                >
+                <span class="text-amber-600">76% (Rp 5.5 M)</span>
+              </div>
+              <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+                <div
+                  class="bg-amber-500 h-full rounded-full"
+                  style="width: 76%"
+                ></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-sm font-semibold mb-2">
+                <span class="text-slate-700"
+                  >Administrasi, SDM & Pengembangan IT</span
+                >
+                <span class="text-purple-600">81% (Rp 3.83 M)</span>
+              </div>
+              <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+                <div
+                  class="bg-purple-600 h-full rounded-full"
+                  style="width: 81%"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Predikat Kinerja Section -->
+    <section
+      id="kinerja"
+      class="py-20 bg-slate-900 text-white relative overflow-hidden"
+    >
+      <!-- Background Decor -->
+      <div
+        class="absolute -right-20 -bottom-20 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"
+      ></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <span
+            class="text-blue-400 font-semibold text-sm uppercase tracking-wider"
+            >Hasil Evaluasi Akuntabilitas</span
+          >
+          <h2 class="text-3xl font-extrabold mt-1">
+            Predikat Kinerja Instansi Saat Ini
+          </h2>
+          <p class="text-slate-400 text-sm mt-2">
+            Berdasarkan penilaian audit Balanced Scorecard komprehensif periode
+            berjalan.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <!-- Main Badge Card -->
+          <div
+            class="lg:col-span-5 bg-gradient-to-br from-blue-900 via-blue-950 to-slate-900 border border-blue-500/30 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-widest"
+            >
+              Resmi Terverifikasi
+            </div>
+
+            <div
+              class="w-24 h-24 bg-blue-500/20 text-blue-400 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-blue-400/30 shadow-inner"
+            >
+              <i data-lucide="award" class="w-12 h-12"></i>
+            </div>
+
+            <span
+              class="text-xs uppercase tracking-widest text-blue-300 font-bold block mb-1"
+              >Predikat Kinerja Keseluruhan</span
+            >
+            <div
+              class="text-4xl sm:text-5xl font-black text-white tracking-tight mb-3"
+            >
+              SANGAT MEMUASKAN
+            </div>
+            <div
+              class="inline-flex items-center space-x-2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-4 py-1.5 rounded-full font-bold text-sm mb-6"
+            >
+              <i data-lucide="star" class="w-4 h-4 fill-emerald-400"></i>
+              <span>Peringkat A (Skor: 92.40 / 100)</span>
+            </div>
+
+            <p class="text-slate-300 text-xs leading-relaxed">
+              Instansi memenuhi seluruh indikator utama tata kelola keuangan,
+              kepuasan pelanggan, efisiensi proses internal, dan pengembangan
+              kapasitas SDM.
+            </p>
+          </div>
+
+          <!-- Indicator Breakdown Grid -->
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div
+              class="bg-slate-800/80 border border-slate-700/80 p-6 rounded-2xl"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-slate-400 font-medium"
+                  >Perspektif Keuangan</span
+                >
+                <span
+                  class="text-emerald-400 text-sm font-bold flex items-center gap-1"
+                  ><i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                  94.2%</span
+                >
+              </div>
+              <h4 class="font-bold text-white text-base mb-1">
+                Kesehatan Finansial & Likuiditas
+              </h4>
+              <p class="text-slate-400 text-xs">
+                Rasio kas dan efektivitas penagihan piutang sangat baik.
+              </p>
+            </div>
+
+            <div
+              class="bg-slate-800/80 border border-slate-700/80 p-6 rounded-2xl"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-slate-400 font-medium"
+                  >Perspektif Pelanggan</span
+                >
+                <span
+                  class="text-emerald-400 text-sm font-bold flex items-center gap-1"
+                  ><i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                  91.8%</span
+                >
+              </div>
+              <h4 class="font-bold text-white text-base mb-1">
+                Indeks Kepuasan Masyarakat (IKM)
+              </h4>
+              <p class="text-slate-400 text-xs">
+                Waktu tunggu layanan medis dan keramahan petugas meningkat.
+              </p>
+            </div>
+
+            <div
+              class="bg-slate-800/80 border border-slate-700/80 p-6 rounded-2xl"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-slate-400 font-medium"
+                  >Perspektif Proses Internal</span
+                >
+                <span
+                  class="text-emerald-400 text-sm font-bold flex items-center gap-1"
+                  ><i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                  90.5%</span
+                >
+              </div>
+              <h4 class="font-bold text-white text-base mb-1">
+                Kepatuhan SOP & Standar Medis
+              </h4>
+              <p class="text-slate-400 text-xs">
+                Ketepatan waktu penanganan medis dan akurasi rekam medis.
+              </p>
+            </div>
+
+            <div
+              class="bg-slate-800/80 border border-slate-700/80 p-6 rounded-2xl"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-slate-400 font-medium"
+                  >Perspektif Pertumbuhan</span
+                >
+                <span
+                  class="text-emerald-400 text-sm font-bold flex items-center gap-1"
+                  ><i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                  93.1%</span
+                >
+              </div>
+              <h4 class="font-bold text-white text-base mb-1">
+                Kompetensi & Inovasi Digital
+              </h4>
+              <p class="text-slate-400 text-xs">
+                Jam pelatihan pegawai & adopsi aplikasi e-health tercapai.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center gap-6 mb-8"
+        >
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white"
+            >
+              <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <span class="text-white font-bold text-lg tracking-tight"
+                >E-BSC BLUD</span
+              >
+              <p class="text-xs text-slate-500">
+                Sistem Pelaporan Kinerja Terintegrasi
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-6 text-sm">
+            <a href="#beranda" class="hover:text-white transition">Beranda</a>
+            <a href="#agenda" class="hover:text-white transition">Agenda</a>
+            <a href="#profil" class="hover:text-white transition"
+              >Profil BLUD</a
+            >
+            <a href="#anggaran" class="hover:text-white transition"
+              >Transparansi Anggaran</a
+            >
+            <a href="#kinerja" class="hover:text-white transition"
+              >Predikat Kinerja</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4"
+        >
+          <p>
+            &copy; 2026 E-BSC BLUD Pemerintah Daerah. Hak Cipta Dilindungi
+            Undang-Undang.
+          </p>
+          <div class="flex items-center space-x-4">
+            <a href="#" class="hover:text-slate-400 transition"
+              >Kebijakan Privasi</a
+            >
+            <span>•</span>
+            <a href="#" class="hover:text-slate-400 transition"
+              >Syarat & Ketentuan</a
+            >
+            <span>•</span>
+            <a href="#" class="hover:text-slate-400 transition"
+              >Bantuan Sistem</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Login Modal (Halaman Belakang / Back-office) -->
+    <div
+      id="login-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm hidden p-4"
+    >
+      <div
+        class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 relative animate-in fade-in zoom-in duration-200"
+      >
+        <!-- Close Button -->
+        <button
+          onclick="closeLoginModal()"
+          class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 p-2 rounded-full hover:bg-slate-100 transition"
+        >
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+
+        <!-- Modal Header -->
+        <div class="text-center mb-6">
+          <div
+            class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3"
+          >
+            <i data-lucide="lock" class="w-7 h-7"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900">
+            Login Halaman Belakang
+          </h3>
+          <p class="text-slate-500 text-xs mt-1">
+            Akses khusus Administrator, Pimpinan, dan Unit Pelapor E-BSC BLUD
+          </p>
+        </div>
+
+        <!-- Login Form -->
+        <form onsubmit="handleLogin(event)" class="space-y-4">
+          <div>
+            <label
+              class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
+              >Username / NIP / Email</label
+            >
+            <div class="relative">
+              <span
+                class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none"
+              >
+                <i data-lucide="user" class="w-4 h-4"></i>
+              </span>
+              <input
+                type="text"
+                required
+                placeholder="Masukkan username instansi..."
+                class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-blue-600 focus:bg-white transition"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
+              >Kata Sandi</label
+            >
+            <div class="relative">
+              <span
+                class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none"
+              >
+                <i data-lucide="key" class="w-4 h-4"></i>
+              </span>
+              <input
+                type="password"
+                required
+                placeholder="••••••••••••"
+                class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-blue-600 focus:bg-white transition"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
+              >Hak Akses / Peran</label
+            >
+            <select
+              class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-blue-600 focus:bg-white transition"
+            >
+              <option>Administrator Sistem / Inspektorat</option>
+              <option>Pimpinan / Dewan Pengawas BLUD</option>
+              <option>Operator Unit / Bidang Pelaporan</option>
+            </select>
+          </div>
+
+          <div class="pt-2">
+            <button
+              type="submit"
+              class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-blue-900/30 transition flex items-center justify-center space-x-2"
+            >
+              <span>Masuk ke Sistem</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </form>
+
+        <div
+          class="mt-6 text-center text-xs text-slate-500 border-t border-slate-100 pt-4"
+        >
+          Mengalami kendala login?
+          <a href="#" class="text-blue-600 font-medium hover:underline"
+            >Hubungi Tim IT Support</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts for Interactivity -->
+    <script>
+      // Initialize Lucide Icons
+      lucide.createIcons();
+
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const menu = document.getElementById("mobile-menu");
+        menu.classList.toggle("hidden");
+      }
+
+      // Login Modal open & close
+      function openLoginModal() {
+        const modal = document.getElementById("login-modal");
+        modal.classList.remove("hidden");
+        // Close mobile menu if open
+        document.getElementById("mobile-menu").classList.add("hidden");
+      }
+
+      function closeLoginModal() {
+        const modal = document.getElementById("login-modal");
+        modal.classList.add("hidden");
+      }
+
+      // Handle login form submission (simulation)
+      function handleLogin(event) {
+        event.preventDefault();
+        closeLoginModal();
+        showToast("Autentikasi berhasil! Mengarahkan ke halaman belakang...");
+      }
+
+      // Toast notification helper
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        const toastMsg = document.getElementById("toast-message");
+        toastMsg.innerText = message;
+
+        toast.classList.remove("translate-x-full");
+        setTimeout(() => {
+          toast.classList.add("translate-x-full");
+        }, 3500);
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function (event) {
+        const modal = document.getElementById("login-modal");
+        if (event.target == modal) {
+          closeLoginModal();
+        }
+      };
+    </script>
   </body>
 </html>
